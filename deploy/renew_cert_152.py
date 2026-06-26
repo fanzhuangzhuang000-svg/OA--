@@ -1,11 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """为 152 服务器部署 HTTPS - 续期专用(oa.afjsw.cn)"""
-import paramiko, os, sys
-
-HOST = '152.136.115.121'
-USER = 'ubuntu'
-PWD = 'Aa782997781.'
+import os, sys
+from deploy_credentials import get_ssh_credentials_152, connect_ssh, load_credentials
 
 CERT_LOCAL_DIR = r'D:\work\website\OA\.workbuddy\cert_staging\oa.afjsw.cn_nginx'
 CERT_REMOTE_DIR = '/etc/nginx/ssl/oa.afjsw.cn'
@@ -21,9 +18,8 @@ def run(ssh, cmd, check=True, sudo=False):
     return out
 
 def main():
-    ssh = paramiko.SSHClient()
-    ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-    ssh.connect(HOST, username=USER, password=PWD, timeout=15)
+    creds = get_ssh_credentials_152()
+    ssh = connect_ssh(creds)
 
     print('=== 1) 备份现有证书和配置 ===')
     run(ssh, 'sudo mkdir -p /etc/nginx/ssl/oa.afjsw.cn.bak.$(date +%Y%m%d_%H%M%S) || true')
@@ -95,7 +91,7 @@ server {
         root /var/www/oa-api/public;
         try_files $uri /index.php =404;
         fastcgi_pass unix:/run/php/php8.3-fpm.sock;
-        fastcgi_split_path_info ^(.+\\.php)(/.+)$;
+        fastcgi_split_path_info ^(.+\\\\.php)(/.+)$;
         fastcgi_index index.php;
         include fastcgi.conf;
         fastcgi_param SCRIPT_FILENAME $document_root/index.php;
@@ -103,7 +99,7 @@ server {
     }
 
     # 静态资源
-    location ~* \\.(js|css|png|jpg|jpeg|gif|ico|svg|woff2?)$ {
+    location ~* \\\\.(js|css|png|jpg|jpeg|gif|ico|svg|woff2?)$ {
         try_files $uri $uri/ /index.html;
         expires 7d;
         access_log off;
@@ -143,7 +139,7 @@ server {
     print(run(ssh, 'curl -sk -X POST -H "Content-Type: application/json" -d "{\\"username\\":\\"admin\\",\\"password\\":\\"admin123\\"}" https://oa.afjsw.cn/api/auth/login | head -c 200', check=False))
 
     ssh.close()
-    print('\\n✅ 证书已更新到 oa.afjsw.cn')
+    print('\n✅ 证书已更新到 oa.afjsw.cn')
 
 if __name__ == '__main__':
     main()

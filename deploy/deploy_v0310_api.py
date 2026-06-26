@@ -1,18 +1,15 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """把 v0.3.10 后端增量推送到 152"""
-import paramiko, os, subprocess
+import os, subprocess
+from deploy_credentials import get_ssh_credentials_152, connect_ssh
 
-HOST = '152.136.115.121'
-USER = 'ubuntu'
-PWD = 'Aa782997781.'
 LOCAL = 'D:/work/website/OA'
 STAGING = '/tmp/oa-staging'
 
 def main():
-    ssh = paramiko.SSHClient()
-    ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-    ssh.connect(HOST, username=USER, password=PWD, timeout=15)
+    creds = get_ssh_credentials_152()
+    ssh = connect_ssh(creds)
 
     # 1) 列变更 php
     out = subprocess.check_output(

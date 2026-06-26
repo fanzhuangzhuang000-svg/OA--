@@ -1,11 +1,18 @@
 #!/usr/bin/env python3
 """重排 migration + 重新部署 + migrate"""
 import os
+import sys
 import paramiko
 
-HOST = '172.20.0.139'
-USER = 'nbcy'
-PWD = 'admin123'
+HOST = os.environ.get('OA172_HOST', '172.20.0.139')
+USER = os.environ.get('OA172_USER', 'nbcy')
+PWD = os.environ.get('OA172_PWD', '')
+
+if not PWD:
+    print("ERROR: 环境变量 OA172_PWD 未设置", file=sys.stderr)
+    print("请设置: export OA172_PWD='your_password'", file=sys.stderr)
+    sys.exit(2)
+
 LOCAL_BASE = r'D:\work\website\OA\pc-api'
 
 ssh = paramiko.SSHClient()
@@ -37,7 +44,7 @@ print(f"  rm 旧文件 rc={rc} {o.strip()}")
 # 2) 删 失败记录的 migration 状态
 rc, o, e = run(
     "cd /var/www/oa-api && sudo -n -u www-data psql -h 127.0.0.1 -U oa_user -d security_oa "
-    "-c \"DELETE FROM migrations WHERE migration LIKE '2026_06_19_11000%purchase%';\" 2>&1 | head -5"
+    "-c \\\"DELETE FROM migrations WHERE migration LIKE '2026_06_19_11000%purchase%';\\\" 2>&1 | head -5"
 )
 print(f"  DELETE FROM migrations rc={rc} {o.strip()} {e.strip()}")
 

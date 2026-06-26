@@ -1,19 +1,16 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """推送前端 dist 到 152"""
-import paramiko, os
+import os
+from deploy_credentials import get_ssh_credentials_152, connect_ssh
 
-HOST = '152.136.115.121'
-USER = 'ubuntu'
-PWD = 'Aa782997781.'
 LOCAL_DIST = r'D:\work\website\OA\pc-web\dist'
 REMOTE_WEB = '/var/www/oa-web'
 STAGING = '/tmp/oa-web-staging'
 
 def main():
-    ssh = paramiko.SSHClient()
-    ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-    ssh.connect(HOST, username=USER, password=PWD, timeout=15)
+    creds = get_ssh_credentials_152()
+    ssh = connect_ssh(creds)
 
     # 1) 清空 staging
     ssh.exec_command(f'sudo rm -rf {STAGING} && sudo mkdir -p {STAGING} && sudo chown ubuntu:ubuntu {STAGING}')

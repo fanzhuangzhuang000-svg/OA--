@@ -99,12 +99,9 @@ def cmd_backup(args):
 
 def cmd_shell(args):
     """直接 SSH 进服务器"""
-    import paramiko
-    ssh = paramiko.SSHClient()
-    ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-    # 172测试服务器 (默认): ubuntu / Aa782997781.
-    # 152展示服务器 (需手动确认): ubuntu / Aa782997781.
-    ssh.connect("172.20.0.139", 22, "ubuntu", "Aa782997781.", timeout=10)
+    from deploy_credentials import get_ssh_credentials_172, connect_ssh
+    creds = get_ssh_credentials_172()
+    ssh = connect_ssh(creds)
     chan = ssh.get_transport().open_session()
     chan.get_pty()
     chan.invoke_shell()

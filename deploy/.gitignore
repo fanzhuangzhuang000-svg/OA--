@@ -1,0 +1,4 @@
+.env.deploy
+*.pem
+*.key
+id_rsa*

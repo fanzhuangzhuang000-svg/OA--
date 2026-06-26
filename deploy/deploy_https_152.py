@@ -1,14 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """为 152 服务器部署 HTTPS"""
-import paramiko, os, sys
+import os, sys
+from deploy_credentials import get_ssh_credentials_152, connect_ssh, load_credentials
 
-HOST = '152.136.115.121'
-USER = 'ubuntu'
-PWD = 'Aa782997781.'
-
-CERT_LOCAL_DIR = r'D:\work\website\OA\.workbuddy\cert_staging\www.afjsw.cn_nginx'
-CERT_REMOTE_DIR = '/etc/nginx/ssl/afjsw.cn'
 
 def run(ssh, cmd, check=True, sudo=False):
     if sudo and not cmd.startswith('sudo'):
@@ -20,10 +15,14 @@ def run(ssh, cmd, check=True, sudo=False):
         print(f'[STDERR] {err.strip()[:200]}')
     return out
 
+
 def main():
-    ssh = paramiko.SSHClient()
-    ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-    ssh.connect(HOST, username=USER, password=PWD, timeout=15)
+    creds_deploy = load_credentials()
+    CERT_LOCAL_DIR = creds_deploy.get('CERT_LOCAL_DIR', r'D:\work\website\OA\.workbuddy\cert_staging\www.afjsw.cn_nginx')
+    CERT_REMOTE_DIR = creds_deploy.get('CERT_REMOTE_DIR', '/etc/nginx/ssl/afjsw.cn')
+
+    creds = get_ssh_credentials_152()
+    ssh = connect_ssh(creds)
 
     print('=== 1) 备份现有配置 ===')
     run(ssh, 'sudo cp /etc/nginx/sites-available/oa /etc/nginx/sites-available/oa.bak.https-pre')

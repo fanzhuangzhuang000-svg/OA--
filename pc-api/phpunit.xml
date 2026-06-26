@@ -28,7 +28,7 @@
         <env name="DB_PORT" value="5432"/>
         <env name="DB_DATABASE" value="security_oa_test"/>
         <env name="DB_USERNAME" value="oa_test"/>
-        <env name="DB_PASSWORD" value="test_pass_2026"/>
+        <env name="DB_PASSWORD" value=""/>
         <env name="CACHE_STORE" value="array"/>
         <env name="SESSION_DRIVER" value="array"/>
         <env name="QUEUE_CONNECTION" value="sync"/>

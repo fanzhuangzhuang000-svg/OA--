@@ -20,7 +20,7 @@ return [
     'allowed_methods' => ['*'],
 
     'allowed_origins' => [
-        'http://172.20.0.139',
+        env('CORS_ALLOWED_ORIGIN_172', 'http://172.20.0.139'),
         'http://localhost:3000',
         // 生产域名占位 — 上线 HTTPS 时取消注释
         // 'https://oa.example.com',

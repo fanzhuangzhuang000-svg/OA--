@@ -1,11 +1,18 @@
 #!/usr/bin/env python3
 """重新部署 110003+110005 + migrate"""
 import os
+import sys
 import paramiko
 
-HOST = '172.20.0.139'
-USER = 'nbcy'
-PWD = 'admin123'
+HOST = os.environ.get('OA172_HOST', '172.20.0.139')
+USER = os.environ.get('OA172_USER', 'nbcy')
+PWD = os.environ.get('OA172_PWD', '')
+
+if not PWD:
+    print("ERROR: 环境变量 OA172_PWD 未设置", file=sys.stderr)
+    print("请设置: export OA172_PWD='your_password'", file=sys.stderr)
+    sys.exit(2)
+
 LOCAL_BASE = r'D:\work\website\OA\pc-api'
 
 ssh = paramiko.SSHClient()

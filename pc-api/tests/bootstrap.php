@@ -7,11 +7,11 @@
  */
 require __DIR__ . '/../vendor/autoload.php';
 
-// 强制用 oa_test 数据库连接
+// 强制用 oa_test 数据库连接（从环境变量读取，不要硬编码密码）
 $_ENV['APP_ENV'] = 'testing';
-$_ENV['DB_DATABASE'] = 'security_oa_test';
-$_ENV['DB_USERNAME'] = 'oa_test';
-$_ENV['DB_PASSWORD'] = 'test_pass_2026';
+$_ENV['DB_DATABASE'] = getenv('DB_DATABASE') ?: 'security_oa_test';
+$_ENV['DB_USERNAME'] = getenv('DB_USERNAME') ?: 'oa_test';
+$_ENV['DB_PASSWORD'] = getenv('DB_PASSWORD') ?: '';
 $_ENV['CACHE_STORE'] = 'array';
 $_ENV['SESSION_DRIVER'] = 'array';
 

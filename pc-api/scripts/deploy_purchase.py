@@ -8,11 +8,10 @@ import stat
 import time
 import paramiko
 
-HOST = "172.20.0.139"
-USER = "nbcy"
-# MEMORY 记录：172.20.0.139 / nbcy / admin123
-PASSWORD = os.environ.get("OA172_PWD", "admin123")
-PORT = 22
+HOST = os.environ.get("OA172_HOST", "172.20.0.139")
+USER = os.environ.get("OA172_USER", "nbcy")
+PASSWORD = os.environ.get("OA172_PWD")
+PORT = int(os.environ.get("OA172_PORT", "22"))
 LOCAL_BASE = r"D:\work\website\OA\pc-api"
 
 CONTROLLERS = [
@@ -64,9 +63,8 @@ def run(ssh, cmd, sudo=False, check=True, timeout=120):
 def main():
     if not PASSWORD:
         print("ERROR: 环境变量 OA172_PWD 未设置", file=sys.stderr)
+        print("请设置: export OA172_PWD='your_password'", file=sys.stderr)
         sys.exit(2)
-    if PASSWORD == "admin123":
-        print("[info] 使用 MEMORY 记录的默认凭据 nbcy/admin123（172.20.0.139）")
 
     print(f"[1/4] connecting {USER}@{HOST}:{PORT} ...")
     ssh = paramiko.SSHClient()

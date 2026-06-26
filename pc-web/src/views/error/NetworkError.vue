@@ -21,7 +21,7 @@
       </div>
       <div class="ne-tip">
         <el-icon><InfoFilled /></el-icon>
-        <span>持续断开请联系系统管理员,服务地址:172.20.0.139</span>
+        <span>持续断开请联系系统管理员</span>
       </div>
     </div>
   </div>
