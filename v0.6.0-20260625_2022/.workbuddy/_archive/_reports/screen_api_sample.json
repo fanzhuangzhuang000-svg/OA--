@@ -1,0 +1,188 @@
+{
+  "code": 0,
+  "data": {
+    "metrics": [
+      {
+        "label": "年度营收",
+        "value": "161万",
+        "color": "#1D9E75",
+        "trend": 0
+      },
+      {
+        "label": "项目总数",
+        "value": "12",
+        "color": "#185FA5",
+        "trend": 0
+      },
+      {
+        "label": "工单完成率",
+        "value": "18.2%",
+        "color": "#BA7517",
+        "trend": 0
+      },
+      {
+        "label": "应收总额",
+        "value": "135万",
+        "color": "#D85A30",
+        "trend": 0
+      },
+      {
+        "label": "员工出勤率",
+        "value": "80%",
+        "color": "#534AB7",
+        "trend": 0
+      },
+      {
+        "label": "客户满意度",
+        "value": "4.8/5.0",
+        "color": "#1D9E75",
+        "trend": 0
+      }
+    ],
+    "revenueChart": [
+      {
+        "month": "7月",
+        "value": 0,
+        "height": 0
+      },
+      {
+        "month": "8月",
+        "value": 0,
+        "height": 0
+      },
+      {
+        "month": "9月",
+        "value": 0,
+        "height": 0
+      },
+      {
+        "month": "10月",
+        "value": 0,
+        "height": 0
+      },
+      {
+        "month": "11月",
+        "value": 0,
+        "height": 0
+      },
+      {
+        "month": "12月",
+        "value": 0,
+        "height": 0
+      },
+      {
+        "month": "1月",
+        "value": 0,
+        "height": 0
+      },
+      {
+        "month": "2月",
+        "value": 0,
+        "height": 0
+      },
+      {
+        "month": "3月",
+        "value": 0,
+        "height": 0
+      },
+      {
+        "month": "4月",
+        "value": 0,
+        "height": 0
+      },
+      {
+        "month": "5月",
+        "value": 840000,
+        "height": 100
+      },
+      {
+        "month": "6月",
+        "value": 770000,
+        "height": 91.7
+      }
+    ],
+    "projectStatus": [
+      {
+        "label": "立项",
+        "count": 0,
+        "pct": 0,
+        "color": "#534AB7"
+      },
+      {
+        "label": "询价",
+        "count": 2,
+        "pct": 16.7,
+        "color": "#185FA5"
+      },
+      {
+        "label": "合同",
+        "count": 1,
+        "pct": 8.3,
+        "color": "#0C447C"
+      },
+      {
+        "label": "采购",
+        "count": 1,
+        "pct": 8.3,
+        "color": "#BA7517"
+      },
+      {
+        "label": "施工",
+        "count": 3,
+        "pct": 25,
+        "color": "#D85A30"
+      },
+      {
+        "label": "结算",
+        "count": 2,
+        "pct": 16.7,
+        "color": "#1D9E75"
+      },
+      {
+        "label": "质保",
+        "count": 3,
+        "pct": 25,
+        "color": "#2EA84F"
+      }
+    ],
+    "serviceMetrics": {
+      "sla": 100,
+      "slaText": "100%",
+      "avgResponse": 0,
+      "avgResponseText": "0min",
+      "satisfaction": 4.8
+    },
+    "todos": [
+      {
+        "label": "待审批",
+        "count": 20,
+        "color": "#BA7517"
+      },
+      {
+        "label": "待派单",
+        "count": 5,
+        "color": "#A32D2D"
+      },
+      {
+        "label": "待回款",
+        "count": 8,
+        "color": "#D85A30"
+      },
+      {
+        "label": "合同到期",
+        "count": 1,
+        "color": "#534AB7"
+      },
+      {
+        "label": "资质到期",
+        "count": 0,
+        "color": "#A32D2D"
+      },
+      {
+        "label": "员工合同到期",
+        "count": 0,
+        "color": "#0C447C"
+      }
+    ]
+  }
+}

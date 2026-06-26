@@ -1,0 +1,1192 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>安防运维综合OA办公系统 - 设计大纲</title>
+<style>
+  @page {
+    size: A4;
+    margin: 20mm 18mm 20mm 18mm;
+    @bottom-center {
+      content: "第 " counter(page) " 页 / 共 " counter(pages) " 页";
+      font-size: 9px;
+      color: #999;
+    }
+  }
+  @page:first { margin-top: 0; }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: "Microsoft YaHei", "SimHei", "PingFang SC", "Helvetica Neue", Arial, sans-serif;
+    font-size: 11px;
+    line-height: 1.7;
+    color: #2c3e50;
+  }
+
+  /* ===== Cover Page ===== */
+  .cover {
+    page-break-after: always;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 90vh;
+    text-align: center;
+    padding: 60px 40px;
+  }
+  .cover-logo {
+    width: 100px; height: 100px;
+    background: linear-gradient(135deg, #0C447C, #1D9E75);
+    border-radius: 24px;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 40px;
+    color: white; font-size: 48px; font-weight: bold;
+  }
+  .cover h1 {
+    font-size: 32px;
+    color: #0C447C;
+    letter-spacing: 3px;
+    margin-bottom: 12px;
+  }
+  .cover .subtitle {
+    font-size: 16px;
+    color: #666;
+    margin-bottom: 48px;
+  }
+  .cover .meta {
+    font-size: 12px;
+    color: #999;
+    line-height: 2.2;
+  }
+  .cover .meta strong { color: #555; }
+  .cover-line {
+    width: 120px;
+    height: 3px;
+    background: linear-gradient(90deg, #0C447C, #1D9E75);
+    margin: 30px auto;
+    border-radius: 2px;
+  }
+
+  /* ===== TOC ===== */
+  .toc {
+    page-break-after: always;
+    padding-top: 20px;
+  }
+  .toc h2 {
+    font-size: 20px;
+    color: #0C447C;
+    border-bottom: 2px solid #0C447C;
+    padding-bottom: 8px;
+    margin-bottom: 20px;
+  }
+  .toc-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 6px 0;
+    border-bottom: 1px dotted #ddd;
+    font-size: 12px;
+  }
+  .toc-item.level1 { font-weight: bold; color: #0C447C; font-size: 13px; padding-top: 10px; }
+  .toc-item.level2 { padding-left: 24px; }
+  .toc-item.level3 { padding-left: 48px; font-size: 11px; color: #666; }
+
+  /* ===== Section Headers ===== */
+  h1.section-title {
+    font-size: 22px;
+    color: #0C447C;
+    border-left: 5px solid #1D9E75;
+    padding-left: 14px;
+    margin: 36px 0 18px 0;
+    page-break-after: avoid;
+  }
+  h2.sub-title {
+    font-size: 15px;
+    color: #185FA5;
+    margin: 24px 0 10px 0;
+    padding-bottom: 5px;
+    border-bottom: 1px solid #E6F1FB;
+    page-break-after: avoid;
+  }
+  h3.item-title {
+    font-size: 12px;
+    color: #333;
+    margin: 14px 0 6px 0;
+    page-break-after: avoid;
+  }
+
+  /* ===== Content Elements ===== */
+  p { margin-bottom: 8px; text-align: justify; }
+  .intro {
+    background: #F5F8FC;
+    border-left: 3px solid #185FA5;
+    padding: 12px 16px;
+    margin: 16px 0;
+    border-radius: 0 6px 6px 0;
+    font-size: 11px;
+    color: #444;
+  }
+
+  /* ===== Tables ===== */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 10px 0 16px 0;
+    font-size: 10.5px;
+    page-break-inside: avoid;
+  }
+  th {
+    background: #0C447C;
+    color: white;
+    padding: 7px 10px;
+    text-align: left;
+    font-weight: 500;
+    font-size: 10.5px;
+  }
+  td {
+    padding: 6px 10px;
+    border-bottom: 1px solid #e5e7eb;
+    vertical-align: top;
+  }
+  tr:nth-child(even) td { background: #FAFBFC; }
+  tr:hover td { background: #E6F1FB; }
+
+  /* ===== Feature List ===== */
+  .feat-list {
+    list-style: none;
+    margin: 6px 0 12px 0;
+  }
+  .feat-list li {
+    padding: 3px 0 3px 18px;
+    position: relative;
+    font-size: 11px;
+  }
+  .feat-list li::before {
+    content: "";
+    position: absolute;
+    left: 4px;
+    top: 9px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #1D9E75;
+  }
+  .feat-list.blue li::before { background: #185FA5; }
+  .feat-list.purple li::before { background: #534AB7; }
+  .feat-list.orange li::before { background: #D85A30; }
+  .feat-list.red li::before { background: #A32D2D; }
+
+  /* ===== Tags ===== */
+  .tag {
+    display: inline-block;
+    padding: 1px 8px;
+    border-radius: 10px;
+    font-size: 9.5px;
+    font-weight: 500;
+  }
+  .tag-p0 { background: #E1F5EE; color: #0F6E56; }
+  .tag-p1 { background: #FAEEDA; color: #854F0B; }
+  .tag-p2 { background: #EEEDFE; color: #534AB7; }
+  .tag-new { background: #FAECE7; color: #D85A30; }
+  .tag-multi { background: #E6F1FB; color: #185FA5; }
+
+  /* ===== Flow Diagram ===== */
+  .flow-box {
+    background: #FAFBFC;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 16px;
+    margin: 14px 0;
+    page-break-inside: avoid;
+  }
+  .flow-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .flow-step {
+    padding: 8px 14px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 600;
+    text-align: center;
+    min-width: 70px;
+  }
+  .flow-arrow { font-size: 16px; color: #999; padding: 0 2px; }
+
+  /* ===== Optimize Box ===== */
+  .opt-box {
+    background: #EEEDFE;
+    border: 1px solid #CECBF6;
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin: 14px 0;
+    page-break-inside: avoid;
+  }
+  .opt-box h4 {
+    font-size: 12px;
+    color: #534AB7;
+    margin-bottom: 6px;
+  }
+  .opt-box p { font-size: 10.5px; color: #444; margin-bottom: 4px; }
+
+  /* ===== Platform Section ===== */
+  .platform-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin: 14px 0;
+  }
+  .platform-card {
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 14px;
+    page-break-inside: avoid;
+  }
+  .platform-card h4 {
+    font-size: 12px;
+    margin-bottom: 8px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid #e5e7eb;
+  }
+  .platform-card .icon-label {
+    font-size: 18px;
+    margin-right: 6px;
+  }
+
+  /* ===== Architecture Box ===== */
+  .arch-box {
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 14px 0;
+    page-break-inside: avoid;
+  }
+  .arch-layer {
+    padding: 10px 16px;
+    text-align: center;
+  }
+  .arch-layer h4 { font-size: 12px; margin-bottom: 4px; }
+  .arch-layer p { font-size: 10px; margin-bottom: 4px; }
+  .arch-mods {
+    display: flex;
+    gap: 4px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .arch-mod {
+    padding: 2px 8px;
+    border-radius: 3px;
+    font-size: 9.5px;
+    font-weight: 500;
+  }
+  .arch-divider {
+    text-align: center;
+    font-size: 14px;
+    color: #ccc;
+    padding: 2px 0;
+    background: white;
+  }
+
+  /* ===== Phase Box ===== */
+  .phase-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 12px;
+    margin: 14px 0;
+  }
+  .phase-card {
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    overflow: hidden;
+    page-break-inside: avoid;
+  }
+  .phase-header {
+    padding: 8px 14px;
+    font-size: 12px;
+    font-weight: 600;
+    color: white;
+  }
+  .phase-body {
+    padding: 10px 14px;
+    font-size: 10.5px;
+  }
+  .phase-body li {
+    padding: 2px 0 2px 14px;
+    position: relative;
+    font-size: 10.5px;
+  }
+  .phase-body li::before {
+    content: "";
+    position: absolute;
+    left: 2px; top: 8px;
+    width: 5px; height: 5px;
+    border-radius: 50%;
+  }
+
+  .page-break { page-break-before: always; }
+
+  .highlight { background: #FFF9E6; padding: 2px 4px; border-radius: 2px; }
+  strong { color: #0C447C; }
+</style>
+</head>
+<body>
+
+<!-- ==================== COVER PAGE ==================== -->
+<div class="cover">
+  <div class="cover-logo">OA</div>
+  <h1>安防运维综合OA办公系统</h1>
+  <p class="subtitle">系统设计大纲 · V2.0 优化版</p>
+  <div class="cover-line"></div>
+  <div class="meta">
+    <p>多端覆盖：PC端 / Android / iOS / 微信小程序</p>
+    <p>版本：<strong>V2.0</strong></p>
+    <p>日期：<strong>2026年6月</strong></p>
+    <p>文档类型：<strong>系统设计大纲</strong></p>
+  </div>
+</div>
+
+<!-- ==================== TOC ==================== -->
+<div class="toc">
+  <h2>目 录</h2>
+  <div class="toc-item level1"><span>一、系统概述</span></div>
+  <div class="toc-item level2"><span>1.1 项目背景与目标</span></div>
+  <div class="toc-item level2"><span>1.2 设计原则</span></div>
+  <div class="toc-item level2"><span>1.3 系统总体架构</span></div>
+  <div class="toc-item level1"><span>二、多端架构设计</span></div>
+  <div class="toc-item level2"><span>2.1 PC客户端（Windows/macOS）</span></div>
+  <div class="toc-item level2"><span>2.2 Android客户端</span></div>
+  <div class="toc-item level2"><span>2.3 iOS客户端</span></div>
+  <div class="toc-item level2"><span>2.4 微信小程序</span></div>
+  <div class="toc-item level2"><span>2.5 多端功能适配矩阵</span></div>
+  <div class="toc-item level2"><span>2.6 多端技术选型</span></div>
+  <div class="toc-item level1"><span>三、功能模块详细设计</span></div>
+  <div class="toc-item level2"><span>3.1 工作台</span></div>
+  <div class="toc-item level2"><span>3.2 考勤管理</span></div>
+  <div class="toc-item level2"><span>3.3 员工管理</span></div>
+  <div class="toc-item level2"><span>3.4 客户管理</span></div>
+  <div class="toc-item level2"><span>3.5 项目管理</span></div>
+  <div class="toc-item level2"><span>3.6 售后服务</span></div>
+  <div class="toc-item level2"><span>3.7 报销管理</span></div>
+  <div class="toc-item level2"><span>3.8 车辆管理</span></div>
+  <div class="toc-item level2"><span>3.9 库存管理</span></div>
+  <div class="toc-item level2"><span>3.10 财务管理</span></div>
+  <div class="toc-item level2"><span>3.11 公司网盘</span></div>
+  <div class="toc-item level2"><span>3.12 知识库</span></div>
+  <div class="toc-item level2"><span>3.13 数据大屏</span></div>
+  <div class="toc-item level2"><span>3.14 消息中心</span></div>
+  <div class="toc-item level2"><span>3.15 系统设置</span></div>
+  <div class="toc-item level1"><span>四、完整功能清单与优先级</span></div>
+  <div class="toc-item level1"><span>五、实施阶段规划</span></div>
+  <div class="toc-item level1"><span>六、非功能性需求</span></div>
+</div>
+
+<!-- ==================== 一、系统概述 ==================== -->
+<h1 class="section-title">一、系统概述</h1>
+
+<h2 class="sub-title">1.1 项目背景与目标</h2>
+<div class="intro">
+  安防行业具有项目分散、外勤频繁、设备种类多、售后维保要求高等特点。传统管理方式依赖纸质单据和微信群，存在信息不透明、流程不规范、数据难追溯等问题。本系统旨在打造一套面向安防行业的<strong>一体化OA办公平台</strong>，实现从项目立项到售后维保的全生命周期管控，支持多端协同办公，提升企业运营效率与服务质量。
+</div>
+
+<p><strong>核心目标：</strong></p>
+<ul class="feat-list blue">
+  <li>项目全流程数字化：立项→询价→合同→采购→施工→结算→售后，全程在线、可追溯</li>
+  <li>售后服务闭环管理：报修→派单→维修→确认→汇总，提升客户满意度</li>
+  <li>多端协同：PC端深度办公 + 移动端灵活外勤 + 微信小程序轻量互动</li>
+  <li>业务财务一体化：项目成本自动归集，应收应付实时掌握</li>
+  <li>知识资产沉淀：技术文档、项目经验形成企业知识库，新人快速上手</li>
+</ul>
+
+<h2 class="sub-title">1.2 设计原则</h2>
+<table>
+  <thead><tr><th style="width:25%;">原则</th><th>说明</th></tr></thead>
+  <tbody>
+    <tr><td><strong>移动优先</strong></td><td>安防行业外勤多，移动端为核心使用场景，PC端为管理与分析中心</td></tr>
+    <tr><td><strong>业务驱动</strong></td><td>以项目全流程与售后服务为主轴，所有模块围绕核心业务展开</td></tr>
+    <tr><td><strong>数据贯通</strong></td><td>客户→项目→售后→库存→财务，数据一次录入、全链路流转</td></tr>
+    <tr><td><strong>灵活配置</strong></td><td>审批流程、考勤规则、权限体系均可自定义，适配不同规模企业</td></tr>
+    <tr><td><strong>安全可控</strong></td><td>数据加密传输、操作日志审计、敏感字段权限隔离</td></tr>
+    <tr><td><strong>渐进实施</strong></td><td>模块化设计，分阶段上线，降低实施风险</td></tr>
+  </tbody>
+</table>
+
+<h2 class="sub-title">1.3 系统总体架构</h2>
+<div class="arch-box">
+  <div class="arch-layer" style="background:#E6F1FB;">
+    <h4 style="color:#0C447C;">客户端层</h4>
+    <div class="arch-mods">
+      <span class="arch-mod" style="background:#fff;color:#185FA5;border:1px solid #185FA5;">PC客户端 (Electron)</span>
+      <span class="arch-mod" style="background:#fff;color:#1D9E75;border:1px solid #1D9E75;">Android (原生/Flutter)</span>
+      <span class="arch-mod" style="background:#fff;color:#534AB7;border:1px solid #534AB7;">iOS (原生/Flutter)</span>
+      <span class="arch-mod" style="background:#fff;color:#D85A30;border:1px solid #D85A30;">微信小程序</span>
+      <span class="arch-mod" style="background:#fff;color:#BA7517;border:1px solid #BA7517;">Web端 (管理后台)</span>
+    </div>
+  </div>
+  <div class="arch-divider">↕ API Gateway / 负载均衡</div>
+  <div class="arch-layer" style="background:#E1F5EE;">
+    <h4 style="color:#0F6E56;">业务服务层</h4>
+    <div class="arch-mods">
+      <span class="arch-mod" style="background:#fff;color:#0F6E56;">工作台</span>
+      <span class="arch-mod" style="background:#fff;color:#0F6E56;">考勤</span>
+      <span class="arch-mod" style="background:#fff;color:#0F6E56;">员工</span>
+      <span class="arch-mod" style="background:#fff;color:#0F6E56;">客户</span>
+      <span class="arch-mod" style="background:#fff;color:#0F6E56;">项目管理</span>
+      <span class="arch-mod" style="background:#fff;color:#0F6E56;">售后服务</span>
+      <span class="arch-mod" style="background:#fff;color:#0F6E56;">报销</span>
+      <span class="arch-mod" style="background:#fff;color:#0F6E56;">车辆</span>
+      <span class="arch-mod" style="background:#fff;color:#0F6E56;">库存</span>
+      <span class="arch-mod" style="background:#fff;color:#0F6E56;">财务</span>
+    </div>
+  </div>
+  <div class="arch-divider">↕</div>
+  <div class="arch-layer" style="background:#EEEDFE;">
+    <h4 style="color:#534AB7;">平台能力层</h4>
+    <div class="arch-mods">
+      <span class="arch-mod" style="background:#fff;color:#534AB7;">审批引擎</span>
+      <span class="arch-mod" style="background:#fff;color:#534AB7;">消息中心</span>
+      <span class="arch-mod" style="background:#fff;color:#534AB7;">权限控制</span>
+      <span class="arch-mod" style="background:#fff;color:#534AB7;">报表引擎</span>
+      <span class="arch-mod" style="background:#fff;color:#534AB7;">通知提醒</span>
+      <span class="arch-mod" style="background:#fff;color:#534AB7;">文件服务</span>
+      <span class="arch-mod" style="background:#fff;color:#534AB7;">数据导入导出</span>
+    </div>
+  </div>
+  <div class="arch-divider">↕</div>
+  <div class="arch-layer" style="background:#FAEEDA;">
+    <h4 style="color:#854F0B;">数据存储层</h4>
+    <div class="arch-mods">
+      <span class="arch-mod" style="background:#fff;color:#854F0B;">MySQL / PostgreSQL</span>
+      <span class="arch-mod" style="background:#fff;color:#854F0B;">Redis 缓存</span>
+      <span class="arch-mod" style="background:#fff;color:#854F0B;">MinIO / OSS 文件存储</span>
+      <span class="arch-mod" style="background:#fff;color:#854F0B;">Elasticsearch 搜索</span>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== 二、多端架构设计 ==================== -->
+<div class="page-break"></div>
+<h1 class="section-title">二、多端架构设计</h1>
+
+<div class="intro">
+  安防行业的工作场景覆盖办公室、施工现场、客户现场、外出拜访等，不同场景对终端的需求差异显著。系统采用<strong>"一套后端、多端适配"</strong>的架构策略，确保数据一致性的同时，针对各终端特性优化交互体验。
+</div>
+
+<h2 class="sub-title">2.1 PC客户端（Windows / macOS）</h2>
+<p><strong>定位：深度办公与管理中心</strong>，适合管理人员、财务人员、项目内勤等在办公室内使用。</p>
+<table>
+  <thead><tr><th style="width:22%;">特性</th><th style="width:40%;">说明</th><th>重点功能</th></tr></thead>
+  <tbody>
+    <tr><td>技术方案</td><td>Electron 框架，一套代码同时支持 Windows 和 macOS</td><td>离线数据缓存、本地打印</td></tr>
+    <tr><td>交互优势</td><td>大屏操作空间，复杂数据表格、多窗口并排、拖拽操作</td><td>项目甘特图、报表分析、批量导入导出</td></tr>
+    <tr><td>系统集成</td><td>调用本地打印机、本地文件系统、系统通知</td><td>合同打印、CAD图纸预览、本地文件上传</td></tr>
+    <tr><td>消息推送</td><td>系统级桌面通知、任务栏提醒</td><td>审批待办、工单派发、到期预警</td></tr>
+    <tr><td>离线支持</td><td>关键数据本地缓存，断网可查看，联网自动同步</td><td>施工日志、客户资料离线查看</td></tr>
+  </tbody>
+</table>
+
+<h2 class="sub-title">2.2 Android客户端</h2>
+<p><strong>定位：外勤与施工现场首选</strong>，适合施工人员、售后工程师、外勤销售等。</p>
+<table>
+  <thead><tr><th style="width:22%;">特性</th><th style="width:40%;">说明</th><th>重点功能</th></tr></thead>
+  <tbody>
+    <tr><td>技术方案</td><td>Flutter 跨平台框架，与 iOS 共享业务逻辑层代码</td><td>热更新、插件化架构</td></tr>
+    <tr><td>GPS与定位</td><td>高精度GPS定位、地理围栏、轨迹记录</td><td>外勤打卡、施工位置签到、客户导航</td></tr>
+    <tr><td>相机集成</td><td>直接调取手机相机拍照、录像，自动添加时间水印与GPS信息</td><td>施工记录拍照、维修过程拍照、设备巡检拍照</td></tr>
+    <tr><td>推送通知</td><td>集成华为/小米/OPPO/VIVO等厂商推送通道</td><td>工单派发、审批提醒、紧急报警</td></tr>
+    <tr><td>NFC/蓝牙</td><td>支持NFC标签读取、蓝牙设备连接</td><td>设备扫码巡检、蓝牙门禁调试</td></tr>
+    <tr><td>离线模式</td><td>施工现场网络不稳定场景，支持离线打卡、离线填写表单</td><td>离线施工日志、离线工单处理</td></tr>
+  </tbody>
+</table>
+
+<h2 class="sub-title">2.3 iOS客户端</h2>
+<p><strong>定位：管理层与销售首选</strong>，注重审批效率与客户管理。</p>
+<table>
+  <thead><tr><th style="width:22%;">特性</th><th style="width:40%;">说明</th><th>重点功能</th></tr></thead>
+  <tbody>
+    <tr><td>技术方案</td><td>Flutter 跨平台框架，与 Android 共享代码库</td><td>iOS原生交互体验</td></tr>
+    <tr><td>推送通知</td><td>APNs 苹果推送服务，确保消息及时送达</td><td>审批待办、项目节点提醒</td></tr>
+    <tr><td>Face ID / Touch ID</td><td>生物识别登录，安全便捷</td><td>一键登录、敏感操作验证</td></tr>
+    <tr><td>Apple Maps</td><td>深度集成苹果地图，客户导航</td><td>客户位置导航、路线规划</td></tr>
+    <tr><td>小组件</td><td>iOS桌面小组件，展示待办与关键数据</td><td>今日待办、审批数量、项目进度</td></tr>
+  </tbody>
+</table>
+
+<h2 class="sub-title">2.4 微信小程序</h2>
+<p><strong>定位：轻量化入口与客户自助服务</strong>，无需安装、即用即走，适合轻量场景与外部客户。</p>
+<table>
+  <thead><tr><th style="width:22%;">特性</th><th style="width:40%;">说明</th><th>重点功能</th></tr></thead>
+  <tbody>
+    <tr><td>员工端</td><td>内部员工快速操作入口，替代部分APP功能</td><td>签到打卡、审批处理、待办查看、消息接收</td></tr>
+    <tr><td>客户自助门户</td><td>客户通过小程序自助报修、查看维修进度、确认完工</td><td>在线报修、进度查询、完工确认、服务评价</td></tr>
+    <tr><td>微信授权</td><td>微信一键登录，无需注册</td><td>手机号快捷登录、微信消息模板推送</td></tr>
+    <tr><td>消息推送</td><td>微信服务通知（模板消息），重要事项不遗漏</td><td>工单状态变更、审批结果、到期提醒</td></tr>
+    <tr><td>支付集成</td><td>微信支付，质保期外维修在线支付</td><td>维修费用支付、维保合同续费</td></tr>
+    <tr><td>分享传播</td><td>支持分享给微信好友，便于客户转介绍</td><td>公司介绍页、服务评价分享</td></tr>
+  </tbody>
+</table>
+
+<h2 class="sub-title">2.5 多端功能适配矩阵</h2>
+<table>
+  <thead>
+    <tr>
+      <th>功能模块</th>
+      <th style="text-align:center;">PC客户端</th>
+      <th style="text-align:center;">Android</th>
+      <th style="text-align:center;">iOS</th>
+      <th style="text-align:center;">微信小程序</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td>工作台 / 数据看板</td><td style="text-align:center;">★ 完整版</td><td style="text-align:center;">★ 完整版</td><td style="text-align:center;">★ 完整版</td><td style="text-align:center;">○ 精简版</td></tr>
+    <tr><td>签到/签退（GPS打卡）</td><td style="text-align:center;">△ 基础版</td><td style="text-align:center;">★ 完整版</td><td style="text-align:center;">★ 完整版</td><td style="text-align:center;">★ 完整版</td></tr>
+    <tr><td>考勤报表</td><td style="text-align:center;">★ 完整版</td><td style="text-align:center;">○ 查看</td><td style="text-align:center;">○ 查看</td><td style="text-align:center;">—</td></tr>
+    <tr><td>员工管理</td><td style="text-align:center;">★ 完整版</td><td style="text-align:center;">○ 查看</td><td style="text-align:center;">○ 查看</td><td style="text-align:center;">—</td></tr>
+    <tr><td>客户管理</td><td style="text-align:center;">★ 完整版</td><td style="text-align:center;">★ 完整版</td><td style="text-align:center;">★ 完整版</td><td style="text-align:center;">○ 精简版</td></tr>
+    <tr><td>项目管理（全流程）</td><td style="text-align:center;">★ 完整版</td><td style="text-align:center;">○ 进度查看</td><td style="text-align:center;">○ 进度查看</td><td style="text-align:center;">—</td></tr>
+    <tr><td>施工日志 / 现场记录</td><td style="text-align:center;">○ 查看</td><td style="text-align:center;">★ 完整版</td><td style="text-align:center;">★ 完整版</td><td style="text-align:center;">○ 基础版</td></tr>
+    <tr><td>售后服务（维修人员）</td><td style="text-align:center;">★ 完整版</td><td style="text-align:center;">★ 完整版</td><td style="text-align:center;">★ 完整版</td><td style="text-align:center;">○ 基础版</td></tr>
+    <tr><td>客户自助报修</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">★ 完整版</td></tr>
+    <tr><td>报销管理</td><td style="text-align:center;">★ 完整版</td><td style="text-align:center;">○ 申请+拍照</td><td style="text-align:center;">○ 申请+拍照</td><td style="text-align:center;">○ 申请</td></tr>
+    <tr><td>审批处理</td><td style="text-align:center;">★ 完整版</td><td style="text-align:center;">★ 完整版</td><td style="text-align:center;">★ 完整版</td><td style="text-align:center;">★ 完整版</td></tr>
+    <tr><td>车辆管理</td><td style="text-align:center;">★ 完整版</td><td style="text-align:center;">○ 申请+查看</td><td style="text-align:center;">○ 申请+查看</td><td style="text-align:center;">—</td></tr>
+    <tr><td>库存管理</td><td style="text-align:center;">★ 完整版</td><td style="text-align:center;">○ 扫码出入库</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td></tr>
+    <tr><td>公司网盘</td><td style="text-align:center;">★ 完整版</td><td style="text-align:center;">○ 预览+上传</td><td style="text-align:center;">○ 预览+上传</td><td style="text-align:center;">—</td></tr>
+    <tr><td>知识库</td><td style="text-align:center;">★ 完整版</td><td style="text-align:center;">○ 搜索+查看</td><td style="text-align:center;">○ 搜索+查看</td><td style="text-align:center;">—</td></tr>
+    <tr><td>数据大屏</td><td style="text-align:center;">★ 完整版</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td></tr>
+    <tr><td>系统设置</td><td style="text-align:center;">★ 完整版</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td></tr>
+    <tr><td>消息通知</td><td style="text-align:center;">★ 完整版</td><td style="text-align:center;">★ 完整版</td><td style="text-align:center;">★ 完整版</td><td style="text-align:center;">★ 完整版</td></tr>
+  </tbody>
+</table>
+<p style="font-size:10px;color:#999;">★ 完整版 = 全部功能 | ○ 部分功能 | △ 基础版 | — 不支持</p>
+
+<h2 class="sub-title">2.6 多端技术选型</h2>
+<table>
+  <thead><tr><th>端</th><th>技术框架</th><th>语言</th><th>优势</th></tr></thead>
+  <tbody>
+    <tr><td><strong>PC客户端</strong></td><td>Electron + Vue3 / React</td><td>JavaScript / TypeScript</td><td>跨平台、Web技术栈复用、丰富生态</td></tr>
+    <tr><td><strong>Android</strong></td><td>Flutter</td><td>Dart</td><td>高性能渲染、与iOS共享代码、热重载</td></tr>
+    <tr><td><strong>iOS</strong></td><td>Flutter</td><td>Dart</td><td>与Android共享代码、原生体验</td></tr>
+    <tr><td><strong>微信小程序</strong></td><td>uni-app / Taro</td><td>Vue / React</td><td>一套代码多端发布、微信生态深度集成</td></tr>
+    <tr><td><strong>Web管理端</strong></td><td>Vue3 + Element Plus</td><td>TypeScript</td><td>快速开发、丰富组件库</td></tr>
+    <tr><td><strong>后端服务</strong></td><td>Spring Boot / Django</td><td>Java / Python</td><td>企业级稳定性、RESTful API</td></tr>
+  </tbody>
+</table>
+
+<!-- ==================== 三、功能模块详细设计 ==================== -->
+<div class="page-break"></div>
+<h1 class="section-title">三、功能模块详细设计</h1>
+
+<!-- 3.1 工作台 -->
+<h2 class="sub-title">3.1 工作台</h2>
+<p>个人工作中心，一览全局、高效处理日常事务。支持多端数据实时同步。</p>
+
+<h3 class="item-title">3.1.1 数据看板</h3>
+<table>
+  <thead><tr><th>看板项</th><th>说明</th><th>多端适配</th></tr></thead>
+  <tbody>
+    <tr><td>待办事项</td><td>按紧急程度排列，一键跳转处理</td><td>全端支持，PC大屏展示更多信息</td></tr>
+    <tr><td>项目进度概览</td><td>进行中项目的关键节点与状态</td><td>PC甘特图，移动端卡片式</td></tr>
+    <tr><td>售后工单统计</td><td>今日/本周工单量、SLA达标率</td><td>全端支持</td></tr>
+    <tr><td>考勤状态</td><td>今日出勤/迟到/缺勤汇总</td><td>全端支持</td></tr>
+    <tr><td>营收趋势</td><td>月度/季度合同额与回款额</td><td>PC完整图表，移动端精简</td></tr>
+  </tbody>
+</table>
+
+<h3 class="item-title">3.1.2 快捷入口</h3>
+<ul class="feat-list">
+  <li>签到打卡、新建项目、报修工单、费用报销、用车申请、公司网盘</li>
+  <li>用户可自定义常用入口排序（PC端拖拽、移动端长按编辑）</li>
+</ul>
+
+<h3 class="item-title">3.1.3 日程安排</h3>
+<ul class="feat-list">
+  <li>个人日程管理（日/周/月视图）</li>
+  <li>项目关键节点日历视图</li>
+  <li>会议室预约</li>
+  <li>外出/拜访登记</li>
+  <li>iOS小组件、Android桌面小部件展示今日日程</li>
+</ul>
+
+<!-- 3.2 考勤管理 -->
+<h2 class="sub-title">3.2 考勤管理</h2>
+<p>灵活的考勤规则，支持外勤打卡与多维度报表，适配安防行业多班次需求。</p>
+
+<h3 class="item-title">3.2.1 考勤参数设置</h3>
+<table>
+  <thead><tr><th>配置项</th><th>说明</th></tr></thead>
+  <tbody>
+    <tr><td>上下班时间</td><td>支持多班次设定（办公室班/施工班/值守班）</td></tr>
+    <tr><td>迟到/早退规则</td><td>阈值设定（如5分钟内免计、5-15分钟计迟到、15分钟以上计旷工）</td></tr>
+    <tr><td>加班认定规则</td><td>加班申请制 / 自动认定制，调休换算比例</td></tr>
+    <tr><td>考勤组管理</td><td>按部门/岗位分配不同考勤组，各自独立规则</td></tr>
+    <tr><td>节假日日历</td><td>法定节假日、调休日、公司自定义假期</td></tr>
+    <tr><td>打卡方式</td><td>GPS定位 + WiFi打卡 + 人脸识别（可选）</td></tr>
+  </tbody>
+</table>
+
+<h3 class="item-title">3.2.2 签到 / 签退</h3>
+<table>
+  <thead><tr><th>功能</th><th>说明</th><th>多端适配</th></tr></thead>
+  <tbody>
+    <tr><td>正常打卡</td><td>GPS定位 + WiFi双重验证，防止代打卡</td><td>Android/iOS/小程序为核心，PC辅助</td></tr>
+    <tr><td>外勤打卡</td><td>项目现场/客户处打卡，自动关联项目或客户</td><td>移动端专属功能</td></tr>
+    <tr><td>补卡申请</td><td>漏打卡时提交补卡申请，附审批流</td><td>全端支持</td></tr>
+    <tr><td>外勤轨迹</td><td>外勤人员GPS轨迹记录与回放</td><td>Android/iOS后台定位，PC端轨迹回放</td></tr>
+    <tr><td>人脸识别</td><td>打卡时人脸比对，防止代打卡</td><td>移动端前置摄像头，PC可选</td></tr>
+  </tbody>
+</table>
+
+<h3 class="item-title">3.2.3 请假 / 加班 / 排班</h3>
+<ul class="feat-list">
+  <li><strong>请假管理：</strong>年假/事假/病假/婚假/产假等，在线申请与审批，假期余额自动扣减</li>
+  <li><strong>加班管理：</strong>加班申请、加班时长统计、调休换算与审批</li>
+  <li><strong>排班管理：</strong>灵活排班（日历拖拽式）、换班申请、值守班次管理</li>
+</ul>
+
+<h3 class="item-title">3.2.4 考勤报表</h3>
+<ul class="feat-list blue">
+  <li>月度考勤汇总表（全公司/按部门/按人员）</li>
+  <li>异常考勤明细（迟到/早退/缺勤/漏卡）</li>
+  <li>加班统计报表</li>
+  <li>请假统计汇总</li>
+  <li>外勤轨迹统计</li>
+  <li>支持导出Excel / PDF（PC端），移动端查看与分享</li>
+</ul>
+
+<!-- 3.3 员工管理 -->
+<div class="page-break"></div>
+<h2 class="sub-title">3.3 员工管理</h2>
+<p>全生命周期员工信息管理，含安防行业特色字段（资质证书、技能标签）。</p>
+
+<h3 class="item-title">3.3.1 员工信息</h3>
+<table>
+  <thead><tr><th>信息类别</th><th>字段</th></tr></thead>
+  <tbody>
+    <tr><td>基本信息</td><td>姓名、性别、身份证、手机、邮箱、照片</td></tr>
+    <tr><td>岗位信息</td><td>部门、岗位、职级、入职日期、试用期</td></tr>
+    <tr><td>合同信息</td><td>合同类型、起止日期、续签提醒（提前30天通知）</td></tr>
+    <tr><td>薪资信息</td><td>基本工资、岗位津贴、社保公积金（权限控制）</td></tr>
+    <tr><td>安防资质</td><td>证书名称（安防工程师证/弱电证/电工证等）、编号、有效期、到期前自动提醒复检</td></tr>
+    <tr><td>技能标签</td><td>自定义标签（监控安装/门禁调试/网络配置/云平台部署等），售后派单智能匹配</td></tr>
+    <tr><td>紧急联系人</td><td>姓名、关系、电话</td></tr>
+  </tbody>
+</table>
+
+<h3 class="item-title">3.3.2 组织架构</h3>
+<ul class="feat-list">
+  <li>可视化组织架构树形图（PC端大屏展示、移动端折叠展开）</li>
+  <li>部门/岗位增删改查</li>
+  <li>员工调动、晋升、离职全流程</li>
+  <li>离职员工数据归档与权限回收</li>
+</ul>
+
+<h3 class="item-title">3.3.3 培训管理</h3>
+<ul class="feat-list">
+  <li>新员工入职培训计划与进度跟踪</li>
+  <li>安防技术培训记录（关联知识库课程）</li>
+  <li>培训考核与证书关联</li>
+  <li>培训日历与提醒</li>
+</ul>
+
+<!-- 3.4 客户管理 -->
+<h2 class="sub-title">3.4 客户管理</h2>
+<p>客户全生命周期管理，从潜在客户到售后服务闭环，支持客户地图视图。</p>
+
+<h3 class="item-title">3.4.1 客户信息</h3>
+<table>
+  <thead><tr><th>字段</th><th>说明</th></tr></thead>
+  <tbody>
+    <tr><td>基本信息</td><td>客户名称、统一社会信用代码、行业类型</td></tr>
+    <tr><td>联系信息</td><td>地址（省/市/区/详细地址）、邮编</td></tr>
+    <tr><td>联系人</td><td>主要联系人、电话、职位（支持多联系人管理）</td></tr>
+    <tr><td>客户分类</td><td>VIP/普通/潜在，自定义标签（学校/医院/园区/工厂等）</td></tr>
+    <tr><td>关联项目</td><td>自动关联该客户下所有项目与售后记录</td></tr>
+    <tr><td>设备台账</td><td>客户名下所有安防设备清单（型号/位置/保修信息）</td></tr>
+    <tr><td>跟进记录</td><td>拜访记录、沟通日志、下次跟进提醒</td></tr>
+  </tbody>
+</table>
+
+<h3 class="item-title">3.4.2 客户地图与画像</h3>
+<ul class="feat-list orange">
+  <li><strong>地图视图：</strong>基于地址自动标注客户位置，支持区域筛选、拜访路线规划、就近派单</li>
+  <li><strong>客户画像：</strong>自动汇总项目历史、售后频次、合同金额、设备清单，360度客户画像</li>
+  <li><strong>跟进提醒：</strong>定期回访计划，自动提醒销售或售后人员跟进</li>
+  <li><strong>移动端优化：</strong>Android/iOS导航至客户地址，地图查看周边客户</li>
+</ul>
+
+<!-- 3.5 项目管理 -->
+<div class="page-break"></div>
+<h2 class="sub-title">3.5 项目管理</h2>
+<p>安防工程项目全生命周期管控，7大阶段流程化驱动。</p>
+
+<div class="flow-box">
+  <div class="flow-row">
+    <div class="flow-step" style="background:#E6F1FB;color:#0C447C;">立项</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step" style="background:#E1F5EE;color:#0F6E56;">询价</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step" style="background:#EEEDFE;color:#534AB7;">合同</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step" style="background:#FAEEDA;color:#854F0B;">采购</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step" style="background:#FAECE7;color:#D85A30;">施工</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step" style="background:#E1F5EE;color:#0F6E56;">结算</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step" style="background:#FCEBEB;color:#A32D2D;">质保/售后</div>
+  </div>
+</div>
+
+<h3 class="item-title">3.5.1 立项阶段</h3>
+<table>
+  <thead><tr><th>功能</th><th>说明</th></tr></thead>
+  <tbody>
+    <tr><td>项目创建</td><td>项目名称、客户、项目类型（监控/门禁/报警/综合/网络/云平台）</td></tr>
+    <tr><td>预算编制</td><td>预估金额（设备费/材料费/人工费/外包费/其他）</td></tr>
+    <tr><td>团队分配</td><td>项目经理、技术负责人、施工人员、内勤</td></tr>
+    <tr><td>立项审批</td><td>自定义审批链（部门经理→总经理），按金额自动匹配</td></tr>
+    <tr><td>项目模板</td><td>常见项目类型预置模板，快速创建</td></tr>
+  </tbody>
+</table>
+
+<h3 class="item-title">3.5.2 询价阶段</h3>
+<ul class="feat-list">
+  <li>设备清单与规格要求录入</li>
+  <li>多供应商报价对比（价格/交期/服务对比表）</li>
+  <li>询价单生成与发送（邮件/微信）</li>
+  <li>历史价格参考（同设备上次采购价自动带出）</li>
+  <li>最优报价推荐与选择</li>
+</ul>
+
+<h3 class="item-title">3.5.3 合同阶段</h3>
+<ul class="feat-list purple">
+  <li>合同信息录入（编号、金额、付款方式、工期）</li>
+  <li>合同附件上传与电子签章（集成第三方CA）</li>
+  <li>付款节点管理（预付款/进度款/验收款/尾款/质保金）</li>
+  <li>合同到期/续签自动提醒</li>
+  <li>应收账款跟踪与逾期预警</li>
+</ul>
+
+<h3 class="item-title">3.5.4 采购阶段</h3>
+<ul class="feat-list blue">
+  <li>采购申请与审批（关联项目与预算）</li>
+  <li>供应商管理（评估/评级/黑名单）</li>
+  <li>采购订单生成与跟踪</li>
+  <li>到货确认与入库（扫码入库，Android NFC支持）</li>
+  <li>采购成本与预算实时对比，超预算自动预警</li>
+</ul>
+
+<h3 class="item-title">3.5.5 施工阶段</h3>
+<ul class="feat-list orange">
+  <li>施工计划与甘特图管理（PC端大屏操作，移动端查看）</li>
+  <li>施工日志（每日填报，移动端拍照+语音快速记录）</li>
+  <li>现场照片/视频记录（自动添加时间水印和GPS位置）</li>
+  <li>材料领用与消耗统计</li>
+  <li>施工人员考勤（关联项目打卡，GPS围栏验证）</li>
+  <li>施工变更与签证管理</li>
+  <li>里程碑管理（关键节点设置、逾期自动升级提醒）</li>
+</ul>
+
+<h3 class="item-title">3.5.6 结算阶段</h3>
+<ul class="feat-list">
+  <li>竣工验收报告（含验收照片与签字确认，移动端手写签名）</li>
+  <li>结算清单与成本汇总（人工+材料+外包+费用）</li>
+  <li>项目利润分析（收入-成本-费用）</li>
+  <li>质保期设定与到期提醒</li>
+  <li>项目档案自动归档（合同/图纸/验收资料/照片等）</li>
+</ul>
+
+<h3 class="item-title">3.5.7 质保管理</h3>
+<ul class="feat-list">
+  <li>质保期自动计算（从验收日期起算）</li>
+  <li>到期前30/15/7天提醒客户续保</li>
+  <li>质保期内免费维修工单自动关联</li>
+  <li>转维保项目管理（续签维保合同）</li>
+</ul>
+
+<!-- 3.6 售后服务 -->
+<div class="page-break"></div>
+<h2 class="sub-title">3.6 售后服务</h2>
+<p>售后维修全流程闭环管理，从报修到完工全程可追溯。</p>
+
+<div class="flow-box">
+  <div class="flow-row">
+    <div class="flow-step" style="background:#FCEBEB;color:#A32D2D;">报修接入</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step" style="background:#FAEEDA;color:#854F0B;">维修立项</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step" style="background:#E6F1FB;color:#0C447C;">智能派单</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step" style="background:#EEEDFE;color:#534AB7;">维修中</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step" style="background:#E1F5EE;color:#0F6E56;">完工确认</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step" style="background:#FAECE7;color:#D85A30;">单据归档</div>
+  </div>
+</div>
+
+<h3 class="item-title">3.6.1 报修接入</h3>
+<table>
+  <thead><tr><th>接入渠道</th><th>说明</th></tr></thead>
+  <tbody>
+    <tr><td>客户电话</td><td>内勤人员接听后录入系统</td></tr>
+    <tr><td>微信小程序</td><td>客户自助提交报修，上传故障照片</td></tr>
+    <tr><td>系统巡检</td><td>定期巡检发现的问题自动生成工单</td></tr>
+    <tr><td>内部提交</td><td>员工发现设备故障主动上报</td></tr>
+  </tbody>
+</table>
+
+<h3 class="item-title">3.6.2 维修立项与派单</h3>
+<ul class="feat-list red">
+  <li>关联客户与项目（自动带出设备清单与历史维修记录）</li>
+  <li>故障描述与现场照片</li>
+  <li>紧急程度评定（普通/紧急/特急），SLA响应时效自动设定</li>
+  <li>维修类型：质保期内 / 质保期外 / 维保合同</li>
+  <li><strong>智能派单：</strong>根据故障类型、客户位置、人员技能标签、当前负载自动推荐最佳维修人员</li>
+  <li>移动端推送通知（APP推送 + 微信模板消息）</li>
+</ul>
+
+<h3 class="item-title">3.6.3 维修进度</h3>
+<ul class="feat-list">
+  <li>工单状态实时更新（待处理→已派单→维修中→待确认→已完成）</li>
+  <li>维修人员GPS签到/签退（到达客户现场自动签到）</li>
+  <li>维修过程拍照记录（移动端拍照，自动加水印）</li>
+  <li>备件更换记录（关联库存，自动扣减）</li>
+  <li>超时预警与自动升级（SLA未达标时通知主管）</li>
+  <li>客户可通过微信小程序实时查看维修进度</li>
+</ul>
+
+<h3 class="item-title">3.6.4 维修单据</h3>
+<ul class="feat-list blue">
+  <li>维修确认单（移动端手写签名，客户现场确认）</li>
+  <li>维修费用清单（材料费 + 人工费 + 其他费用）</li>
+  <li>更换备件清单与库存自动扣减</li>
+  <li>客户评价与满意度评分（微信小程序评价）</li>
+  <li>电子签章与PDF导出（PC端生成正式单据）</li>
+</ul>
+
+<h3 class="item-title">3.6.5 单据汇总</h3>
+<ul class="feat-list">
+  <li>按客户/单位汇总维修次数与费用</li>
+  <li>按设备类型统计故障率（辅助产品选型）</li>
+  <li>按维修人员统计工单量、响应时效与客户评分</li>
+  <li>月度/季度维修费用汇总报表</li>
+  <li>维保合同执行情况统计</li>
+</ul>
+
+<h3 class="item-title">3.6.6 维保合同与预防性维护</h3>
+<ul class="feat-list purple">
+  <li>年度维保合同签订、到期续签提醒</li>
+  <li>合同约定巡检计划自动生成（月度/季度/半年度）</li>
+  <li>预防性维护：根据设备使用年限与类型，自动生成定期巡检计划</li>
+  <li>客户自助门户（微信小程序）：在线报修、查看进度、确认完工、评价服务</li>
+</ul>
+
+<!-- 3.7 报销管理 -->
+<h2 class="sub-title">3.7 报销管理</h2>
+<table>
+  <thead><tr><th>功能</th><th>说明</th><th>多端适配</th></tr></thead>
+  <tbody>
+    <tr><td>报销申请</td><td>费用类别（差旅/招待/办公/交通/项目成本），关联项目</td><td>全端申请，移动端拍照上传发票</td></tr>
+    <tr><td>发票OCR识别</td><td>拍照自动识别发票信息与验真</td><td>Android/iOS为核心功能</td></tr>
+    <tr><td>报销标准校验</td><td>超标自动预警，住宿/餐饮标准按城市分级</td><td>全端支持</td></tr>
+    <tr><td>审批流程</td><td>多级审批，按金额自动匹配审批链</td><td>全端审批，移动端/小程序快捷审批</td></tr>
+    <tr><td>财务处理</td><td>付款记录、月度汇总、项目成本归集</td><td>PC端核心操作</td></tr>
+  </tbody>
+</table>
+
+<!-- 3.8 车辆管理 -->
+<h2 class="sub-title">3.8 车辆管理</h2>
+<table>
+  <thead><tr><th>子模块</th><th>核心功能</th><th>提醒机制</th></tr></thead>
+  <tbody>
+    <tr><td><strong>车辆档案</strong></td><td>车牌/品牌/型号/购买信息/使用部门/责任人</td><td>年检到期前30/15/7天提醒</td></tr>
+    <tr><td><strong>保险管理</strong></td><td>保单信息/保费/出险记录/理赔记录</td><td>保险到期前30/15/7天提醒</td></tr>
+    <tr><td><strong>保养管理</strong></td><td>保养计划（按里程/时间周期）/保养记录/维修记录/费用</td><td>保养到期前15/7天提醒</td></tr>
+    <tr><td><strong>用车管理</strong></td><td>用车申请/审批/调度/出车归还/里程油耗/车辆日历</td><td>审批结果实时推送</td></tr>
+    <tr><td><strong>加油管理</strong></td><td>加油记录/油耗统计/异常油耗预警</td><td>—</td></tr>
+  </tbody>
+</table>
+
+<!-- 3.9 库存管理 -->
+<div class="page-break"></div>
+<h2 class="sub-title">3.9 库存管理 <span class="tag tag-new">新增模块</span></h2>
+<p>安防行业设备与材料库存是核心资产，设备序列号从采购到安装到售后全程追踪。</p>
+
+<h3 class="item-title">3.9.1 仓库管理</h3>
+<ul class="feat-list">
+  <li>多仓库管理（公司总仓/项目现场仓/售后备件仓）</li>
+  <li>库位管理（库区/货架/层位）</li>
+  <li>仓库管理员与权限设置</li>
+</ul>
+
+<h3 class="item-title">3.9.2 出入库管理</h3>
+<table>
+  <thead><tr><th>操作</th><th>说明</th><th>多端适配</th></tr></thead>
+  <tbody>
+    <tr><td>入库</td><td>采购入库、退料入库、维修归还入库</td><td>Android扫码入库（条码/NFC），PC批量导入</td></tr>
+    <tr><td>出库</td><td>项目领料出库、售后维修出库、调拨出库</td><td>Android扫码出库，移动端现场领料</td></tr>
+    <tr><td>调拨</td><td>仓库间调拨申请与确认</td><td>全端支持</td></tr>
+    <tr><td>盘点</td><td>定期盘点、动态盘点、盘点差异处理</td><td>Android扫码盘点，PC生成盘点报告</td></tr>
+  </tbody>
+</table>
+
+<h3 class="item-title">3.9.3 设备序列号追踪</h3>
+<ul class="feat-list">
+  <li>每台设备唯一序列号，从采购→入库→出库→安装→售后，全程追踪</li>
+  <li>扫码查看设备完整生命周期记录</li>
+  <li>售后服务时快速定位设备信息（采购时间、安装位置、保修状态）</li>
+</ul>
+
+<h3 class="item-title">3.9.4 库存预警</h3>
+<ul class="feat-list">
+  <li>安全库存预警（低于安全库存自动提醒采购）</li>
+  <li>库存周转率分析</li>
+  <li>呆滞库存预警（超过N天未出库）</li>
+  <li>保质期预警（线缆/胶水等有保质期的材料）</li>
+</ul>
+
+<!-- 3.10 财务管理 -->
+<h2 class="sub-title">3.10 财务管理 <span class="tag tag-new">新增模块</span></h2>
+<p>业务财务一体化，项目收支与应收应付实时掌握。</p>
+<table>
+  <thead><tr><th>子模块</th><th>核心功能</th></tr></thead>
+  <tbody>
+    <tr><td><strong>应收账款</strong></td><td>合同回款跟踪、逾期预警、收款确认、账龄分析</td></tr>
+    <tr><td><strong>应付账款</strong></td><td>供应商付款计划、付款审批、账期管理</td></tr>
+    <tr><td><strong>项目成本核算</strong></td><td>自动归集人工+材料+外包+费用，项目利润实时计算</td></tr>
+    <tr><td><strong>发票管理</strong></td><td>进项/销项发票管理、发票OCR识别、发票验真</td></tr>
+    <tr><td><strong>现金流水</strong></td><td>收支流水账、银行对账、资金日报</td></tr>
+    <tr><td><strong>财务报表</strong></td><td>利润表、资产负债表、项目利润排名、部门费用统计</td></tr>
+  </tbody>
+</table>
+
+<!-- 3.11 公司网盘 -->
+<h2 class="sub-title">3.11 公司网盘</h2>
+<table>
+  <thead><tr><th>功能</th><th>说明</th><th>多端适配</th></tr></thead>
+  <tbody>
+    <tr><td>文件管理</td><td>多级目录、拖拽上传、在线预览（PDF/图片/Office）</td><td>PC完整操作，移动端预览+上传</td></tr>
+    <tr><td>CAD图纸预览</td><td>安防行业核心需求，支持在线预览CAD文件</td><td>PC完整预览，移动端缩略图</td></tr>
+    <tr><td>版本管理</td><td>修改历史与回滚、版本对比</td><td>PC核心操作</td></tr>
+    <tr><td>权限控制</td><td>按部门/岗位/人员设置访问权限、下载水印</td><td>全端权限统一</td></tr>
+    <tr><td>项目文档库</td><td>自动关联项目文件夹，标准目录模板</td><td>全端支持</td></tr>
+    <tr><td>全文搜索</td><td>OCR识别图片文字，支持内容搜索</td><td>全端搜索</td></tr>
+    <tr><td>存储管理</td><td>空间统计、配额管理、回收站</td><td>PC管理端</td></tr>
+  </tbody>
+</table>
+
+<!-- 3.12 知识库 -->
+<div class="page-break"></div>
+<h2 class="sub-title">3.12 知识库</h2>
+<p>安防行业经验沉淀，让知识成为企业资产。</p>
+<table>
+  <thead><tr><th>分类</th><th>内容</th></tr></thead>
+  <tbody>
+    <tr><td>技术文档</td><td>设备安装手册、调试指南、故障排除、配置模板</td></tr>
+    <tr><td>方案模板</td><td>项目方案模板、报价模板、投标文件模板</td></tr>
+    <tr><td>经验案例</td><td>典型故障处理案例、项目经验总结、踩坑记录</td></tr>
+    <tr><td>培训资料</td><td>新员工入职培训、安防技术培训、安全规范</td></tr>
+    <tr><td>行业法规</td><td>安防标准、地方法规、验收规范</td></tr>
+    <tr><td>产品知识</td><td>常用设备参数、配置方法、常见FAQ</td></tr>
+  </tbody>
+</table>
+<p><strong>核心功能：</strong>富文本编辑器、全文搜索、标签关联、版本管理、点赞收藏、知识贡献积分、AI智能检索与问答、发布审核流程。</p>
+
+<!-- 3.13 数据大屏 -->
+<h2 class="sub-title">3.13 数据大屏 <span class="tag tag-new">新增模块</span></h2>
+<p>管理层驾驶舱，核心经营指标一目了然，PC端与公司展示屏专用。</p>
+<table>
+  <thead><tr><th>看板</th><th>指标</th></tr></thead>
+  <tbody>
+    <tr><td>经营概览</td><td>年度营收、合同额、回款额、利润率、同比环比</td></tr>
+    <tr><td>项目地图</td><td>项目地理分布热力图、区域营收对比</td></tr>
+    <tr><td>项目进度</td><td>进行中项目进度条、逾期预警、阶段分布</td></tr>
+    <tr><td>售后服务</td><td>SLA达标率、平均响应时间、客户满意度、工单趋势</td></tr>
+    <tr><td>库存动态</td><td>库存金额、周转率、安全库存预警数</td></tr>
+    <tr><td>人力分析</td><td>人员编制、人力成本、效能分析、技能分布</td></tr>
+  </tbody>
+</table>
+
+<!-- 3.14 消息中心 -->
+<h2 class="sub-title">3.14 消息中心 <span class="tag tag-new">新增模块</span></h2>
+<p>统一消息推送，多渠道触达，确保重要事项不遗漏。</p>
+<table>
+  <thead><tr><th>渠道</th><th>适用场景</th><th>优先级</th></tr></thead>
+  <tbody>
+    <tr><td>站内消息</td><td>所有系统通知、审批提醒、工单变更</td><td>默认渠道</td></tr>
+    <tr><td>APP推送</td><td>审批待办、工单派发、紧急通知</td><td>高优先级</td></tr>
+    <tr><td>微信模板消息</td><td>审批结果、打卡提醒、日常通知</td><td>中优先级</td></tr>
+    <tr><td>短信通知</td><td>紧急工单、密码重置、重要预警</td><td>紧急场景</td></tr>
+    <tr><td>邮件通知</td><td>报表发送、合同到期提醒、周报月报</td><td>非紧急场景</td></tr>
+    <tr><td>PC桌面通知</td><td>审批待办、即时消息</td><td>办公场景</td></tr>
+  </tbody>
+</table>
+
+<!-- 3.15 系统设置 -->
+<h2 class="sub-title">3.15 系统设置</h2>
+<table>
+  <thead><tr><th>子模块</th><th>核心功能</th></tr></thead>
+  <tbody>
+    <tr><td><strong>组织与权限</strong></td><td>公司信息、部门管理、角色管理（权限矩阵）、数据权限（按部门/个人隔离）、字段权限（敏感字段仅授权可见）</td></tr>
+    <tr><td><strong>审批流程引擎</strong></td><td>可视化流程设计器（拖拽式）、条件分支、会签/或签/加签/转签、流程版本管理、审批代理（请假自动转交）</td></tr>
+    <tr><td><strong>系统日志</strong></td><td>操作日志、登录日志、异常登录提醒、数据导出审计</td></tr>
+    <tr><td><strong>数据管理</strong></td><td>数据备份与恢复、系统参数配置、数据导入/导出工具、数据清理策略</td></tr>
+    <tr><td><strong>多端管理</strong></td><td>APP版本管理（强制更新/建议更新）、小程序发布管理、设备绑定与解绑</td></tr>
+  </tbody>
+</table>
+
+<!-- ==================== 四、完整功能清单与优先级 ==================== -->
+<div class="page-break"></div>
+<h1 class="section-title">四、完整功能清单与优先级</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th style="width:6%;">序号</th>
+      <th style="width:12%;">模块</th>
+      <th style="width:14%;">子模块</th>
+      <th>核心功能点</th>
+      <th style="width:8%;">优先级</th>
+      <th style="width:14%;">核心终端</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td>1</td><td>工作台</td><td>—</td><td>数据看板、待办任务、快捷入口、日程安排</td><td><span class="tag tag-p0">P0</span></td><td><span class="tag tag-multi">全端</span></td></tr>
+    <tr><td>2.1</td><td>考勤管理</td><td>考勤参数</td><td>班次设定、迟到规则、考勤组、节假日日历</td><td><span class="tag tag-p0">P0</span></td><td>PC</td></tr>
+    <tr><td>2.1</td><td>考勤管理</td><td>签到/签退</td><td>GPS打卡、外勤打卡、补卡申请、人脸识别</td><td><span class="tag tag-p0">P0</span></td><td><span class="tag tag-multi">移动端优先</span></td></tr>
+    <tr><td>2.1</td><td>考勤管理</td><td>考勤报表</td><td>月度汇总、异常统计、加班统计、导出</td><td><span class="tag tag-p0">P0</span></td><td>PC</td></tr>
+    <tr><td>2.1</td><td>考勤管理</td><td>请假/加班</td><td>在线申请审批、假期余额、调休换算</td><td><span class="tag tag-p1">P1</span></td><td><span class="tag tag-multi">全端</span></td></tr>
+    <tr><td>2.1</td><td>考勤管理</td><td>排班管理</td><td>灵活排班、换班申请、值守班次</td><td><span class="tag tag-p1">P1</span></td><td>PC</td></tr>
+    <tr><td>2.2</td><td>员工管理</td><td>员工信息</td><td>全字段管理、安防资质到期提醒、合同续签</td><td><span class="tag tag-p0">P0</span></td><td>PC</td></tr>
+    <tr><td>2.2</td><td>员工管理</td><td>组织架构</td><td>可视化架构、部门岗位、调动离职</td><td><span class="tag tag-p0">P0</span></td><td>PC</td></tr>
+    <tr><td>2.2</td><td>员工管理</td><td>技能标签</td><td>技能打标、智能派单匹配</td><td><span class="tag tag-p1">P1</span></td><td>PC</td></tr>
+    <tr><td>2.2</td><td>员工管理</td><td>培训管理</td><td>培训计划、考核记录、证书关联</td><td><span class="tag tag-p2">P2</span></td><td><span class="tag tag-multi">全端</span></td></tr>
+    <tr><td>2.3</td><td>客户管理</td><td>客户信息</td><td>名称/地址/电话/联系人/分类/标签</td><td><span class="tag tag-p0">P0</span></td><td><span class="tag tag-multi">全端</span></td></tr>
+    <tr><td>2.3</td><td>客户管理</td><td>客户地图</td><td>位置标注、拜访路线、就近派单</td><td><span class="tag tag-p1">P1</span></td><td><span class="tag tag-multi">移动端优先</span></td></tr>
+    <tr><td>2.3</td><td>客户管理</td><td>客户画像</td><td>项目历史、售后频次、设备台账关联</td><td><span class="tag tag-p1">P1</span></td><td>PC</td></tr>
+    <tr><td>2.3</td><td>客户管理</td><td>跟进管理</td><td>拜访记录、沟通日志、回访提醒</td><td><span class="tag tag-p1">P1</span></td><td><span class="tag tag-multi">移动端优先</span></td></tr>
+    <tr><td>3</td><td>项目管理</td><td>立项</td><td>项目创建、审批、预算编制、团队分配</td><td><span class="tag tag-p0">P0</span></td><td>PC</td></tr>
+    <tr><td>3</td><td>项目管理</td><td>询价</td><td>设备清单、多供应商报价对比、历史参考</td><td><span class="tag tag-p0">P0</span></td><td>PC</td></tr>
+    <tr><td>3</td><td>项目管理</td><td>合同</td><td>合同录入、电子签章、付款节点、应收跟踪</td><td><span class="tag tag-p0">P0</span></td><td>PC</td></tr>
+    <tr><td>3</td><td>项目管理</td><td>采购</td><td>采购申请、供应商管理、到货入库</td><td><span class="tag tag-p0">P0</span></td><td>PC + Android扫码</td></tr>
+    <tr><td>3</td><td>项目管理</td><td>施工</td><td>甘特图、施工日志、现场拍照、材料消耗</td><td><span class="tag tag-p0">P0</span></td><td><span class="tag tag-multi">移动端优先</span></td></tr>
+    <tr><td>3</td><td>项目管理</td><td>结算</td><td>竣工验收、成本汇总、利润分析</td><td><span class="tag tag-p0">P0</span></td><td>PC</td></tr>
+    <tr><td>3</td><td>项目管理</td><td>质保管理</td><td>质保期管理、到期提醒、转维保</td><td><span class="tag tag-p1">P1</span></td><td>PC</td></tr>
+    <tr><td>4</td><td>售后服务</td><td>维修立项</td><td>报修接入、关联客户项目、故障描述、紧急度</td><td><span class="tag tag-p0">P0</span></td><td><span class="tag tag-multi">全端</span></td></tr>
+    <tr><td>4</td><td>售后服务</td><td>智能派单</td><td>技能匹配、位置匹配、负载均衡</td><td><span class="tag tag-p0">P0</span></td><td>PC + 移动端推送</td></tr>
+    <tr><td>4</td><td>售后服务</td><td>维修进度</td><td>状态跟踪、GPS签到、过程记录、超时预警</td><td><span class="tag tag-p0">P0</span></td><td><span class="tag tag-multi">移动端优先</span></td></tr>
+    <tr><td>4</td><td>售后服务</td><td>维修单据</td><td>确认单、费用清单、备件更换、客户评价</td><td><span class="tag tag-p0">P0</span></td><td>PC + 移动端签名</td></tr>
+    <tr><td>4</td><td>售后服务</td><td>单据汇总</td><td>按单位汇总、故障率统计、月度报表</td><td><span class="tag tag-p0">P0</span></td><td>PC</td></tr>
+    <tr><td>4</td><td>售后服务</td><td>维保合同</td><td>年度维保、巡检计划、合同续签提醒</td><td><span class="tag tag-p1">P1</span></td><td>PC</td></tr>
+    <tr><td>4</td><td>售后服务</td><td>客户自助</td><td>微信小程序报修、进度查询、评价</td><td><span class="tag tag-p1">P1</span></td><td>微信小程序专属</td></tr>
+    <tr><td>5.1</td><td>报销管理</td><td>—</td><td>报销申请、发票OCR、多级审批、项目关联</td><td><span class="tag tag-p0">P0</span></td><td>PC + 移动端拍照</td></tr>
+    <tr><td>5.2</td><td>车辆管理</td><td>车辆档案</td><td>车辆信息、年检提醒</td><td><span class="tag tag-p0">P0</span></td><td>PC</td></tr>
+    <tr><td>5.2</td><td>车辆管理</td><td>保险管理</td><td>保单信息、到期提醒、出险记录</td><td><span class="tag tag-p0">P0</span></td><td>PC</td></tr>
+    <tr><td>5.2</td><td>车辆管理</td><td>保养管理</td><td>保养计划、记录、费用、到期提醒</td><td><span class="tag tag-p0">P0</span></td><td>PC</td></tr>
+    <tr><td>5.2</td><td>车辆管理</td><td>用车管理</td><td>用车申请、审批调度、里程油耗</td><td><span class="tag tag-p1">P1</span></td><td><span class="tag tag-multi">全端</span></td></tr>
+    <tr><td>6</td><td>库存管理</td><td>仓库管理</td><td>多仓库、库位管理</td><td><span class="tag tag-p1">P1</span></td><td>PC</td></tr>
+    <tr><td>6</td><td>库存管理</td><td>出入库</td><td>入库/出库/调拨/盘点</td><td><span class="tag tag-p1">P1</span></td><td>PC + Android扫码</td></tr>
+    <tr><td>6</td><td>库存管理</td><td>序列号追踪</td><td>设备序列号全生命周期追踪</td><td><span class="tag tag-p1">P1</span></td><td>Android扫码</td></tr>
+    <tr><td>6</td><td>库存管理</td><td>库存预警</td><td>安全库存、周转率、呆滞预警</td><td><span class="tag tag-p1">P1</span></td><td>PC</td></tr>
+    <tr><td>7</td><td>财务管理</td><td>应收应付</td><td>回款跟踪、逾期预警、付款审批</td><td><span class="tag tag-p1">P1</span></td><td>PC</td></tr>
+    <tr><td>7</td><td>财务管理</td><td>项目成本</td><td>自动归集、利润计算</td><td><span class="tag tag-p1">P1</span></td><td>PC</td></tr>
+    <tr><td>7</td><td>财务管理</td><td>发票管理</td><td>进销项管理、OCR识别、验真</td><td><span class="tag tag-p1">P1</span></td><td>PC + 移动端拍照</td></tr>
+    <tr><td>8</td><td>公司网盘</td><td>—</td><td>文件管理、权限控制、CAD预览、版本管理</td><td><span class="tag tag-p1">P1</span></td><td>PC为主</td></tr>
+    <tr><td>9</td><td>知识库</td><td>—</td><td>分类管理、全文搜索、标签关联、AI检索</td><td><span class="tag tag-p1">P1</span></td><td><span class="tag tag-multi">全端</span></td></tr>
+    <tr><td>10</td><td>数据大屏</td><td>—</td><td>营收趋势、项目分布、SLA达标率、热力图</td><td><span class="tag tag-p2">P2</span></td><td>PC大屏</td></tr>
+    <tr><td>11</td><td>消息中心</td><td>—</td><td>站内信、APP推送、微信模板消息、短信、邮件</td><td><span class="tag tag-p1">P1</span></td><td><span class="tag tag-multi">全端</span></td></tr>
+    <tr><td>12</td><td>系统设置</td><td>组织权限</td><td>角色管理、权限矩阵、数据/字段权限</td><td><span class="tag tag-p0">P0</span></td><td>PC</td></tr>
+    <tr><td>12</td><td>系统设置</td><td>审批引擎</td><td>可视化设计器、条件分支、会签/或签</td><td><span class="tag tag-p0">P0</span></td><td>PC</td></tr>
+    <tr><td>12</td><td>系统设置</td><td>日志安全</td><td>操作日志、登录日志、数据备份</td><td><span class="tag tag-p0">P0</span></td><td>PC</td></tr>
+  </tbody>
+</table>
+
+<!-- ==================== 五、实施阶段规划 ==================== -->
+<div class="page-break"></div>
+<h1 class="section-title">五、实施阶段规划</h1>
+
+<div class="phase-grid">
+  <div class="phase-card">
+    <div class="phase-header" style="background:#0C447C;">第一阶段 · 核心基础</div>
+    <div class="phase-body">
+      <p style="font-size:10px;color:#0C447C;margin-bottom:6px;"><strong>预计 6-8 周</strong></p>
+      <ul style="list-style:none;">
+        <li style="--dot-color:#0C447C;">系统设置（权限/审批引擎/多端管理）</li>
+        <li style="--dot-color:#0C447C;">员工管理 + 组织架构</li>
+        <li style="--dot-color:#0C447C;">考勤管理（含移动端GPS打卡）</li>
+        <li style="--dot-color:#0C447C;">客户管理（含移动端地图）</li>
+        <li style="--dot-color:#0C447C;">工作台基础版</li>
+        <li style="--dot-color:#0C447C;">消息中心基础版</li>
+      </ul>
+      <p style="font-size:9.5px;color:#999;margin-top:8px;">终端：PC端 + 微信小程序（签到打卡+审批）</p>
+    </div>
+  </div>
+  <div class="phase-card">
+    <div class="phase-header" style="background:#1D9E75;">第二阶段 · 业务核心</div>
+    <div class="phase-body">
+      <p style="font-size:10px;color:#0F6E56;margin-bottom:6px;"><strong>预计 8-10 周</strong></p>
+      <ul style="list-style:none;">
+        <li style="--dot-color:#1D9E75;">项目管理（全流程7阶段）</li>
+        <li style="--dot-color:#1D9E75;">售后服务（含客户自助报修）</li>
+        <li style="--dot-color:#1D9E75;">报销管理（含发票OCR）</li>
+        <li style="--dot-color:#1D9E75;">车辆管理</li>
+        <li style="--dot-color:#1D9E75;">消息中心完整版</li>
+      </ul>
+      <p style="font-size:9.5px;color:#999;margin-top:8px;">终端：Android + iOS APP上线</p>
+    </div>
+  </div>
+  <div class="phase-card">
+    <div class="phase-header" style="background:#534AB7;">第三阶段 · 拓展增强</div>
+    <div class="phase-body">
+      <p style="font-size:10px;color:#534AB7;margin-bottom:6px;"><strong>预计 6-8 周</strong></p>
+      <ul style="list-style:none;">
+        <li style="--dot-color:#534AB7;">库存管理（含扫码出入库）</li>
+        <li style="--dot-color:#534AB7;">财务管理（应收应付/成本核算）</li>
+        <li style="--dot-color:#534AB7;">公司网盘（含CAD预览）</li>
+        <li style="--dot-color:#534AB7;">知识库（含AI检索）</li>
+        <li style="--dot-color:#534AB7;">数据大屏</li>
+        <li style="--dot-color:#534AB7;">工作台完整版</li>
+      </ul>
+      <p style="font-size:9.5px;color:#999;margin-top:8px;">终端：PC客户端(Electron)上线</p>
+    </div>
+  </div>
+</div>
+
+<h2 class="sub-title" style="margin-top:24px;">5.1 各阶段终端上线计划</h2>
+<table>
+  <thead><tr><th>阶段</th><th>PC Web端</th><th>PC客户端</th><th>Android/iOS</th><th>微信小程序</th></tr></thead>
+  <tbody>
+    <tr><td><strong>第一阶段</strong></td><td>✅ 全功能</td><td>—</td><td>—</td><td>✅ 签到+审批+消息</td></tr>
+    <tr><td><strong>第二阶段</strong></td><td>✅ 全功能</td><td>—</td><td>✅ 核心功能上线</td><td>✅ 增加报修+客户自助</td></tr>
+    <tr><td><strong>第三阶段</strong></td><td>✅ 全功能</td><td>✅ 全功能上线</td><td>✅ 全功能</td><td>✅ 全功能</td></tr>
+  </tbody>
+</table>
+
+<!-- ==================== 六、非功能性需求 ==================== -->
+<h1 class="section-title">六、非功能性需求</h1>
+
+<table>
+  <thead><tr><th style="width:18%;">维度</th><th>要求</th></tr></thead>
+  <tbody>
+    <tr><td><strong>性能要求</strong></td><td>页面加载 ≤ 2秒；API响应 ≤ 500ms；支持 200+ 并发用户；移动端弱网可用</td></tr>
+    <tr><td><strong>安全要求</strong></td><td>数据传输HTTPS加密；敏感数据AES-256加密存储；SQL注入/XSS/CSRF防护；操作日志全审计</td></tr>
+    <tr><td><strong>可用性</strong></td><td>系统可用率 ≥ 99.9%；自动备份（每日增量、每周全量）；故障恢复 ≤ 4小时</td></tr>
+    <tr><td><strong>兼容性</strong></td><td>PC：Chrome/Edge/Firefox最新版；Android 8.0+；iOS 14.0+；微信 7.0+</td></tr>
+    <tr><td><strong>扩展性</strong></td><td>模块化架构，新模块即插即用；API开放，支持第三方集成；支持微服务拆分</td></tr>
+    <tr><td><strong>数据隐私</strong></td><td>符合《个人信息保护法》；员工敏感信息字段级权限控制；客户数据隔离</td></tr>
+    <tr><td><strong>多端一致性</strong></td><td>核心数据实时同步（≤3秒）；离线数据自动合并；冲突处理策略</td></tr>
+    <tr><td><strong>离线支持</strong></td><td>Android/iOS支持签到、施工日志、工单处理离线操作，联网自动同步</td></tr>
+  </tbody>
+</table>
+
+<div style="margin-top:40px;padding:24px;background:#FAFBFC;border-radius:8px;border:1px solid #e5e7eb;text-align:center;">
+  <p style="font-size:14px;color:#0C447C;font-weight:600;margin-bottom:8px;">—— 文档结束 ——</p>
+  <p style="font-size:11px;color:#999;">安防运维综合OA办公系统 · 系统设计大纲 V2.0</p>
+  <p style="font-size:11px;color:#999;">2026年6月</p>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,112 @@
+{
+  "timestamp": "2026-06-19T18:51:18.661579",
+  "base": "http://172.20.0.139:3001/api",
+  "total": 17,
+  "ok": 17,
+  "fail": 0,
+  "pass_rate": "100.0",
+  "results": [
+    {
+      "flow": "流程1",
+      "step": "1.1 录线索",
+      "ok": 45,
+      "detail": "status=200 lead_id=45"
+    },
+    {
+      "flow": "流程1",
+      "step": "1.2 转商机",
+      "ok": 63,
+      "detail": "status=200 opp_id=63"
+    },
+    {
+      "flow": "流程1",
+      "step": "1.3 战败",
+      "ok": true,
+      "detail": "status=200"
+    },
+    {
+      "flow": "流程1",
+      "step": "1.4 列表 lost",
+      "ok": true,
+      "detail": "status=200 stage=lost"
+    },
+    {
+      "flow": "流程2",
+      "step": "2.1 录线索",
+      "ok": 46,
+      "detail": "status=200 lead_id=46"
+    },
+    {
+      "flow": "流程2",
+      "step": "2.2 转商机",
+      "ok": 64,
+      "detail": "status=200 opp_id=64"
+    },
+    {
+      "flow": "流程2",
+      "step": "2.3 推进 contracting",
+      "ok": true,
+      "detail": "最终 stage=contracting"
+    },
+    {
+      "flow": "流程2",
+      "step": "2.4 成交",
+      "ok": 9,
+      "detail": "status=200 pool_id=9"
+    },
+    {
+      "flow": "流程2",
+      "step": "2.5 项目池 +1",
+      "ok": true,
+      "detail": "差值=1  (before=8, after=9)"
+    },
+    {
+      "flow": "流程2",
+      "step": "2.6 转施工",
+      "ok": 20,
+      "detail": "status=200 project_id=20"
+    },
+    {
+      "flow": "流程2",
+      "step": "2.7 项目列表 +1",
+      "ok": true,
+      "detail": "差值=1  (before=18, after=19)"
+    },
+    {
+      "flow": "流程3",
+      "step": "3.1 录商机",
+      "ok": 65,
+      "detail": "status=200 opp_id=65"
+    },
+    {
+      "flow": "流程3",
+      "step": "3.2 推进 negotiation",
+      "ok": true,
+      "detail": "stage=negotiation"
+    },
+    {
+      "flow": "流程3",
+      "step": "3.3 新建报价 V1",
+      "ok": 26,
+      "detail": "status=200 quote_id=26"
+    },
+    {
+      "flow": "流程3",
+      "step": "3.4 提交",
+      "ok": true,
+      "detail": "status=200"
+    },
+    {
+      "flow": "流程3",
+      "step": "3.5 客户接受",
+      "ok": true,
+      "detail": "status=200"
+    },
+    {
+      "flow": "流程3",
+      "step": "3.6 商机 contracting",
+      "ok": true,
+      "detail": "status=200 stage=contracting"
+    }
+  ]
+}

@@ -1,0 +1,111 @@
+{
+  "timestamp": "2026-06-19T10:52:00.131Z",
+  "base": "http://172.20.0.139:3000",
+  "total": 7,
+  "ok": 6,
+  "warn": 0,
+  "fail": 1,
+  "pass_rate": "85.7%",
+  "results": [
+    {
+      "p": "/sales/leads",
+      "title": "线索池",
+      "buttons": [
+        "新建线索",
+        "转商机",
+        "丢弃"
+      ],
+      "status": "✅",
+      "note": "渲染(1345字) rows=11 cards=0",
+      "clicks": [
+        "新建线索",
+        "转商机",
+        "丢弃"
+      ],
+      "errCount": 0,
+      "consoleCount": 0
+    },
+    {
+      "p": "/sales/leads/board",
+      "title": "线索看板",
+      "buttons": [],
+      "status": "✅",
+      "note": "渲染(986字) rows=0 cards=12",
+      "clicks": [],
+      "errCount": 0,
+      "consoleCount": 0
+    },
+    {
+      "p": "/sales/opps",
+      "title": "商机池",
+      "buttons": [
+        "新建商机",
+        "成交",
+        "战败"
+      ],
+      "status": "✅",
+      "note": "渲染(1446字) rows=11 cards=0",
+      "clicks": [
+        "新建商机",
+        "成交",
+        "战败"
+      ],
+      "errCount": 0,
+      "consoleCount": 0
+    },
+    {
+      "p": "/sales/opps/board",
+      "title": "商机看板",
+      "buttons": [],
+      "status": "✅",
+      "note": "渲染(2325字) rows=0 cards=0",
+      "clicks": [],
+      "errCount": 0,
+      "consoleCount": 0
+    },
+    {
+      "p": "/opp/1/quote",
+      "title": "报价单 (opp=1)",
+      "buttons": [
+        "新建版本",
+        "提交审批",
+        "客户接受"
+      ],
+      "status": "❌",
+      "note": "页面 404",
+      "clicks": [],
+      "errCount": 0,
+      "consoleCount": 0
+    },
+    {
+      "p": "/sales/referrers",
+      "title": "推荐人",
+      "buttons": [
+        "新增",
+        "编辑",
+        "删除"
+      ],
+      "status": "✅",
+      "note": "渲染(302字) rows=2 cards=0",
+      "clicks": [
+        "新增",
+        "编辑",
+        "删除"
+      ],
+      "errCount": 0,
+      "consoleCount": 0
+    },
+    {
+      "p": "/project/pool",
+      "title": "项目池",
+      "buttons": [
+        "转为施工项目"
+      ],
+      "status": "✅",
+      "note": "渲染(1236字) rows=10 cards=0",
+      "clicks": [],
+      "errCount": 0,
+      "consoleCount": 0
+    }
+  ]
+}

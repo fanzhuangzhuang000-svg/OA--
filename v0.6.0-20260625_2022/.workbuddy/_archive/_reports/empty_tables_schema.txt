@@ -1,0 +1,239 @@
+=== jobs ===
+                                       Table "public.jobs"
+    Column    |          Type          | Collation | Nullable |             Default              
+--------------+------------------------+-----------+----------+----------------------------------
+ id           | bigint                 |           | not null | nextval('jobs_id_seq'::regclass)
+ queue        | character varying(255) |           | not null | 
+ payload      | text                   |           | not null | 
+ attempts     | smallint               |           | not null | 
+ reserved_at  | integer                |           |          | 
+ available_at | integer                |           | not null | 
+ created_at   | integer                |           | not null | 
+Indexes:
+    "jobs_pkey" PRIMARY KEY, btree (id)
+    "jobs_queue_index" btree (queue)
+
+
+
+=== failed_jobs ===
+                                        Table "public.failed_jobs"
+   Column   |            Type             | Collation | Nullable |                 Default                 
+------------+-----------------------------+-----------+----------+-----------------------------------------
+ id         | bigint                      |           | not null | nextval('failed_jobs_id_seq'::regclass)
+ uuid       | character varying(255)      |           | not null | 
+ connection | text                        |           | not null | 
+ queue      | text                        |           | not null | 
+ payload    | text                        |           | not null | 
+ exception  | text                        |           | not null | 
+ failed_at  | timestamp without time zone |           | not null | now()
+Indexes:
+    "failed_jobs_pkey" PRIMARY KEY, btree (id)
+    "failed_jobs_uuid_key" UNIQUE CONSTRAINT, btree (uuid)
+
+
+
+=== sessions ===
+                         Table "public.sessions"
+    Column     |          Type          | Collation | Nullable | Default 
+---------------+------------------------+-----------+----------+---------
+ id            | character varying(255) |           | not null | 
+ user_id       | bigint                 |           |          | 
+ ip_address    | character varying(45)  |           |          | 
+ user_agent    | text                   |           |          | 
+ payload       | text                   |           | not null | 
+ last_activity | integer                |           | not null | 
+Indexes:
+    "sessions_pkey" PRIMARY KEY, btree (id)
+    "sessions_last_activity_index" btree (last_activity)
+    "sessions_user_id_index" btree (user_id)
+
+
+
+=== cache_locks ===
+                      Table "public.cache_locks"
+   Column   |          Type          | Collation | Nullable | Default 
+------------+------------------------+-----------+----------+---------
+ key        | character varying(255) |           | not null | 
+ owner      | character varying(255) |           | not null | 
+ expiration | integer                |           | not null | 
+Indexes:
+    "cache_locks_pkey" PRIMARY KEY, btree (key)
+
+
+
+=== role_has_permissions ===
+           Table "public.role_has_permissions"
+    Column     |  Type  | Collation | Nullable | Default 
+---------------+--------+-----------+----------+---------
+ permission_id | bigint |           | not null | 
+ role_id       | bigint |           | not null | 
+Indexes:
+    "role_has_permissions_pkey" PRIMARY KEY, btree (permission_id, role_id)
+
+
+
+=== model_has_permissions ===
+                  Table "public.model_has_permissions"
+    Column     |          Type          | Collation | Nullable | Default 
+---------------+------------------------+-----------+----------+---------
+ permission_id | bigint                 |           | not null | 
+ model_type    | character varying(255) |           | not null | 
+ model_id      | bigint                 |           | not null | 
+Indexes:
+    "model_has_permissions_pkey" PRIMARY KEY, btree (permission_id, model_id, model_type)
+    "mhp_model" btree (model_id, model_type)
+
+
+
+=== password_reset_tokens ===
+                   Table "public.password_reset_tokens"
+   Column   |            Type             | Collation | Nullable | Default 
+------------+-----------------------------+-----------+----------+---------
+ email      | character varying(255)      |           | not null | 
+ token      | character varying(255)      |           | not null | 
+ created_at | timestamp without time zone |           |          | 
+Indexes:
+    "password_reset_tokens_pkey" PRIMARY KEY, btree (email)
+
+
+
+=== purchase_logistics ===
+                                          Table "public.purchase_logistics"
+   Column    |              Type              | Collation | Nullable |                    Default                     
+-------------+--------------------------------+-----------+----------+------------------------------------------------
+ id          | bigint                         |           | not null | nextval('purchase_logistics_id_seq'::regclass)
+ shipment_id | bigint                         |           | not null | 
+ tracking_no | character varying(100)         |           |          | 
+ event_at    | timestamp(0) without time zone |           | not null | 
+ location    | character varying(200)         |           |          | 
+ status      | character varying(30)          |           |          | 
+ description | text                           |           |          | 
+ operator    | character varying(50)          |           |          | 
+ created_at  | timestamp(0) without time zone |           |          | 
+ updated_at  | timestamp(0) without time zone |           |          | 
+Indexes:
+    "purchase_logistics_pkey" PRIMARY KEY, btree (id)
+    "purchase_logistics_shipment_id_event_at_index" btree (shipment_id, event_at)
+Foreign-key constraints:
+    "purchase_logistics_shipment_id_foreign" FOREIGN KEY (shipment_id) REFERENCES purchase_shipments(id) ON DELETE CASCADE
+
+
+
+=== purchase_payment_requests ===
+                                            Table "public.purchase_payment_requests"
+     Column     |              Type              | Collation | Nullable |                        Default                        
+----------------+--------------------------------+-----------+----------+-------------------------------------------------------
+ id             | bigint                         |           | not null | nextval('purchase_payment_requests_id_seq'::regclass)
+ code           | character varying(50)          |           | not null | 
+ contract_id    | bigint                         |           |          | 
+ supplier_id    | bigint                         |           |          | 
+ amount         | numeric(14,2)                  |           | not null | '0'::numeric
+ payment_type   | character varying(30)          |           | not null | 'full'::character varying
+ request_date   | date                           |           |          | 
+ status         | character varying(20)          |           | not null | 'pending'::character varying
+ applicant      | character varying(50)          |           |          | 
+ applicant_id   | bigint                         |           |          | 
+ reason         | text                           |           |          | 
+ approver_id    | bigint                         |           |          | 
+ approved_at    | timestamp(0) without time zone |           |          | 
+ approve_remark | text                           |           |          | 
+ created_at     | timestamp(0) without time zone |           |          | 
+ updated_at     | timestamp(0) without time zone |           |          | 
+Indexes:
+    "purchase_payment_requests_pkey" PRIMARY KEY, btree (id)
+    "purchase_payment_requests_code_unique" UNIQUE CONSTRAINT, btree (code)
+    "purchase_payment_requests_status_payment_type_index" btree (status, payment_type)
+Foreign-key constraints:
+    "purchase_payment_requests_applicant_id_foreign" FOREIGN KEY (applicant_id) REFERENCES users(id) ON DELETE SET NULL
+    "purchase_payment_requests_approver_id_foreign" FOREIGN KEY (approver_id) REFERENCES users(id) ON DELETE SET NULL
+    "purchase_payment_requests_contract_id_foreign" FOREIGN KEY (contract_id) REFERENCES purchase_contracts(id) ON DELETE SET NULL
+    "purchase_payment_requests_supplier_id_foreign" FOREIGN KEY (supplier_id) REFERENCES suppliers(id) ON DELETE SET NULL
+Referenced by:
+    TABLE "purchase_payments" CONSTRAINT "purchase_payments_payment_request_id_foreign" FOREIGN KEY (payment_request_id) REFERENCES purchase_payment_requests(id) ON DELETE SET NULL
+
+
+
+=== purchase_payments ===
+                                              Table "public.purchase_payments"
+       Column       |              Type              | Collation | Nullable |                    Default                    
+--------------------+--------------------------------+-----------+----------+-----------------------------------------------
+ id                 | bigint                         |           | not null | nextval('purchase_payments_id_seq'::regclass)
+ code               | character varying(50)          |           | not null | 
+ payment_request_id | bigint                         |           |          | 
+ contract_id        | bigint                         |           |          | 
+ supplier_id        | bigint                         |           |          | 
+ amount             | numeric(14,2)                  |           | not null | '0'::numeric
+ payment_method     | character varying(30)          |           | not null | 'transfer'::character varying
+ paid_at            | date                           |           |          | 
+ voucher_no         | character varying(80)          |           |          | 
+ operator           | character varying(50)          |           |          | 
+ operator_id        | bigint                         |           |          | 
+ status             | character varying(20)          |           | not null | 'success'::character varying
+ remark             | text                           |           |          | 
+ created_at         | timestamp(0) without time zone |           |          | 
+ updated_at         | timestamp(0) without time zone |           |          | 
+Indexes:
+    "purchase_payments_pkey" PRIMARY KEY, btree (id)
+    "purchase_payments_code_unique" UNIQUE CONSTRAINT, btree (code)
+    "purchase_payments_paid_at_index" btree (paid_at)
+    "purchase_payments_status_payment_method_index" btree (status, payment_method)
+Foreign-key constraints:
+    "purchase_payments_contract_id_foreign" FOREIGN KEY (contract_id) REFERENCES purchase_contracts(id) ON DELETE SET NULL
+    "purchase_payments_operator_id_foreign" FOREIGN KEY (operator_id) REFERENCES users(id) ON DELETE SET NULL
+    "purchase_payments_payment_request_id_foreign" FOREIGN KEY (payment_request_id) REFERENCES purchase_payment_requests(id) ON DELETE SET NULL
+    "purchase_payments_supplier_id_foreign" FOREIGN KEY (supplier_id) REFERENCES suppliers(id) ON DELETE SET NULL
+
+
+
+=== purchase_shipment_items ===
+                                          Table "public.purchase_shipment_items"
+   Column    |              Type              | Collation | Nullable |                       Default                       
+-------------+--------------------------------+-----------+----------+-----------------------------------------------------
+ id          | bigint                         |           | not null | nextval('purchase_shipment_items_id_seq'::regclass)
+ shipment_id | bigint                         |           | not null | 
+ material    | character varying(200)         |           | not null | 
+ spec        | character varying(200)         |           |          | 
+ quantity    | numeric(12,2)                  |           | not null | '0'::numeric
+ unit        | character varying(20)          |           | not null | '件'::character varying
+ remark      | text                           |           |          | 
+ created_at  | timestamp(0) without time zone |           |          | 
+ updated_at  | timestamp(0) without time zone |           |          | 
+Indexes:
+    "purchase_shipment_items_pkey" PRIMARY KEY, btree (id)
+    "purchase_shipment_items_shipment_id_index" btree (shipment_id)
+Foreign-key constraints:
+    "purchase_shipment_items_shipment_id_foreign" FOREIGN KEY (shipment_id) REFERENCES purchase_shipments(id) ON DELETE CASCADE
+
+
+
+=== purchase_shipments ===
+                                              Table "public.purchase_shipments"
+       Column        |              Type              | Collation | Nullable |                    Default                     
+---------------------+--------------------------------+-----------+----------+------------------------------------------------
+ id                  | bigint                         |           | not null | nextval('purchase_shipments_id_seq'::regclass)
+ code                | character varying(50)          |           | not null | 
+ contract_id         | bigint                         |           |          | 
+ supplier_id         | bigint                         |           |          | 
+ shipped_at          | date                           |           |          | 
+ expected_arrival_at | date                           |           |          | 
+ arrived_at          | date                           |           |          | 
+ carrier             | character varying(100)         |           |          | 
+ tracking_no         | character varying(100)         |           |          | 
+ status              | character varying(20)          |           | not null | 'shipped'::character varying
+ consignee           | character varying(50)          |           |          | 
+ remark              | text                           |           |          | 
+ created_at          | timestamp(0) without time zone |           |          | 
+ updated_at          | timestamp(0) without time zone |           |          | 
+Indexes:
+    "purchase_shipments_pkey" PRIMARY KEY, btree (id)
+    "purchase_shipments_code_unique" UNIQUE CONSTRAINT, btree (code)
+    "purchase_shipments_shipped_at_index" btree (shipped_at)
+    "purchase_shipments_status_carrier_index" btree (status, carrier)
+Foreign-key constraints:
+    "purchase_shipments_contract_id_foreign" FOREIGN KEY (contract_id) REFERENCES purchase_contracts(id) ON DELETE SET NULL
+    "purchase_shipments_supplier_id_foreign" FOREIGN KEY (supplier_id) REFERENCES suppliers(id) ON DELETE SET NULL
+Referenced by:
+    TABLE "purchase_logistics" CONSTRAINT "purchase_logistics_shipment_id_foreign" FOREIGN KEY (shipment_id) REFERENCES purchase_shipments(id) ON DELETE CASCADE
+    TABLE "purchase_shipment_items" CONSTRAINT "purchase_shipment_items_shipment_id_foreign" FOREIGN KEY (shipment_id) REFERENCES purchase_shipments(id) ON DELETE CASCADE
+
+

@@ -1,0 +1,2660 @@
+[
+  {
+    "method": "POST",
+    "uri": "api/admin/wipe-data ........ Api\\SystemSettingsController@wipeData",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/approval-templates ...... Api\\ApprovalTemplateController@index",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/approval-templates ...... Api\\ApprovalTemplateController@store",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/approval-templates/{approvalTemplate} Api\\ApprovalTemplateCon…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "PUT",
+    "uri": "api/approval-templates/{approvalTemplate} Api\\ApprovalTemplateCon…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "DELETE",
+    "uri": "api/approval-templates/{approvalTemplate} Api\\ApprovalTemplateCon…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/approval-templates/{approvalTemplate}/toggle Api\\ApprovalTemp…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/approvals ................. Api\\ApprovalCenterController@index",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/approvals/center .......... Api\\ApprovalCenterController@index",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/approvals/center/stats .... Api\\ApprovalCenterController@stats",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/approvals/finance ........ Api\\FinanceApprovalController@index",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/approvals/finance ........ Api\\FinanceApprovalController@store",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/approvals/finance/{approval} Api\\FinanceApprovalController@sh…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/approvals/finance/{approval}/approve Api\\FinanceApprovalContr…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/approvals/finance/{approval}/forward Api\\FinanceApprovalContr…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/approvals/finance/{approval}/reject Api\\FinanceApprovalContro…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/approvals/operation .... Api\\OperationApprovalController@index",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/approvals/operation .... Api\\OperationApprovalController@store",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/approvals/operation/{approval} Api\\OperationApprovalControlle…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/approvals/operation/{approval}/approve Api\\OperationApprovalC…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/approvals/operation/{approval}/forward Api\\OperationApprovalC…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/approvals/operation/{approval}/reject Api\\OperationApprovalCo…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/approvals/project ........ Api\\ProjectApprovalController@index",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/approvals/project ........ Api\\ProjectApprovalController@store",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/approvals/project/{approval} Api\\ProjectApprovalController@sh…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/approvals/project/{approval}/approve Api\\ProjectApprovalContr…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/approvals/project/{approval}/forward Api\\ProjectApprovalContr…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/approvals/project/{approval}/reject Api\\ProjectApprovalContro…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/attendance ................. Api\\AttendanceController@overview",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/attendance/calendar ........ Api\\AttendanceController@calendar",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/attendance/clock-in ......... Api\\AttendanceController@clockIn",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/attendance/clock-out ....... Api\\AttendanceController@clockOut",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/attendance/field-clock ... Api\\AttendanceController@fieldClock",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/attendance/leave ...... Api\\AttendanceController@leaveRequests",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/attendance/leave .. Api\\AttendanceController@storeLeaveRequest",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "DELETE",
+    "uri": "api/attendance/leave/{leave} Api\\AttendanceController@destroyLeav…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/attendance/leave/{leave}/approve Api\\AttendanceController@app…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/attendance/overtime Api\\AttendanceController@overtimeRequests",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/attendance/overtime Api\\AttendanceController@storeOvertimeReq…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "DELETE",
+    "uri": "api/attendance/overtime/{overtime} Api\\AttendanceController@destr…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/attendance/overtime/{overtime}/approve Api\\AttendanceControll…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/attendance/overview ........ Api\\AttendanceController@overview",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/attendance/records .......... Api\\AttendanceController@records",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/attendance/report ............ Api\\AttendanceController@report",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/attendance/stats .............. Api\\AttendanceController@stats",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/attendance/supplement .... Api\\AttendanceController@supplement",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/attendance/today .............. Api\\AttendanceController@today",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/audit-logs ......................... Api\\AuditController@index",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/audit-logs/{id} ..................... Api\\AuditController@show",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/auth/change-password ....... Api\\AuthController@changePassword",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/auth/login .......................... Api\\AuthController@login",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/auth/logout ........................ Api\\AuthController@logout",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/auth/me .......................... Api\\AuthController@userInfo",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "PUT",
+    "uri": "api/auth/profile ................ Api\\AuthController@updateProfile",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/auth/userinfo .................... Api\\AuthController@userInfo",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/backups ........................... Api\\BackupController@index",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/backups ........................... Api\\BackupController@store",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "DELETE",
+    "uri": "api/backups/{filename} .............. Api\\BackupController@destroy",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/backups/{filename}/download .... Api\\BackupController@download",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/customers ....................... Api\\CustomerController@index",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/customers ....................... Api\\CustomerController@store",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/customers/health ............... Api\\CustomerController@health",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/customers/import ............... Api\\CustomerController@import",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/customers/map ................. Api\\CustomerController@mapData",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/customers/pipeline ...... Api\\CustomerPipelineController@index",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/customers/pipeline/weekly-trend Api\\CustomerPipelineControlle…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/customers/stats ................. Api\\CustomerController@stats",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/customers/{customer} ............. Api\\CustomerController@show",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "PUT",
+    "uri": "api/customers/{customer} ........... Api\\CustomerController@update",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "DELETE",
+    "uri": "api/customers/{customer} .......... Api\\CustomerController@destroy",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/customers/{customer}/devices .. Api\\CustomerController@devices",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/customers/{customer}/follow-ups Api\\CustomerController@follow…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/customers/{customer}/follow-ups Api\\CustomerController@storeF…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/customers/{customer}/profile .. Api\\CustomerController@profile",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "PUT",
+    "uri": "api/customers/{customer}/stage Api\\CustomerPipelineController@upd…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/dashboard/project-progress Api\\DashboardController@projectPro…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/dashboard/recent-projects Api\\DashboardController@recentProje…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/dashboard/recent-service-orders Api\\DashboardController@recen…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/dashboard/revenue-trend . Api\\DashboardController@revenueTrend",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/dashboard/screen .............. Api\\DashboardController@screen",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/dashboard/service-stats . Api\\DashboardController@serviceStats",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/dashboard/stats ................ Api\\DashboardController@stats",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/dashboard/todo .................. Api\\DashboardController@todo",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/departments ............... Api\\EmployeeController@departments",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/departments ........... Api\\EmployeeController@storeDepartment",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "PUT",
+    "uri": "api/departments/{department} Api\\EmployeeController@updateDepartm…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "DELETE",
+    "uri": "api/departments/{department} Api\\EmployeeController@destroyDepart…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/disk/files .......................... Api\\DiskController@files",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "DELETE",
+    "uri": "api/disk/files/{file} ............. Api\\DiskController@destroyFile",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/disk/folders ...................... Api\\DiskController@folders",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/disk/folders ................. Api\\DiskController@createFolder",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "DELETE",
+    "uri": "api/disk/folders/{folder} ....... Api\\DiskController@destroyFolder",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/disk/upload ........................ Api\\DiskController@upload",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/employee-onboardings .. Api\\EmployeeOnboardingController@index",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/employee-onboardings .. Api\\EmployeeOnboardingController@store",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/employee-onboardings/{onboarding} Api\\EmployeeOnboardingContr…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "PUT",
+    "uri": "api/employee-onboardings/{onboarding} Api\\EmployeeOnboardingContr…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "DELETE",
+    "uri": "api/employee-onboardings/{onboarding} Api\\EmployeeOnboardingContr…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/employee-resignations Api\\EmployeeResignationController@index",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/employee-resignations Api\\EmployeeResignationController@store",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/employee-resignations/settlement-preview Api\\EmployeeResignat…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/employee-resignations/{resignation} Api\\EmployeeResignationCo…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "PUT",
+    "uri": "api/employee-resignations/{resignation} Api\\EmployeeResignationCo…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/employee-resignations/{resignation}/approve Api\\EmployeeResig…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/employee-resignations/{resignation}/cancel Api\\EmployeeResign…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/employee-resignations/{resignation}/complete Api\\EmployeeResi…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/employee-resignations/{resignation}/submit Api\\EmployeeResign…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/employees ....................... Api\\EmployeeController@index",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/employees ....................... Api\\EmployeeController@store",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/employees/certificates ... Api\\EmployeeController@certificates",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/employees/departments ..... Api\\EmployeeController@departments",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/employees/departments . Api\\EmployeeController@storeDepartment",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "PUT",
+    "uri": "api/employees/departments/{department} Api\\EmployeeController@upd…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "DELETE",
+    "uri": "api/employees/departments/{department} Api\\EmployeeController@des…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/employees/import ............... Api\\EmployeeController@import",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/employees/positions ......... Api\\EmployeeController@positions",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/employees/positions ..... Api\\EmployeeController@storePosition",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "PUT",
+    "uri": "api/employees/positions/{position} Api\\EmployeeController@updateP…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "DELETE",
+    "uri": "api/employees/positions/{position} Api\\EmployeeController@destroy…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/employees/skills ............... Api\\EmployeeController@skills",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/employees/skills ........... Api\\EmployeeController@storeSkill",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "PUT",
+    "uri": "api/employees/skills/{skillTag} Api\\EmployeeController@updateSkill",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "DELETE",
+    "uri": "api/employees/skills/{skillTag} Api\\EmployeeController@destroySki…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/employees/skills/{skillTag}/attach Api\\EmployeeController@att…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/employees/skills/{skillTag}/detach Api\\EmployeeController@det…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/employees/{user} ................. Api\\EmployeeController@show",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "PUT",
+    "uri": "api/employees/{user} ............... Api\\EmployeeController@update",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "DELETE",
+    "uri": "api/employees/{user} .............. Api\\EmployeeController@destroy",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/employees/{user}/skills .... Api\\EmployeeController@userSkills",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/expenses ......................... Api\\ExpenseController@index",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/expenses ......................... Api\\ExpenseController@store",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/expenses/my ................... Api\\ExpenseController@myClaims",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/expenses/projects ............. Api\\ExpenseController@projects",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/expenses/stats ................... Api\\ExpenseController@stats",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/expenses/{claim} .................. Api\\ExpenseController@show",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "PUT",
+    "uri": "api/expenses/{claim} ................ Api\\ExpenseController@update",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "DELETE",
+    "uri": "api/expenses/{claim} ............... Api\\ExpenseController@destroy",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/expenses/{claim}/approve ....... Api\\ExpenseController@approve",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/expenses/{claim}/cancel ......... Api\\ExpenseController@cancel",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/expenses/{claim}/pay ............... Api\\ExpenseController@pay",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/finance/accounts .............. Api\\FinanceController@accounts",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/finance/accounts .......... Api\\FinanceController@storeAccount",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/finance/accounts/transfer Api\\FinanceController@transferAccou…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "PUT",
+    "uri": "api/finance/accounts/{account} Api\\FinanceController@updateAccount",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "DELETE",
+    "uri": "api/finance/accounts/{account} Api\\FinanceController@destroyAccou…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/finance/accounts/{account}/transactions Api\\FinanceController…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/finance/invoices .............. Api\\FinanceController@invoices",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/finance/invoices .......... Api\\FinanceController@storeInvoice",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/finance/invoices/{invoice} . Api\\FinanceController@showInvoice",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "PUT",
+    "uri": "api/finance/invoices/{invoice} Api\\FinanceController@updateInvoice",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "DELETE",
+    "uri": "api/finance/invoices/{invoice} Api\\FinanceController@destroyInvoi…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/finance/overview .............. Api\\FinanceController@overview",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/finance/payables .............. Api\\FinanceController@payables",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/finance/payables .......... Api\\FinanceController@storePayable",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "PUT",
+    "uri": "api/finance/payables/{payable} Api\\FinanceController@updatePayable",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "DELETE",
+    "uri": "api/finance/payables/{payable} Api\\FinanceController@destroyPayab…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/finance/payables/{payable}/payments Api\\FinanceController@pay…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/finance/payables/{payable}/payments Api\\FinanceController@sto…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/finance/payments .............. Api\\FinanceController@payments",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/finance/receipts .............. Api\\FinanceController@receipts",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/finance/receipts .......... Api\\FinanceController@storeReceipt",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/finance/receipts/{receipt} . Api\\FinanceController@showReceipt",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/finance/receivables ........ Api\\FinanceController@receivables",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/finance/receivables .... Api\\FinanceController@storeReceivable",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "PUT",
+    "uri": "api/finance/receivables/{receivable} Api\\FinanceController@update…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "DELETE",
+    "uri": "api/finance/receivables/{receivable} Api\\FinanceController@destro…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/finance/receivables/{receivable}/close Api\\FinanceController@…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/finance/receivables/{receivable}/payments Api\\FinanceControll…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/finance/receivables/{receivable}/payments Api\\FinanceControll…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/finance/summary ................ Api\\FinanceController@summary",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/finance/summary/aging ..... Api\\FinanceController@agingSummary",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/finance/summary/cashflow Api\\FinanceController@cashflowSummary",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/finance/transfers ............ Api\\FinanceController@transfers",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/follow-ups/calendar ..... Api\\FollowUpCalendarController@index",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/fuel-cards ...................... Api\\FuelCardController@index",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/fuel-cards ...................... Api\\FuelCardController@store",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/fuel-cards/recharges ........ Api\\FuelCardController@recharges",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/fuel-cards/recharges .... Api\\FuelCardController@storeRecharge",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "DELETE",
+    "uri": "api/fuel-cards/recharges/{recharge} Api\\FuelCardController@destro…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/fuel-cards/stats ................ Api\\FuelCardController@stats",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "PUT",
+    "uri": "api/fuel-cards/{card} .............. Api\\FuelCardController@update",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "DELETE",
+    "uri": "api/fuel-cards/{card} ............. Api\\FuelCardController@destroy",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/health .......................................................",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/inventory ...................... Api\\InventoryController@index",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/inventory ...................... Api\\InventoryController@store",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/inventory-categories ... Api\\InventoryCategoryController@index",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/inventory-categories ... Api\\InventoryCategoryController@store",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/inventory-categories/tree Api\\InventoryCategoryController@tree",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "PUT",
+    "uri": "api/inventory-categories/{category} Api\\InventoryCategoryControll…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "DELETE",
+    "uri": "api/inventory-categories/{category} Api\\InventoryCategoryControll…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/inventory-categories/{category}/move Api\\InventoryCategoryCon…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/inventory/batch-delete ... Api\\InventoryController@batchDelete",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/inventory/batch-export ... Api\\InventoryController@batchExport",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/inventory/batch-update ... Api\\InventoryController@batchUpdate",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/inventory/items-by-category Api\\InventoryController@itemsByCa…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/inventory/items/batch-import Api\\InventoryController@batchImp…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/inventory/items/export-template Api\\InventoryController@expor…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/inventory/low-stock ......... Api\\InventoryController@lowStock",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/inventory/stats ................ Api\\InventoryController@stats",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/inventory/stock-in ........... Api\\InventoryController@stockIn",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/inventory/stock-out ......... Api\\InventoryController@stockOut",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/inventory/stock-records . Api\\InventoryController@stockRecords",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/inventory/tree-with-counts Api\\InventoryController@treeWithCo…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/inventory/warehouses ...... Api\\InventoryController@warehouses",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/inventory/warnings .......... Api\\InventoryController@warnings",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/inventory/{inventoryItem} ....... Api\\InventoryController@show",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "PUT",
+    "uri": "api/inventory/{inventoryItem} ..... Api\\InventoryController@update",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "DELETE",
+    "uri": "api/inventory/{inventoryItem} .... Api\\InventoryController@destroy",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/knowledge/articles .......... Api\\KnowledgeController@articles",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/knowledge/articles ............. Api\\KnowledgeController@store",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/knowledge/articles/{article} .... Api\\KnowledgeController@show",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "PUT",
+    "uri": "api/knowledge/articles/{article} .. Api\\KnowledgeController@update",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "DELETE",
+    "uri": "api/knowledge/articles/{article} . Api\\KnowledgeController@destroy",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/knowledge/categories ... Api\\KnowledgeController@storeCategory",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/knowledge/categories ...... Api\\KnowledgeController@categories",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "PUT",
+    "uri": "api/knowledge/categories/{category} Api\\KnowledgeController@updat…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "DELETE",
+    "uri": "api/knowledge/categories/{category} Api\\KnowledgeController@destr…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/notifications ............... Api\\NotificationController@index",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/notifications/mark-all-read Api\\NotificationController@markAl…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/notifications/mark-read Api\\NotificationController@markAsRead",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/notifications/unread-count Api\\NotificationController@unreadC…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/permissions ............... Api\\RoleController@permissionIndex",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/permissions/tree ........... Api\\RoleController@permissionTree",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/positions ................... Api\\EmployeeController@positions",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/process/images .................. Api\\ProcessController@images",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/process/images/upload ..... Api\\ProcessController@uploadImages",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/process/images/{image} ....... Api\\ProcessController@showImage",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "PUT",
+    "uri": "api/process/images/{image} . Api\\ProcessController@updateImageMeta",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "DELETE",
+    "uri": "api/process/images/{image} .... Api\\ProcessController@destroyImage",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/process/industries .......... Api\\ProcessController@industries",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/process/inspections ........ Api\\ProcessController@inspections",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/process/inspections .... Api\\ProcessController@storeInspection",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/process/inspections/{inspection} Api\\ProcessController@showIn…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "PUT",
+    "uri": "api/process/inspections/{inspection} Api\\ProcessController@update…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "DELETE",
+    "uri": "api/process/inspections/{inspection} Api\\ProcessController@destro…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/process/instances ............ Api\\ProcessController@instances",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/process/instances ........ Api\\ProcessController@storeInstance",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/process/instances/{process} Api\\ProcessController@showInstance",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "PUT",
+    "uri": "api/process/instances/{process} Api\\ProcessController@updateInsta…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "DELETE",
+    "uri": "api/process/instances/{process} Api\\ProcessController@destroyInst…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/process/instances/{process}/accept Api\\ProcessController@acce…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/process/instances/{process}/progress Api\\ProcessController@up…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/process/instances/{process}/reject Api\\ProcessController@reje…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/process/signatures .......... Api\\ProcessController@signatures",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/process/signatures ...... Api\\ProcessController@storeSignature",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "DELETE",
+    "uri": "api/process/signatures/{signature} Api\\ProcessController@destroyS…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/process/signatures/{signature}/verify Api\\ProcessController@v…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/process/templates ............ Api\\ProcessController@templates",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/process/templates ........ Api\\ProcessController@storeTemplate",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/process/templates/{template} Api\\ProcessController@showTempla…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "PUT",
+    "uri": "api/process/templates/{template} Api\\ProcessController@updateTemp…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "DELETE",
+    "uri": "api/process/templates/{template} Api\\ProcessController@destroyTem…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/process/templates/{template}/apply Api\\ProcessController@appl…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/projects ......................... Api\\ProjectController@index",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/projects ......................... Api\\ProjectController@store",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/projects/board ................... Api\\ProjectController@board",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/projects/dashboard-summary Api\\ProjectController@dashboardSum…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/projects/payment-calendar Api\\ProjectController@paymentCalend…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/projects/stages ................. Api\\ProjectController@stages",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/projects/suppliers ........... Api\\ProjectController@suppliers",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/projects/suppliers ....... Api\\ProjectController@storeSupplier",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/projects/{project} ................ Api\\ProjectController@show",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "PUT",
+    "uri": "api/projects/{project} .............. Api\\ProjectController@update",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "DELETE",
+    "uri": "api/projects/{project} ............. Api\\ProjectController@destroy",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/projects/{project}/construction-logs Api\\ProjectController@co…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/projects/{project}/construction-logs Api\\ProjectController@st…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/projects/{project}/contracts Api\\ProjectController@projectCon…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "PUT",
+    "uri": "api/projects/{project}/stage ... Api\\ProjectController@updateStage",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/projects/{project}/suppliers Api\\ProjectController@projectSup…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/projects/{project}/tracking ... Api\\ProjectController@tracking",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/purchase/approvals ...... Api\\PurchaseApprovalController@index",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/purchase/approvals ...... Api\\PurchaseApprovalController@store",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/purchase/approvals/{appr}/decide Api\\PurchaseApprovalControll…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/purchase/contracts ...... Api\\PurchaseContractController@index",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/purchase/contracts ...... Api\\PurchaseContractController@store",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/purchase/contracts/stats Api\\PurchaseContractController@stats",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/purchase/contracts/{contract} Api\\PurchaseContractController@…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "PUT",
+    "uri": "api/purchase/contracts/{contract} Api\\PurchaseContractController@…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "DELETE",
+    "uri": "api/purchase/contracts/{contract} Api\\PurchaseContractController@…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/purchase/contracts/{contract}/ship Api\\PurchaseContractContro…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/purchase/logistics .. Api\\PurchaseLogisticsController@overview",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/purchase/payment-requests Api\\PurchasePaymentRequestControlle…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/purchase/payment-requests Api\\PurchasePaymentRequestControlle…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/purchase/payment-requests/stats Api\\PurchasePaymentRequestCon…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "DELETE",
+    "uri": "api/purchase/payment-requests/{req} Api\\PurchasePaymentRequestCon…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/purchase/payment-requests/{req}/approve Api\\PurchasePaymentRe…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/purchase/payments ........ Api\\PurchasePaymentController@index",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/purchase/payments ........ Api\\PurchasePaymentController@store",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/purchase/payments/stats .. Api\\PurchasePaymentController@stats",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/purchase/plans .............. Api\\PurchasePlanController@index",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/purchase/plans .............. Api\\PurchasePlanController@store",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/purchase/plans/stats ........ Api\\PurchasePlanController@stats",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "PUT",
+    "uri": "api/purchase/plans/{plan} ...... Api\\PurchasePlanController@update",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "DELETE",
+    "uri": "api/purchase/plans/{plan} ..... Api\\PurchasePlanController@destroy",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/purchase/plans/{plan}/approve Api\\PurchasePlanController@appr…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/purchase/plans/{plan}/submit Api\\PurchasePlanController@submit",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/purchase/requirements Api\\PurchaseRequirementController@index",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/purchase/requirements Api\\PurchaseRequirementController@store",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/purchase/requirements/stats Api\\PurchaseRequirementController…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "PUT",
+    "uri": "api/purchase/requirements/{requirement} Api\\PurchaseRequirementCo…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "DELETE",
+    "uri": "api/purchase/requirements/{requirement} Api\\PurchaseRequirementCo…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/purchase/shipments ...... Api\\PurchaseShipmentController@index",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/purchase/shipments/stats Api\\PurchaseShipmentController@stats",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/purchase/shipments/{shipment} Api\\PurchaseShipmentController@…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/purchase/shipments/{shipment}/logistics Api\\PurchaseLogistics…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/purchase/shipments/{shipment}/logistics-update Api\\PurchaseLo…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "PUT",
+    "uri": "api/purchase/shipments/{shipment}/logistics/{log} Api\\PurchaseLog…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/purchase/shipments/{shipment}/track Api\\PurchaseLogisticsCont…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/roles ............................... Api\\RoleController@index",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/roles ............................... Api\\RoleController@store",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/roles/{role} ......................... Api\\RoleController@show",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "PUT",
+    "uri": "api/roles/{role} ....................... Api\\RoleController@update",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "DELETE",
+    "uri": "api/roles/{role} ...................... Api\\RoleController@destroy",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/roles/{role}/permissions Api\\RoleController@assignPermissions",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/sales/follow-ups .......... Api\\SalesController@followUpsIndex",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/sales/follow-ups .......... Api\\SalesController@followUpsStore",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "DELETE",
+    "uri": "api/sales/follow-ups/attachments/{att} Api\\SalesController@follow…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/sales/follow-ups/attachments/{att}/download Api\\SalesControll…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/sales/follow-ups/{followUp} Api\\SalesController@followUpsShow",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "PUT",
+    "uri": "api/sales/follow-ups/{followUp} Api\\SalesController@followUpsUpda…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "DELETE",
+    "uri": "api/sales/follow-ups/{followUp} Api\\SalesController@followUpsDest…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/sales/follow-ups/{followUp}/attachments Api\\SalesController@f…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/sales/leads ................... Api\\SalesController@leadsIndex",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/sales/leads ................... Api\\SalesController@leadsStore",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/sales/leads/source-options Api\\SalesController@leadsSourceOpt…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/sales/leads/{lead} ............. Api\\SalesController@leadsShow",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "PUT",
+    "uri": "api/sales/leads/{lead} ........... Api\\SalesController@leadsUpdate",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "DELETE",
+    "uri": "api/sales/leads/{lead} .......... Api\\SalesController@leadsDestroy",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/sales/leads/{lead}/convert-to-opp Api\\SalesController@leadsCo…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "PATCH",
+    "uri": "api/sales/leads/{lead}/status Api\\SalesController@leadsUpdateStat…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/sales/opps ..................... Api\\SalesController@oppsIndex",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/sales/opps ..................... Api\\SalesController@oppsStore",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/sales/opps/funnel ............. Api\\SalesController@oppsFunnel",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/sales/opps/lost-reasons .. Api\\SalesController@oppsLostReasons",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/sales/opps/stage-options Api\\SalesController@oppsStageOptions",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/sales/opps/{opp} ................ Api\\SalesController@oppsShow",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "PUT",
+    "uri": "api/sales/opps/{opp} .............. Api\\SalesController@oppsUpdate",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "DELETE",
+    "uri": "api/sales/opps/{opp} ............. Api\\SalesController@oppsDestroy",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/sales/opps/{opp}/assign ....... Api\\SalesController@oppsAssign",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/sales/opps/{opp}/hold ........... Api\\SalesController@oppsHold",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/sales/opps/{opp}/lose ........... Api\\SalesController@oppsLose",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/sales/opps/{opp}/mark-lost .. Api\\SalesController@oppsMarkLost",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/sales/opps/{opp}/mark-won .... Api\\SalesController@oppsMarkWon",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/sales/opps/{opp}/move-to-project-pool Api\\SalesController@opp…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/sales/opps/{opp}/quotations Api\\SalesController@oppsQuotation…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/sales/opps/{opp}/quotations Api\\SalesController@oppsQuotation…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "PATCH",
+    "uri": "api/sales/opps/{opp}/stage ... Api\\SalesController@oppsUpdateStage",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/sales/opps/{opp}/win ............. Api\\SalesController@oppsWin",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/sales/pool ..................... Api\\SalesController@poolIndex",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/sales/pool/{pool} ............... Api\\SalesController@poolShow",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "PUT",
+    "uri": "api/sales/pool/{pool} ............. Api\\SalesController@poolUpdate",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/sales/pool/{pool}/convert-to-project Api\\SalesController@pool…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/sales/products .............. Api\\SalesProductController@index",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/sales/products .............. Api\\SalesProductController@store",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/sales/products/categories Api\\SalesProductController@categori…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/sales/products/{product} ..... Api\\SalesProductController@show",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "PUT",
+    "uri": "api/sales/products/{product} ... Api\\SalesProductController@update",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "DELETE",
+    "uri": "api/sales/products/{product} .. Api\\SalesProductController@destroy",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/sales/quotations/{quotation} Api\\SalesController@quotationsSh…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "PUT",
+    "uri": "api/sales/quotations/{quotation} Api\\SalesController@quotationsUp…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "DELETE",
+    "uri": "api/sales/quotations/{quotation} Api\\SalesController@quotationsDe…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/sales/quotations/{quotation}/accept Api\\SalesController@quota…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/sales/quotations/{quotation}/reject Api\\SalesController@quota…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/sales/quotations/{quotation}/revise Api\\SalesController@quota…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/sales/quotes ................. Api\\SalesController@quotesIndex",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/sales/quotes ................. Api\\SalesController@quotesStore",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/sales/quotes/status-options Api\\SalesController@quotesStatusO…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/sales/quotes/{quote} .......... Api\\SalesController@quotesShow",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "PUT",
+    "uri": "api/sales/quotes/{quote} ........ Api\\SalesController@quotesUpdate",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "DELETE",
+    "uri": "api/sales/quotes/{quote} ....... Api\\SalesController@quotesDestroy",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/sales/quotes/{quote}/accept Api\\SalesController@quotationsAcc…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/sales/quotes/{quote}/items Api\\SalesController@quotesStoreIte…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/sales/quotes/{quote}/new-version Api\\SalesController@quotesNe…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/sales/quotes/{quote}/reject Api\\SalesController@quotationsRej…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/sales/quotes/{quote}/revise Api\\SalesController@quotationsRev…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "PUT",
+    "uri": "api/sales/quotes/{quote}/status Api\\SalesController@quotesUpdateS…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/sales/referrers ........... Api\\SalesController@referrersIndex",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/sales/referrers ........... Api\\SalesController@referrersStore",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/sales/referrers/{referrer} . Api\\SalesController@referrersShow",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "PUT",
+    "uri": "api/sales/referrers/{referrer} Api\\SalesController@referrersUpdate",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "DELETE",
+    "uri": "api/sales/referrers/{referrer} Api\\SalesController@referrersDestr…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/schedules ....................... Api\\ScheduleController@index",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/schedules ................... Api\\ScheduleController@batchSave",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/schedules/batch-by-group . Api\\ScheduleController@batchByGroup",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/schedules/groups ........... Api\\ScheduleController@listGroups",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/schedules/groups ........... Api\\ScheduleController@storeGroup",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "PUT",
+    "uri": "api/schedules/groups/{group} .. Api\\ScheduleController@updateGroup",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "DELETE",
+    "uri": "api/schedules/groups/{group} . Api\\ScheduleController@destroyGroup",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/schedules/groups/{group}/add-member Api\\ScheduleController@ad…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/schedules/groups/{group}/members Api\\ScheduleController@syncG…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "DELETE",
+    "uri": "api/schedules/groups/{group}/members/{user} Api\\ScheduleControlle…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/schedules/my-schedule ...... Api\\ScheduleController@mySchedule",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/schedules/next-reminder .. Api\\ScheduleController@nextReminder",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/schedules/shifts ........... Api\\ScheduleController@listShifts",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/schedules/shifts ........... Api\\ScheduleController@storeShift",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "PUT",
+    "uri": "api/schedules/shifts/{shift} .. Api\\ScheduleController@updateShift",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "DELETE",
+    "uri": "api/schedules/shifts/{shift} . Api\\ScheduleController@destroyShift",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/schedules/smart-suggest .. Api\\ScheduleController@smartSuggest",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/schedules/stats ................. Api\\ScheduleController@stats",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "DELETE",
+    "uri": "api/schedules/{schedule} .......... Api\\ScheduleController@destroy",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/service/maintenance-contracts Api\\ServiceController@maintenan…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/service/orders ................... Api\\ServiceController@index",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/service/orders ................... Api\\ServiceController@store",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/service/orders/stats ............. Api\\ServiceController@stats",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/service/orders/{serviceOrder} ..... Api\\ServiceController@show",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/service/orders/{serviceOrder}/assign Api\\ServiceController@as…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/service/orders/{serviceOrder}/complete Api\\ServiceController@…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/service/orders/{serviceOrder}/confirm Api\\ServiceController@c…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/service/orders/{serviceOrder}/start Api\\ServiceController@sta…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/service/stats .................... Api\\ServiceController@stats",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/settings .................. Api\\SystemSettingsController@index",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "PUT",
+    "uri": "api/settings ................. Api\\SystemSettingsController@update",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/settings/idle-config Api\\SystemSettingsController@getIdleConf…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/settings/port ..... Api\\SystemSettingsController@getPortConfig",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "PUT",
+    "uri": "api/settings/port .. Api\\SystemSettingsController@updatePortConfig",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/system-logs .................... Api\\SystemLogController@index",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/users ........................... Api\\EmployeeController@index",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/users ........................... Api\\EmployeeController@store",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/users/{user} ..................... Api\\EmployeeController@show",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "PUT",
+    "uri": "api/users/{user} ................... Api\\EmployeeController@update",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "DELETE",
+    "uri": "api/users/{user} .................. Api\\EmployeeController@destroy",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/users/{user}/reset-password Api\\EmployeeController@resetPassw…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/vehicles ......................... Api\\VehicleController@index",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/vehicles ......................... Api\\VehicleController@store",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/vehicles/applies ......... Api\\VehicleController@usageRequests",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/vehicles/apply ........... Api\\VehicleController@usageRequests",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/vehicles/apply ....... Api\\VehicleController@storeUsageRequest",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/vehicles/insurances ......... Api\\VehicleController@insurances",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/vehicles/insurances ..... Api\\VehicleController@storeInsurance",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "PUT",
+    "uri": "api/vehicles/insurances/{insurance} Api\\VehicleController@updateI…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "DELETE",
+    "uri": "api/vehicles/insurances/{insurance} Api\\VehicleController@destroy…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/vehicles/maintenances ..... Api\\VehicleController@maintenances",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/vehicles/maintenances . Api\\VehicleController@storeMaintenance",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "PUT",
+    "uri": "api/vehicles/maintenances/{maintenance} Api\\VehicleController@upd…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "DELETE",
+    "uri": "api/vehicles/maintenances/{maintenance} Api\\VehicleController@des…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/vehicles/stats ................... Api\\VehicleController@stats",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/vehicles/usage ........... Api\\VehicleController@usageRequests",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/vehicles/usage ....... Api\\VehicleController@storeUsageRequest",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "PUT",
+    "uri": "api/vehicles/usage/{usageRequest} Api\\VehicleController@updateUsa…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "POST",
+    "uri": "api/vehicles/usage/{usageRequest}/dispatch Api\\VehicleController@…",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "GET|HEAD",
+    "uri": "api/vehicles/{vehicle} ................ Api\\VehicleController@show",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "PUT",
+    "uri": "api/vehicles/{vehicle} .............. Api\\VehicleController@update",
+    "name": "",
+    "action": ""
+  },
+  {
+    "method": "DELETE",
+    "uri": "api/vehicles/{vehicle} ............. Api\\VehicleController@destroy",
+    "name": "",
+    "action": ""
+  }
+]

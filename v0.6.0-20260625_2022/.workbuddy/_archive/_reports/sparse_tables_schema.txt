@@ -1,0 +1,452 @@
+=== project_contracts ===
+                                            Table "public.project_contracts"
+     Column      |              Type              | Collation | Nullable |                    Default                    
+-----------------+--------------------------------+-----------+----------+-----------------------------------------------
+ id              | bigint                         |           | not null | nextval('project_contracts_id_seq'::regclass)
+ project_id      | bigint                         |           | not null | 
+ contract_no     | character varying(50)          |           | not null | 
+ contract_amount | numeric(12,2)                  |           | not null | 
+ payment_method  | character varying(255)         |           | not null | 'installment'::character varying
+ contract_start  | date                           |           | not null | 
+ contract_end    | date                           |           | not null | 
+ status          | character varying(255)         |           | not null | 'draft'::character varying
+ attachment      | character varying(255)         |           |          | 
+ signed_at       | timestamp(0) without time zone |           |          | 
+ notes           | text                           |           |          | 
+ created_at      | timestamp(0) without time zone |           |          | 
+ updated_at      | timestamp(0) without time zone |           |          | 
+Indexes:
+    "project_contracts_pkey" PRIMARY KEY, btree (id)
+    "project_contracts_contract_no_unique" UNIQUE CONSTRAINT, btree (contract_no)
+    "project_contracts_project_id_index" btree (project_id)
+Foreign-key constraints:
+    "project_contracts_project_id_foreign" FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE RESTRICT
+Referenced by:
+    TABLE "contract_payment_nodes" CONSTRAINT "contract_payment_nodes_contract_id_foreign" FOREIGN KEY (contract_id) REFERENCES project_contracts(id) ON DELETE CASCADE
+    TABLE "receivables" CONSTRAINT "receivables_contract_id_foreign" FOREIGN KEY (contract_id) REFERENCES project_contracts(id) ON DELETE SET NULL
+
+
+=== construction_logs ===
+                                          Table "public.construction_logs"
+   Column   |              Type              | Collation | Nullable |                    Default                    
+------------+--------------------------------+-----------+----------+-----------------------------------------------
+ id         | bigint                         |           | not null | nextval('construction_logs_id_seq'::regclass)
+ project_id | bigint                         |           | not null | 
+ user_id    | bigint                         |           | not null | 
+ work_date  | date                           |           | not null | 
+ weather    | character varying(50)          |           |          | 
+ content    | text                           |           | not null | 
+ problems   | text                           |           |          | 
+ solutions  | text                           |           |          | 
+ photos     | json                           |           |          | 
+ work_hours | numeric(4,1)                   |           | not null | '8'::numeric
+ location   | text                           |           |          | 
+ status     | character varying(255)         |           | not null | 'submitted'::character varying
+ created_at | timestamp(0) without time zone |           |          | 
+ updated_at | timestamp(0) without time zone |           |          | 
+Indexes:
+    "construction_logs_pkey" PRIMARY KEY, btree (id)
+    "construction_logs_project_id_index" btree (project_id)
+    "construction_logs_work_date_index" btree (work_date)
+Foreign-key constraints:
+    "construction_logs_project_id_foreign" FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE CASCADE
+    "construction_logs_user_id_foreign" FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE RESTRICT
+
+
+
+=== project_materials ===
+                                             Table "public.project_materials"
+      Column       |              Type              | Collation | Nullable |                    Default                    
+-------------------+--------------------------------+-----------+----------+-----------------------------------------------
+ id                | bigint                         |           | not null | nextval('project_materials_id_seq'::regclass)
+ project_id        | bigint                         |           | not null | 
+ material_name     | character varying(200)         |           | not null | 
+ specification     | character varying(200)         |           |          | 
+ quantity          | numeric(10,2)                  |           | not null | 
+ unit              | character varying(20)          |           | not null | 
+ unit_cost         | numeric(12,2)                  |           | not null | '0'::numeric
+ total_cost        | numeric(12,2)                  |           | not null | 
+ used_by           | bigint                         |           |          | 
+ use_date          | date                           |           | not null | 
+ inventory_item_id | bigint                         |           |          | 
+ notes             | text                           |           |          | 
+ created_at        | timestamp(0) without time zone |           |          | 
+ updated_at        | timestamp(0) without time zone |           |          | 
+Indexes:
+    "project_materials_pkey" PRIMARY KEY, btree (id)
+    "project_materials_project_id_index" btree (project_id)
+Foreign-key constraints:
+    "project_materials_project_id_foreign" FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE CASCADE
+    "project_materials_used_by_foreign" FOREIGN KEY (used_by) REFERENCES users(id) ON DELETE SET NULL
+
+
+
+=== process_templates ===
+                                                Table "public.process_templates"
+         Column          |              Type              | Collation | Nullable |                    Default                    
+-------------------------+--------------------------------+-----------+----------+-----------------------------------------------
+ id                      | bigint                         |           | not null | nextval('process_templates_id_seq'::regclass)
+ industry                | character varying(30)          |           | not null | 
+ category                | character varying(50)          |           | not null | 
+ code                    | character varying(50)          |           | not null | 
+ name                    | character varying(100)         |           | not null | 
+ description             | text                           |           |          | 
+ standard_duration_days  | smallint                       |           | not null | '1'::smallint
+ standard_man_hours      | numeric(8,2)                   |           | not null | '0'::numeric
+ required_qualifications | json                           |           |          | 
+ safety_requirements     | text                           |           |          | 
+ quality_checkpoints     | json                           |           |          | 
+ acceptance_criteria     | json                           |           |          | 
+ sort_order              | integer                        |           | not null | 0
+ is_active               | boolean                        |           | not null | true
+ created_by              | bigint                         |           |          | 
+ created_at              | timestamp(0) without time zone |           |          | 
+ updated_at              | timestamp(0) without time zone |           |          | 
+Indexes:
+    "process_templates_pkey" PRIMARY KEY, btree (id)
+    "process_templates_industry_category_is_active_index" btree (industry, category, is_active)
+    "process_templates_industry_code_unique" UNIQUE CONSTRAINT, btree (industry, code)
+Foreign-key constraints:
+
+
+=== approval_records ===
+                                            Table "public.approval_records"
+     Column      |              Type              | Collation | Nullable |                   Default                    
+-----------------+--------------------------------+-----------+----------+----------------------------------------------
+ id              | bigint                         |           | not null | nextval('approval_records_id_seq'::regclass)
+ approvable_type | character varying(100)         |           | not null | 
+ approvable_id   | bigint                         |           | not null | 
+ user_id         | bigint                         |           | not null | 
+ action          | character varying(255)         |           | not null | 'approved'::character varying
+ comment         | text                           |           |          | 
+ status          | character varying(255)         |           | not null | 'pending'::character varying
+ created_at      | timestamp(0) without time zone |           |          | 
+ updated_at      | timestamp(0) without time zone |           |          | 
+Indexes:
+    "approval_records_pkey" PRIMARY KEY, btree (id)
+    "approval_records_approvable_type_approvable_id_index" btree (approvable_type, approvable_id)
+    "approval_records_user_id_index" btree (user_id)
+Foreign-key constraints:
+    "approval_records_user_id_foreign" FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE RESTRICT
+
+
+
+=== knowledge_articles ===
+                                           Table "public.knowledge_articles"
+    Column    |              Type              | Collation | Nullable |                    Default                     
+--------------+--------------------------------+-----------+----------+------------------------------------------------
+ id           | bigint                         |           | not null | nextval('knowledge_articles_id_seq'::regclass)
+ category_id  | bigint                         |           | not null | 
+ title        | character varying(255)         |           | not null | 
+ content      | text                           |           | not null | 
+ author_id    | bigint                         |           | not null | 
+ tags         | json                           |           |          | 
+ view_count   | integer                        |           | not null | 0
+ like_count   | integer                        |           | not null | 0
+ status       | character varying(255)         |           | not null | 'draft'::character varying
+ published_at | timestamp(0) without time zone |           |          | 
+ summary      | text                           |           |          | 
+ cover_image  | character varying(255)         |           |          | 
+ created_at   | timestamp(0) without time zone |           |          | 
+ updated_at   | timestamp(0) without time zone |           |          | 
+ is_featured  | boolean                        |           |          | false
+ slug         | character varying(255)         |           |          | 
+Indexes:
+    "knowledge_articles_pkey" PRIMARY KEY, btree (id)
+    "knowledge_articles_author_id_index" btree (author_id)
+    "knowledge_articles_category_id_index" btree (category_id)
+    "knowledge_articles_published_at_index" btree (published_at)
+    "knowledge_articles_status_index" btree (status)
+
+
+=== fuel_cards ===
+                                          Table "public.fuel_cards"
+   Column    |              Type              | Collation | Nullable |                Default                 
+-------------+--------------------------------+-----------+----------+----------------------------------------
+ id          | bigint                         |           | not null | nextval('fuel_cards_id_seq'::regclass)
+ card_no     | character varying(50)          |           | not null | 
+ card_name   | character varying(100)         |           |          | 
+ vehicle_id  | bigint                         |           |          | 
+ balance     | numeric(12,2)                  |           | not null | '0'::numeric
+ status      | character varying(255)         |           | not null | 'active'::character varying
+ issue_date  | date                           |           |          | 
+ expire_date | date                           |           |          | 
+ notes       | text                           |           |          | 
+ created_at  | timestamp(0) without time zone |           |          | 
+ updated_at  | timestamp(0) without time zone |           |          | 
+Indexes:
+    "fuel_cards_pkey" PRIMARY KEY, btree (id)
+    "fuel_cards_card_no_unique" UNIQUE CONSTRAINT, btree (card_no)
+    "fuel_cards_status_index" btree (status)
+    "fuel_cards_vehicle_id_index" btree (vehicle_id)
+Foreign-key constraints:
+    "fuel_cards_vehicle_id_foreign" FOREIGN KEY (vehicle_id) REFERENCES vehicles(id) ON DELETE SET NULL
+Referenced by:
+    TABLE "fuel_card_recharges" CONSTRAINT "fuel_card_recharges_card_id_foreign" FOREIGN KEY (card_id) REFERENCES fuel_cards(id) ON DELETE CASCADE
+
+
+
+=== vehicle_insurances ===
+Did not find any relation named "vehicle_insurances".
+
+
+=== vehicle_maintenances ===
+Did not find any relation named "vehicle_maintenances".
+
+
+=== process_instances ===
+                                               Table "public.process_instances"
+        Column         |              Type              | Collation | Nullable |                    Default                    
+-----------------------+--------------------------------+-----------+----------+-----------------------------------------------
+ id                    | bigint                         |           | not null | nextval('process_instances_id_seq'::regclass)
+ project_id            | bigint                         |           | not null | 
+ template_id           | bigint                         |           |          | 
+ parent_id             | bigint                         |           |          | 
+ code                  | character varying(50)          |           | not null | 
+ name                  | character varying(100)         |           | not null | 
+ sequence              | smallint                       |           | not null | '0'::smallint
+ planned_start_date    | date                           |           |          | 
+ planned_end_date      | date                           |           |          | 
+ actual_start_date     | date                           |           |          | 
+ actual_end_date       | date                           |           |          | 
+ planned_duration_days | smallint                       |           | not null | '0'::smallint
+ actual_duration_days  | smallint                       |           | not null | '0'::smallint
+ status                | character varying(20)          |           | not null | 'pending'::character varying
+ progress              | smallint                       |           | not null | '0'::smallint
+ foreman_id            | bigint                         |           |          | 
+ workers               | json                           |           |          | 
+ location              | character varying(200)         |           |          | 
+ description           | text                           |           |          | 
+ accepted_at           | timestamp(0) without time zone |           |          | 
+ accepted_by           | bigint                         |           |          | 
+ created_at            | timestamp(0) without time zone |           |          | 
+
+
+=== attendance_approvals ===
+Did not find any relation named "attendance_approvals".
+
+
+=== vehicle_fuel_records ===
+Did not find any relation named "vehicle_fuel_records".
+
+
+=== inventory_items ===
+                                            Table "public.inventory_items"
+     Column      |              Type              | Collation | Nullable |                   Default                   
+-----------------+--------------------------------+-----------+----------+---------------------------------------------
+ id              | bigint                         |           | not null | nextval('inventory_items_id_seq'::regclass)
+ name            | character varying(200)         |           | not null | 
+ code            | character varying(50)          |           | not null | 
+ category        | character varying(100)         |           | not null | 
+ specification   | character varying(200)         |           |          | 
+ unit            | character varying(20)          |           | not null | 
+ safety_stock    | integer                        |           | not null | 0
+ current_stock   | integer                        |           | not null | 0
+ cost_price      | numeric(10,2)                  |           | not null | '0'::numeric
+ sell_price      | numeric(10,2)                  |           | not null | '0'::numeric
+ warehouse_id    | bigint                         |           |          | 
+ location        | character varying(100)         |           |          | 
+ has_serial      | boolean                        |           | not null | false
+ status          | character varying(255)         |           | not null | 'active'::character varying
+ created_at      | timestamp(0) without time zone |           |          | 
+ updated_at      | timestamp(0) without time zone |           |          | 
+ category_id     | bigint                         |           |          | 
+ min_stock       | integer                        |           | not null | 0
+ shelf_life_days | integer                        |           |          | 
+ expiry_date     | date                           |           |          | 
+Indexes:
+    "inventory_items_pkey" PRIMARY KEY, btree (id)
+
+
+=== employee_certificates ===
+Did not find any relation named "employee_certificates".
+
+
+=== customer_contacts ===
+                                          Table "public.customer_contacts"
+   Column    |              Type              | Collation | Nullable |                    Default                    
+-------------+--------------------------------+-----------+----------+-----------------------------------------------
+ id          | bigint                         |           | not null | nextval('customer_contacts_id_seq'::regclass)
+ customer_id | bigint                         |           | not null | 
+ name        | character varying(50)          |           | not null | 
+ position    | character varying(100)         |           |          | 
+ phone       | character varying(20)          |           | not null | 
+ email       | character varying(100)         |           |          | 
+ is_primary  | boolean                        |           | not null | false
+ wechat      | character varying(50)          |           |          | 
+ notes       | text                           |           |          | 
+ created_at  | timestamp(0) without time zone |           |          | 
+ updated_at  | timestamp(0) without time zone |           |          | 
+Indexes:
+    "customer_contacts_pkey" PRIMARY KEY, btree (id)
+Foreign-key constraints:
+    "customer_contacts_customer_id_foreign" FOREIGN KEY (customer_id) REFERENCES customers(id) ON DELETE CASCADE
+
+
+
+=== reimbursement_items ===
+Did not find any relation named "reimbursement_items".
+
+
+=== contract_payment_nodes ===
+                                           Table "public.contract_payment_nodes"
+    Column    |              Type              | Collation | Nullable |                      Default                       
+--------------+--------------------------------+-----------+----------+----------------------------------------------------
+ id           | bigint                         |           | not null | nextval('contract_payment_nodes_id_seq'::regclass)
+ contract_id  | bigint                         |           | not null | 
+ name         | character varying(100)         |           | not null | 
+ percentage   | numeric(5,2)                   |           | not null | 
+ amount       | numeric(12,2)                  |           | not null | 
+ planned_date | date                           |           | not null | 
+ actual_date  | date                           |           |          | 
+ status       | character varying(255)         |           | not null | 'pending'::character varying
+ paid_amount  | numeric(12,2)                  |           | not null | '0'::numeric
+ notes        | text                           |           |          | 
+ created_at   | timestamp(0) without time zone |           |          | 
+ updated_at   | timestamp(0) without time zone |           |          | 
+Indexes:
+    "contract_payment_nodes_pkey" PRIMARY KEY, btree (id)
+    "contract_payment_nodes_contract_id_index" btree (contract_id)
+Foreign-key constraints:
+    "contract_payment_nodes_contract_id_foreign" FOREIGN KEY (contract_id) REFERENCES project_contracts(id) ON DELETE CASCADE
+
+
+
+=== quotation_items ===
+                                             Table "public.quotation_items"
+      Column       |              Type              | Collation | Nullable |                   Default                   
+-------------------+--------------------------------+-----------+----------+---------------------------------------------
+ id                | bigint                         |           | not null | nextval('quotation_items_id_seq'::regclass)
+ quotation_id      | bigint                         |           | not null | 
+ inventory_item_id | bigint                         |           |          | 
+ name              | character varying(200)         |           | not null | 
+ specification     | character varying(200)         |           |          | 
+ unit              | character varying(20)          |           | not null | '件'::character varying
+ quantity          | numeric(10,2)                  |           | not null | '1'::numeric
+ unit_price        | numeric(12,2)                  |           | not null | '0'::numeric
+ total_price       | numeric(12,2)                  |           | not null | '0'::numeric
+ remark            | text                           |           |          | 
+ created_at        | timestamp(0) without time zone |           |          | 
+ updated_at        | timestamp(0) without time zone |           |          | 
+Indexes:
+    "quotation_items_pkey" PRIMARY KEY, btree (id)
+    "quotation_items_inventory_item_id_index" btree (inventory_item_id)
+    "quotation_items_quotation_id_index" btree (quotation_id)
+Foreign-key constraints:
+    "quotation_items_inventory_item_id_foreign" FOREIGN KEY (inventory_item_id) REFERENCES inventory_items(id) ON DELETE SET NULL
+    "quotation_items_quotation_id_foreign" FOREIGN KEY (quotation_id) REFERENCES quotations(id) ON DELETE CASCADE
+
+
+
+=== maintenance_records ===
+Did not find any relation named "maintenance_records".
+
+
+=== opportunities ===
+                                              Table "public.opportunities"
+       Column       |              Type              | Collation | Nullable |                  Default                  
+--------------------+--------------------------------+-----------+----------+-------------------------------------------
+ id                 | bigint                         |           | not null | nextval('opportunities_id_seq'::regclass)
+ opp_no             | character varying(30)          |           | not null | 
+ name               | character varying(200)         |           | not null | 
+ customer_id        | bigint                         |           |          | 
+ lead_id            | bigint                         |           |          | 
+ type               | character varying(50)          |           | not null | 'comprehensive'::character varying
+ estimated_amount   | numeric(12,2)                  |           | not null | '0'::numeric
+ expected_sign_date | date                           |           |          | 
+ stage              | character varying(20)          |           | not null | 'requirement'::character varying
+ probability        | smallint                       |           | not null | '50'::smallint
+ sales_id           | bigint                         |           |          | 
+ presale_id         | bigint                         |           |          | 
+ competitor         | character varying(200)         |           |          | 
+ lost_reason        | character varying(30)          |           |          | 
+ project_id         | bigint                         |           |          | 
+ pool_id            | bigint                         |           |          | 
+ last_contact_at    | timestamp(0) without time zone |           |          | 
+ next_action        | text                           |           |          | 
+ next_action_at     | date                           |           |          | 
+ notes              | text                           |           |          | 
+ created_at         | timestamp(0) without time zone |           |          | 
+ updated_at         | timestamp(0) without time zone |           |          | 
+
+
+=== leads ===
+                                             Table "public.leads"
+      Column      |              Type              | Collation | Nullable |              Default              
+------------------+--------------------------------+-----------+----------+-----------------------------------
+ id               | bigint                         |           | not null | nextval('leads_id_seq'::regclass)
+ lead_no          | character varying(30)          |           | not null | 
+ customer_id      | bigint                         |           |          | 
+ customer_name    | character varying(200)         |           |          | 
+ contact_name     | character varying(50)          |           |          | 
+ contact_phone    | character varying(20)          |           |          | 
+ contact_title    | character varying(50)          |           |          | 
+ source           | character varying(20)          |           | not null | 'online'::character varying
+ referrer_id      | bigint                         |           |          | 
+ requirement      | text                           |           |          | 
+ estimated_amount | numeric(12,2)                  |           | not null | '0'::numeric
+ rating           | character varying(5)           |           | not null | 'C'::character varying
+ status           | character varying(20)          |           | not null | 'new'::character varying
+ owner_id         | bigint                         |           |          | 
+ follow_up_at     | date                           |           |          | 
+ last_contact_at  | timestamp(0) without time zone |           |          | 
+ discard_reason   | text                           |           |          | 
+ created_at       | timestamp(0) without time zone |           |          | 
+ updated_at       | timestamp(0) without time zone |           |          | 
+Indexes:
+    "leads_pkey" PRIMARY KEY, btree (id)
+    "leads_customer_id_index" btree (customer_id)
+
+
+=== employee_skills ===
+                                         Table "public.employee_skills"
+       Column        |              Type              | Collation | Nullable |              Default              
+---------------------+--------------------------------+-----------+----------+-----------------------------------
+ employee_profile_id | bigint                         |           | not null | 
+ skill_tag_id        | bigint                         |           | not null | 
+ proficiency         | character varying(255)         |           | not null | 'intermediate'::character varying
+ created_at          | timestamp(0) without time zone |           |          | 
+ updated_at          | timestamp(0) without time zone |           |          | 
+Indexes:
+    "employee_skills_employee_profile_id_skill_tag_id_unique" UNIQUE CONSTRAINT, btree (employee_profile_id, skill_tag_id)
+Foreign-key constraints:
+    "employee_skills_employee_profile_id_foreign" FOREIGN KEY (employee_profile_id) REFERENCES employee_profiles(id) ON DELETE CASCADE
+    "employee_skills_skill_tag_id_foreign" FOREIGN KEY (skill_tag_id) REFERENCES skill_tags(id) ON DELETE CASCADE
+
+
+
+=== service_orders ===
+                                              Table "public.service_orders"
+       Column       |              Type              | Collation | Nullable |                  Default                   
+--------------------+--------------------------------+-----------+----------+--------------------------------------------
+ id                 | bigint                         |           | not null | nextval('service_orders_id_seq'::regclass)
+ order_no           | character varying(30)          |           | not null | 
+ customer_id        | bigint                         |           | not null | 
+ project_id         | bigint                         |           |          | 
+ customer_device_id | bigint                         |           |          | 
+ fault_description  | text                           |           | not null | 
+ fault_photos       | json                           |           |          | 
+ urgency            | character varying(255)         |           | not null | 'normal'::character varying
+ service_type       | character varying(255)         |           | not null | 'warranty'::character varying
+ status             | character varying(255)         |           | not null | 'pending'::character varying
+ assigned_to        | bigint                         |           |          | 
+ assigned_at        | timestamp(0) without time zone |           |          | 
+ started_at         | timestamp(0) without time zone |           |          | 
+ completed_at       | timestamp(0) without time zone |           |          | 
+ confirmed_at       | timestamp(0) without time zone |           |          | 
+ rating             | smallint                       |           |          | 
+ review             | text                           |           |          | 
+ created_by         | bigint                         |           | not null | 
+ sla_hours          | smallint                       |           | not null | '24'::smallint
+ created_at         | timestamp(0) without time zone |           |          | 
+ updated_at         | timestamp(0) without time zone |           |          | 
+Indexes:
+
+
+=== tickets ===
+Did not find any relation named "tickets".
+
+
+=== training_records ===
+Did not find any relation named "training_records".
+

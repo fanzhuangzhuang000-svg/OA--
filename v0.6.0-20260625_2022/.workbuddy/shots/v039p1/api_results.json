@@ -1,0 +1,296 @@
+{
+  "timestamp": "2026-06-19T18:49:29.326807",
+  "base": "http://172.20.0.139:3001/api",
+  "total": 39,
+  "ok": 38,
+  "fail": 1,
+  "pass_rate": "97.4",
+  "results": [
+    {
+      "endpoint": "POST /sales/leads",
+      "expect": "200",
+      "actual": 200,
+      "ok": true,
+      "resp": ""
+    },
+    {
+      "endpoint": "PUT /sales/leads/41",
+      "expect": "200",
+      "actual": 200,
+      "ok": true,
+      "resp": ""
+    },
+    {
+      "endpoint": "PATCH /sales/leads/41/status",
+      "expect": "200",
+      "actual": 200,
+      "ok": true,
+      "resp": ""
+    },
+    {
+      "endpoint": "PATCH /sales/leads/41/status",
+      "expect": "200",
+      "actual": 200,
+      "ok": true,
+      "resp": ""
+    },
+    {
+      "endpoint": "POST /sales/leads/41/convert-to-opp",
+      "expect": "200",
+      "actual": 200,
+      "ok": true,
+      "resp": ""
+    },
+    {
+      "endpoint": "POST /sales/leads",
+      "expect": "200",
+      "actual": 200,
+      "ok": true,
+      "resp": ""
+    },
+    {
+      "endpoint": "DELETE /sales/leads/42",
+      "expect": "200",
+      "actual": 200,
+      "ok": true,
+      "resp": ""
+    },
+    {
+      "endpoint": "PATCH /sales/leads/41/status",
+      "expect": "409",
+      "actual": 409,
+      "ok": true,
+      "resp": ""
+    },
+    {
+      "endpoint": "PATCH /sales/leads/41/status",
+      "expect": "409",
+      "actual": 409,
+      "ok": true,
+      "resp": ""
+    },
+    {
+      "endpoint": "POST /sales/opps",
+      "expect": "200",
+      "actual": 200,
+      "ok": true,
+      "resp": ""
+    },
+    {
+      "endpoint": "PUT /sales/opps/55",
+      "expect": "200",
+      "actual": 200,
+      "ok": true,
+      "resp": ""
+    },
+    {
+      "endpoint": "PATCH /sales/opps/55/stage",
+      "expect": "200",
+      "actual": 200,
+      "ok": true,
+      "resp": ""
+    },
+    {
+      "endpoint": "POST /sales/opps",
+      "expect": "200",
+      "actual": 200,
+      "ok": true,
+      "resp": ""
+    },
+    {
+      "endpoint": "DELETE /sales/opps/56",
+      "expect": "200",
+      "actual": 200,
+      "ok": true,
+      "resp": ""
+    },
+    {
+      "endpoint": "POST /sales/opps/31/mark-lost",
+      "expect": "200",
+      "actual": 409,
+      "ok": false,
+      "resp": "{\"code\":1,\"message\":\"\\u5546\\u673a\\u5df2\\u7ec8\\u7ed3\"}"
+    },
+    {
+      "endpoint": "POST /sales/opps",
+      "expect": "200",
+      "actual": 200,
+      "ok": true,
+      "resp": ""
+    },
+    {
+      "endpoint": "POST /sales/opps/57/mark-won",
+      "expect": "200",
+      "actual": 200,
+      "ok": true,
+      "resp": ""
+    },
+    {
+      "endpoint": "POST /sales/quotes",
+      "expect": "200",
+      "actual": 200,
+      "ok": true,
+      "resp": ""
+    },
+    {
+      "endpoint": "PUT /sales/quotes/21",
+      "expect": "200",
+      "actual": 200,
+      "ok": true,
+      "resp": ""
+    },
+    {
+      "endpoint": "POST /sales/quotes/21/items",
+      "expect": "200",
+      "actual": 200,
+      "ok": true,
+      "resp": ""
+    },
+    {
+      "endpoint": "PUT /sales/quotes/21/status",
+      "expect": "200",
+      "actual": 200,
+      "ok": true,
+      "resp": ""
+    },
+    {
+      "endpoint": "PUT /sales/quotes/21/status",
+      "expect": "200",
+      "actual": 200,
+      "ok": true,
+      "resp": ""
+    },
+    {
+      "endpoint": "POST /sales/quotes/21/new-version",
+      "expect": "200",
+      "actual": 200,
+      "ok": true,
+      "resp": ""
+    },
+    {
+      "endpoint": "POST /sales/quotes",
+      "expect": "200",
+      "actual": 200,
+      "ok": true,
+      "resp": ""
+    },
+    {
+      "endpoint": "DELETE /sales/quotes/23",
+      "expect": "200",
+      "actual": 200,
+      "ok": true,
+      "resp": ""
+    },
+    {
+      "endpoint": "POST /sales/referrers",
+      "expect": "200",
+      "actual": 200,
+      "ok": true,
+      "resp": ""
+    },
+    {
+      "endpoint": "PUT /sales/referrers/10",
+      "expect": "200",
+      "actual": 200,
+      "ok": true,
+      "resp": ""
+    },
+    {
+      "endpoint": "PUT /sales/pool/7",
+      "expect": "200",
+      "actual": 200,
+      "ok": true,
+      "resp": ""
+    },
+    {
+      "endpoint": "POST /sales/pool/7/convert-to-project",
+      "expect": "200",
+      "actual": 200,
+      "ok": true,
+      "resp": ""
+    },
+    {
+      "endpoint": "POST /sales/follow-ups",
+      "expect": "200",
+      "actual": 200,
+      "ok": true,
+      "resp": ""
+    },
+    {
+      "endpoint": "PUT /sales/follow-ups/8",
+      "expect": "200",
+      "actual": 200,
+      "ok": true,
+      "resp": ""
+    },
+    {
+      "endpoint": "POST /sales/follow-ups/8/attachments",
+      "expect": "200",
+      "actual": 200,
+      "ok": true,
+      "resp": ""
+    },
+    {
+      "endpoint": "GET /sales/follow-ups/attachments/4/download",
+      "expect": "200",
+      "actual": 200,
+      "ok": true,
+      "resp": ""
+    },
+    {
+      "endpoint": "DELETE /sales/follow-ups/attachments/4",
+      "expect": "200",
+      "actual": 200,
+      "ok": true,
+      "resp": ""
+    },
+    {
+      "endpoint": "DELETE /sales/follow-ups/8",
+      "expect": "200",
+      "actual": 200,
+      "ok": true,
+      "resp": ""
+    },
+    {
+      "endpoint": "POST /sales/quotes",
+      "expect": "422",
+      "actual": 422,
+      "ok": true,
+      "resp": ""
+    },
+    {
+      "endpoint": "DELETE /sales/leads/41",
+      "expect": "[409, 422]",
+      "actual": 409,
+      "ok": true,
+      "resp": ""
+    },
+    {
+      "endpoint": "POST /sales/referral-settlements",
+      "expect": "[200, 201, 404]",
+      "actual": 404,
+      "ok": true,
+      "resp": ""
+    },
+    {
+      "endpoint": "POST /sales/opps/31/mark-won",
+      "expect": "[409, 422]",
+      "actual": 409,
+      "ok": true,
+      "resp": ""
+    }
+  ],
+  "resources": {
+    "lead_id": 41,
+    "opp_id": 54,
+    "new_opp_id": 55,
+    "won_opp_id": 57,
+    "pool_id": 7,
+    "quote_id": 21,
+    "quote_v2_id": 22,
+    "referrer_id": 10,
+    "new_project_id": 18,
+    "follow_id": 8,
+    "attachment_id": 4
+  }
+}

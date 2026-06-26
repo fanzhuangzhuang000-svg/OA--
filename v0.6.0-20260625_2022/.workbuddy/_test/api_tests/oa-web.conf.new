@@ -1,0 +1,19 @@
+server {
+    listen 80;
+    server_name 172.20.0.139;
+
+    # SPA fallback - HTML 路由全走前端
+    root /var/www/oa-web;
+    index index.html;
+
+    location / {
+        try_files $uri $uri/ /index.html;
+        add_header Cache-Control "no-cache, must-revalidate";
+    }
+
+    # Static assets - 缓存 1h
+    location ~* \.(js|css|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot)$ {
+        expires 1h;
+        add_header Cache-Control "public, must-revalidate";
+    }
+}

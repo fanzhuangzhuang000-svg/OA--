@@ -1,0 +1,25 @@
+﻿Loading FK...
+users=4 customers=30 projects=71 vehicles=5 leads=120 opps=60 svcs=3 inv=10
+
+=== Step 1: Base tables ===
+skill_tags... 8 rows
+positions...   [FAIL] ERROR:  column "department" of relation "positions" does not exist
+0 rows
+departments... 5 rows
+warehouses...   [FAIL] ERROR:  column "location" of relation "warehouses" does not exist
+0 rows
+stock_records...   [FAIL] ERROR:  column "notes" of relation "stock_records" does not exist
+0 rows
+
+=== Step 2: User-related ===
+employee_profiles... 4 rows
+  -> employee_profile ids: [45, 46, 47, 48]
+employee_skills...   [FAIL] ERROR:  duplicate key value violates unique constraint "employee_skills_employee_profile_id_skill_tag_id_unique"
+0 rows
+certificates... 12 rows
+employee_onboardings...   [FAIL] ERROR:  column "notes" of relation "employee_onboardings" does not exist
+0 rows
+employee_resignations...   [FAIL] ERROR:  column "handover_to" of relation "employee_resignations" does not exist
+0 rows
+
+=== Step 1-2 done ===

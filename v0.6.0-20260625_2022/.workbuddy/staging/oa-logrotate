@@ -1,0 +1,33 @@
+/var/log/oa-backup.log {
+    daily
+    rotate 30
+    compress
+    missingok
+    notifempty
+    create 0640 root root
+    su root syslog
+}
+
+/var/log/oa-monitor.log {
+    daily
+    rotate 30
+    compress
+    missingok
+    notifempty
+    create 0640 root root
+    su root syslog
+}
+
+/var/www/oa-api/storage/logs/*.log {
+    daily
+    rotate 14
+    compress
+    missingok
+    notifempty
+    create 0640 www-data www-data
+    sharedscripts
+    su www-data www-data
+    postrotate
+        sudo -u www-data kill -USR1 $(cat /run/php/php8.3-fpm.pid 2>/dev/null) 2>/dev/null || true
+    endscript
+}
