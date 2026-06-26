@@ -76,3 +76,7 @@ cert_staging/
 .env
 .env.local
 .env.*.local
+
+# Docker
+docker-compose.override.yml
+.docker/

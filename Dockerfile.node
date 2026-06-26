@@ -1,0 +1,31 @@
+# =============================================================
+# Node.js 构建环境 (Vue3 + Vite)
+# =============================================================
+FROM node:20-alpine
+
+# 安装系统依赖
+RUN apk add --no-cache \
+    git \
+    python3 \
+    make \
+    g++
+
+# 设置工作目录
+WORKDIR /app
+
+# 复制 package 文件
+COPY ./pc-web/package.json ./pc-web/package-lock.json* ./
+
+# 安装依赖
+RUN npm ci --no-audit --no-fund
+
+# 复制源代码
+COPY ./pc-web/ .
+
+# 暴露端口
+# 3000 - Vite dev server (自定义)
+# 5173 - Vite HMR (默认)
+EXPOSE 3000 5173
+
+# 默认启动开发服务器
+CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0"]

@@ -5,6 +5,9 @@ import Components from 'unplugin-vue-components/vite'
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 import path from 'path'
 
+// API 代理目标：优先读取环境变量 VITE_API_PROXY，默认 http://localhost (Nginx)
+const apiProxyTarget = process.env.VITE_API_PROXY || 'http://localhost'
+
 export default defineConfig({
   plugins: [
     vue(),
@@ -24,12 +27,13 @@ export default defineConfig({
     }
   },
   server: {
+    host: '0.0.0.0',
     port: 3000,
     proxy: {
       '/api': {
-        target: process.env.VITE_API_PROXY_TARGET || 'http://localhost:8000',
+        target: apiProxyTarget,
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\\/api/, '/api')
+        rewrite: (path) => path.replace(/^\/api/, '/api')
       }
     }
   },
