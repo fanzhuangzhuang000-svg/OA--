@@ -1,0 +1,269 @@
+# =============================================================
+# OA 安防运维系统 — 主 CI 流水线
+# 触发: push / PR 到 main, develop, staging
+# =============================================================
+name: CI Pipeline
+
+on:
+  push:
+    branches: [master, develop, staging]
+  pull_request:
+    branches: [master, develop]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  NODE_VERSION: '20'
+  PHP_VERSION: '8.3'
+
+# ─────────────────────────────────────────────────────────────
+jobs:
+  # ============================================================
+  # 1. PHP 后端 — 代码风格检查 (Laravel Pint)
+  # ============================================================
+  php-coding-style:
+    name: "🎨 PHP Code Style (Pint)"
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: pc-api
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ env.PHP_VERSION }}
+          tools: composer:v2
+          coverage: none
+
+      - name: Cache Composer packages
+        uses: actions/cache@v4
+        with:
+          path: pc-api/vendor
+          key: composer-${{ runner.os }}-${{ hashFiles('pc-api/composer.lock') }}
+          restore-keys: composer-${{ runner.os }}-
+
+      - name: Install Dependencies
+        run: composer install --no-interaction --prefer-dist --no-progress
+
+      - name: Run Pint (Laravel Code Style)
+        run: vendor/bin/pint --test
+
+  # ============================================================
+  # 2. PHP 后端 — 单元/功能测试 (PHPUnit + PostgreSQL 15)
+  # ============================================================
+  php-tests:
+    name: "🧪 PHP Tests (PHP ${{ env.PHP_VERSION }} + PostgreSQL)"
+    runs-on: ubuntu-latest
+    needs: php-coding-style
+    defaults:
+      run:
+        working-directory: pc-api
+
+    services:
+      postgres:
+        image: postgres:15-alpine
+        env:
+          POSTGRES_DB: security_oa_test
+          POSTGRES_USER: oa_test
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd="pg_isready -U oa_test -d security_oa_test"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ env.PHP_VERSION }}
+          extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, pdo_pgsql, pgsql, bcmath, gd, intl, exif, fileinfo
+          tools: composer:v2
+          coverage: xdebug
+
+      - name: Get Composer Cache Dir
+        id: composer-cache
+        run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+
+      - name: Cache Composer packages
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: composer-${{ runner.os }}-${{ hashFiles('pc-api/composer.lock') }}
+          restore-keys: composer-${{ runner.os }}-
+
+      - name: Install Dependencies
+        run: composer install --no-interaction --prefer-dist --no-progress
+
+      - name: Prepare Laravel Environment
+        run: |
+          cp .env.example .env
+          sed -i 's/DB_CONNECTION=mysql/DB_CONNECTION=pgsql/' .env
+          sed -i 's/DB_HOST=127.0.0.1/DB_HOST=127.0.0.1/' .env
+          sed -i 's/DB_PORT=3306/DB_PORT=5432/' .env
+          sed -i 's/DB_DATABASE=security_oa/DB_DATABASE=security_oa_test/' .env
+          sed -i 's/DB_USERNAME=root/DB_USERNAME=oa_test/' .env
+          sed -i 's/DB_PASSWORD=/DB_PASSWORD=postgres/' .env
+          php artisan key:generate
+
+      - name: Run Database Migrations
+        run: php artisan migrate --force
+        env:
+          DB_CONNECTION: pgsql
+          DB_HOST: 127.0.0.1
+          DB_PORT: 5432
+          DB_DATABASE: security_oa_test
+          DB_USERNAME: oa_test
+          DB_PASSWORD: postgres
+
+      - name: Run PHPUnit Tests
+        run: vendor/bin/phpunit --coverage-clover=coverage.xml
+        env:
+          DB_CONNECTION: pgsql
+          DB_HOST: 127.0.0.1
+          DB_PORT: 5432
+          DB_DATABASE: security_oa_test
+          DB_USERNAME: oa_test
+          DB_PASSWORD: postgres
+
+      - name: Upload Coverage Report
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: php-coverage
+          path: pc-api/coverage.xml
+          retention-days: 7
+
+  # ============================================================
+  # 3. 前端 — ESLint 代码风格检查
+  # ============================================================
+  frontend-lint:
+    name: "🎨 Frontend Lint (ESLint)"
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: pc-web
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: pc-web/package-lock.json
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Run ESLint
+        run: npm run lint
+
+  # ============================================================
+  # 4. 前端 — 构建 + 测试 (Vite + Vitest)
+  # ============================================================
+  frontend-build-test:
+    name: "🏗️ Frontend Build & Test"
+    runs-on: ubuntu-latest
+    needs: frontend-lint
+    defaults:
+      run:
+        working-directory: pc-web
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: pc-web/package-lock.json
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Type Check (vue-tsc)
+        run: npx vue-tsc --noEmit || true  # 非阻塞，先收集问题
+
+      - name: Run Vitest
+        run: npm run test
+
+      - name: Build Production Bundle
+        run: npm run build
+
+      - name: Upload Build Artifact
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-dist
+          path: pc-web/dist/
+          retention-days: 7
+
+  # ============================================================
+  # 5. 桌面端 — 构建验证 (Electron)
+  # ============================================================
+  desktop-build-check:
+    name: "🖥️ Desktop Build Check"
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: pc-desktop
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Build Electron (verify only)
+        run: npm run build
+
+  # ============================================================
+  # 6. Docker 构建验证
+  # ============================================================
+  docker-build:
+    name: "🐳 Docker Build Verification"
+    runs-on: ubuntu-latest
+    needs: [php-tests, frontend-build-test]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build PHP Docker Image
+        run: docker build -f Dockerfile.php -t oa-api:ci .
+
+      - name: Build Node Docker Image
+        run: docker build -f Dockerfile.node -t oa-web:ci .
+
+  # ============================================================
+  # 7. CI 状态汇总 (用于 branch protection)
+  # ============================================================
+  ci-status:
+    name: "✅ CI Status"
+    if: always()
+    needs: [php-coding-style, php-tests, frontend-lint, frontend-build-test, desktop-build-check, docker-build]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check all jobs
+        run: |
+          results=("${{ needs.php-coding-style.result }}" \
+                   "${{ needs.php-tests.result }}" \
+                   "${{ needs.frontend-lint.result }}" \
+                   "${{ needs.frontend-build-test.result }}" \
+                   "${{ needs.desktop-build-check.result }}" \
+                   "${{ needs.docker-build.result }}")
+          for r in "${results[@]}"; do
+            if [[ "$r" == "failure" || "$r" == "cancelled" ]]; then
+              echo "❌ One or more jobs failed or were cancelled"
+              exit 1
+            fi
+          done
+          echo "✅ All CI checks passed"

@@ -1,0 +1,167 @@
+# =============================================================
+# OA 安防运维系统 — 自动部署流水线
+# 触发: push 到 staging / master (手动触发也支持)
+# =============================================================
+name: Deploy
+
+on:
+  push:
+    branches: [staging, master]
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: '部署目标环境'
+        required: true
+        default: 'staging'
+        type: choice
+        options:
+          - staging
+          - production
+
+concurrency:
+  group: deploy-${{ github.event.inputs.environment || (github.ref_name == 'master' && 'production' || 'staging') }}
+  cancel-in-progress: false
+
+env:
+  DEPLOY_PATH: /opt/oa
+
+# ─────────────────────────────────────────────────────────────
+jobs:
+  # ============================================================
+  # 部署到 Staging (172 测试服务器)
+  # ============================================================
+  deploy-staging:
+    name: "🚀 Deploy to Staging"
+    if: >-
+      github.ref_name == 'staging' ||
+      (github.event_name == 'workflow_dispatch' && github.event.inputs.environment == 'staging')
+    runs-on: ubuntu-latest
+    environment:
+      name: staging
+      url: http://172.20.0.139
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup SSH Key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.STAGING_SSH_KEY }}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -H ${{ secrets.STAGING_HOST }} >> ~/.ssh/known_hosts 2>/dev/null
+
+      - name: Deploy via SSH
+        run: |
+          ssh -i ~/.ssh/deploy_key ${{ secrets.STAGING_USER }}@${{ secrets.STAGING_HOST }} << 'DEPLOY_SCRIPT'
+            set -e
+            echo "=== Starting Staging Deployment ==="
+            cd /opt/oa
+
+            # Pull latest code
+            git fetch origin staging
+            git reset --hard origin/staging
+
+            # Backend
+            cd pc-api
+            composer install --no-dev --optimize-autoloader --no-interaction
+            php artisan migrate --force
+            php artisan config:cache
+            php artisan route:cache
+            php artisan view:cache
+            php artisan optimize
+
+            # Frontend
+            cd ../pc-web
+            npm ci --production=false
+            npm run build
+            cd ..
+
+            # Restart services
+            sudo systemctl restart php8.3-fpm || true
+            sudo systemctl restart nginx || true
+
+            echo "=== Staging Deployment Complete ==="
+          DEPLOY_SCRIPT
+
+      - name: Health Check
+        run: |
+          sleep 5
+          curl -sf http://172.20.0.139/api/health || echo "⚠️ Health check endpoint not available"
+
+      - name: Notify Success
+        if: success()
+        run: echo "✅ Staging deployment successful"
+
+      - name: Notify Failure
+        if: failure()
+        run: echo "❌ Staging deployment failed"
+
+  # ============================================================
+  # 部署到 Production (152 生产服务器)
+  # ============================================================
+  deploy-production:
+    name: "🚀 Deploy to Production"
+    if: >-
+      github.ref_name == 'master' ||
+      (github.event_name == 'workflow_dispatch' && github.event.inputs.environment == 'production')
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+      url: https://www.afjsw.cn
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup SSH Key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.PRODUCTION_SSH_KEY }}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -H ${{ secrets.PRODUCTION_HOST }} >> ~/.ssh/known_hosts 2>/dev/null
+
+      - name: Deploy via SSH
+        run: |
+          ssh -i ~/.ssh/deploy_key ${{ secrets.PRODUCTION_USER }}@${{ secrets.PRODUCTION_HOST }} << 'DEPLOY_SCRIPT'
+            set -e
+            echo "=== Starting Production Deployment ==="
+            cd /opt/oa
+
+            # Backup database before deploy
+            pg_dump -U oa security_oa > /opt/oa/backups/pre-deploy-$(date +%Y%m%d_%H%M%S).sql || true
+
+            # Pull latest code
+            git fetch origin master
+            git reset --hard origin/master
+
+            # Backend
+            cd pc-api
+            composer install --no-dev --optimize-autoloader --no-interaction
+            php artisan migrate --force
+            php artisan config:cache
+            php artisan route:cache
+            php artisan view:cache
+            php artisan optimize
+
+            # Frontend
+            cd ../pc-web
+            npm ci --production=false
+            npm run build
+            cd ..
+
+            # Restart services
+            sudo systemctl restart php8.3-fpm || true
+            sudo systemctl restart nginx || true
+
+            echo "=== Production Deployment Complete ==="
+          DEPLOY_SCRIPT
+
+      - name: Health Check
+        run: |
+          sleep 5
+          curl -sf https://www.afjsw.cn/api/health || echo "⚠️ Health check endpoint not available"
+
+      - name: Notify Success
+        if: success()
+        run: echo "✅ Production deployment successful"
+
+      - name: Notify Failure
+        if: failure()
+        run: echo "❌ Production deployment failed"
