@@ -1,0 +1,78 @@
+# ==================== 通用 ====================
+# 操作系统文件
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# IDE / 编辑器
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# ==================== 开发工具 ====================
+# AI 工作区（开发脚本、记忆、截图等）
+.workbuddy/
+
+# ==================== Laravel (pc-api/) ====================
+pc-api/vendor/
+pc-api/node_modules/
+pc-api/storage/logs/*
+pc-api/storage/framework/cache/*
+pc-api/storage/framework/sessions/*
+pc-api/storage/framework/views/*
+pc-api/storage/app/public/*
+pc-api/.env
+pc-api/.env.backup
+pc-api/.env.production
+pc-api/.phpunit.result.cache
+pc-api/Homestead.json
+pc-api/Homestead.yaml
+pc-api/npm-debug.log
+pc-api/yarn-error.log
+pc-api/.php-cs-fixer.cache
+
+# ==================== Vue3 (pc-web/) ====================
+pc-web/node_modules/
+pc-web/dist/
+pc-web/dist.tar.gz
+pc-web/.env.local
+pc-web/.env.*.local
+pc-web/npm-debug.log*
+pc-web/yarn-debug.log*
+pc-web/yarn-error.log*
+pc-web/pnpm-lock.yaml
+
+# ==================== Electron (pc-desktop/) ====================
+pc-desktop/node_modules/
+pc-desktop/dist/
+pc-desktop/out/
+
+# ==================== 构建产物 ====================
+*.tar.gz
+*.zip
+*.rar
+*.7z
+
+# ==================== 日志 ====================
+*.log
+logs/
+
+# ==================== 临时文件 ====================
+*.tmp
+*.temp
+*.bak
+*.backup
+
+# ==================== 敏感信息 ====================
+# 证书和密钥
+*.pem
+*.key
+*.crt
+cert_staging/
+
+# 环境变量
+.env
+.env.local
+.env.*.local

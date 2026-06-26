@@ -1,6 +1,0 @@
-﻿ERROR:  invalid input syntax for type json
-LINE 1: ...alue, created_at, updated_at) VALUES ('test_xxx', '{quota:10...
-                                                             ^
-DETAIL:  Token "quota" is invalid.
-CONTEXT:  JSON data, line 1: {quota...
-
