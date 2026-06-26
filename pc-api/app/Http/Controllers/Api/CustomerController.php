@@ -49,15 +49,19 @@ class CustomerController extends Controller
 
         $list = $query->orderBy('customers.created_at', 'desc')->paginate($perPage);
 
-        // 计算健康度 (仍在 transform, 但无 query)
-        $list->getCollection()->transform(function ($c) {
+        // V0.6.0: 批量预取健康度数据 (替代 per-customer calcScore N+1)
+        $customerIds = $list->getCollection()->pluck('id')->all();
+        $healthData = $this->batchHealthData($customerIds);
+
+        $list->getCollection()->transform(function ($c) use ($healthData) {
             $c->project_count = $c->projects_count;  // withCount
             $c->last_follow_at = $c->last_follow_at
                 ? (\Carbon\Carbon::parse($c->last_follow_at)->format('Y-m-d H:i'))
                 : null;
             $c->contact = $c->primaryContact?->name ?? ($c->contacts->first()?->name ?? '');
             $c->phone   = $c->primaryContact?->phone ?? ($c->contacts->first()?->phone ?? '');
-            $c->health_score = $this->calcScore($c);
+            $hd = $healthData[$c->id] ?? null;
+            $c->health_score = $hd ? $hd['score'] : 0;
             $c->health_level = $this->toLevel($c->health_score);
             return $c;
         });
@@ -69,7 +73,8 @@ class CustomerController extends Controller
         $data = Cache::remember('customers:stats', 300, function () {
             $total         = Customer::count();
             $vip           = Customer::where('category', 'vip')->count();
-            $project_total = Customer::withCount('projects')->get()->sum('projects_count');
+            // V0.6.0: 直接 COUNT projects 表 (替代 withCount->get()->sum() 加载全部客户)
+            $project_total = (int) DB::table('projects')->count();
             $new_this_month = Customer::where('created_at', '>=', now()->startOfMonth())->count();
             return compact('total', 'vip', 'project_total', 'new_this_month');
         });
@@ -311,6 +316,103 @@ class CustomerController extends Controller
         return $follow + $contract + $payment + $level + $project;
     }
 
+    /**
+     * V0.6.0: 批量获取健康度评分数据 (5 维度聚合，替代 per-customer calcScore N+1)
+     * 复用 health() 方法的批量查询逻辑
+     */
+    private function batchHealthData(array $customerIds): array
+    {
+        if (empty($customerIds)) return [];
+
+        $customers = Customer::whereIn('id', $customerIds)->get(['id', 'category']);
+
+        // 1) 最近跟进
+        $lastFollowMap = DB::table('follow_up_records')
+            ->selectRaw('customer_id, MAX(created_at) as last_at')
+            ->whereIn('customer_id', $customerIds)
+            ->groupBy('customer_id')
+            ->pluck('last_at', 'customer_id');
+
+        // 2) 合同总额 (通过 projects 关联)
+        $contractMap = DB::table('project_contracts as pc')
+            ->join('projects as p', 'p.id', '=', 'pc.project_id')
+            ->selectRaw('p.customer_id, COALESCE(SUM(pc.contract_amount), 0) as total')
+            ->whereIn('p.customer_id', $customerIds)
+            ->groupBy('p.customer_id')
+            ->pluck('total', 'customer_id');
+
+        // 3) 应收/已收
+        $receivableMap = DB::table('receivables')
+            ->selectRaw('customer_id, COALESCE(SUM(amount), 0) as total, COALESCE(SUM(received_amount), 0) as received')
+            ->whereIn('customer_id', $customerIds)
+            ->groupBy('customer_id')
+            ->get()
+            ->keyBy('customer_id');
+
+        // 4) 活跃项目数
+        $activeProjectMap = DB::table('projects')
+            ->selectRaw('customer_id, COUNT(*) as cnt')
+            ->whereIn('customer_id', $customerIds)
+            ->whereNotIn('status', ['completed', 'cancelled', 'done'])
+            ->groupBy('customer_id')
+            ->pluck('cnt', 'customer_id');
+
+        $result = [];
+        foreach ($customers as $c) {
+            // 跟进活跃度(30)
+            $lastAt = $lastFollowMap->get($c->id);
+            $days = $lastAt ? (int) Carbon::parse($lastAt)->diffInDays(now()) : null;
+            if ($days === null || $days > 90)      $follow = 0;
+            elseif ($days <= 7)                      $follow = 30;
+            elseif ($days <= 30)                     $follow = 20;
+            else                                    $follow = 10;
+
+            // 合同价值(25)
+            $contractAmount = (float) ($contractMap->get($c->id) ?? 0);
+            if ($contractAmount >= 1_000_000)      $contract = 25;
+            elseif ($contractAmount >= 500_000)    $contract = 20;
+            elseif ($contractAmount >= 100_000)    $contract = 15;
+            elseif ($contractAmount >= 10_000)     $contract = 8;
+            else                                   $contract = 2;
+
+            // 回款健康(20)
+            $recvRow = $receivableMap->get($c->id);
+            $totalReceivable = $recvRow ? (float) $recvRow->total : 0.0;
+            $totalReceived   = $recvRow ? (float) $recvRow->received : 0.0;
+            if ($totalReceivable <= 0) {
+                $payment = 15;
+            } else {
+                $ratio = $totalReceivable / max($totalReceived, 1.0);
+                if ($ratio < 0.3)       $payment = 20;
+                elseif ($ratio < 0.6)   $payment = 15;
+                elseif ($ratio < 0.9)   $payment = 10;
+                else                    $payment = 5;
+            }
+
+            // 客户等级(15)
+            $cat = $c->category ?: 'normal';
+            if ($cat === 'inactive') $level = 0;
+            else $level = match ($cat) {
+                'vip'       => 15,
+                'normal'    => 10,
+                'potential' => 5,
+                default     => 5,
+            };
+
+            // 项目活跃(10)
+            $activeProjects = (int) ($activeProjectMap->get($c->id) ?? 0);
+            if ($activeProjects >= 3)      $project = 10;
+            elseif ($activeProjects >= 1)  $project = 7;
+            else                           $project = 3;
+
+            $result[$c->id] = [
+                'score' => $follow + $contract + $payment + $level + $project,
+            ];
+        }
+
+        return $result;
+    }
+
     private function toLevel(int $score): string
     {
         return match (true) {
@@ -417,11 +519,15 @@ class CustomerController extends Controller
         $now = Carbon::now();
 
         // 1) 基础信息(沿用 show() 的聚合)
+        // V0.6.0: 补充 projects.manager 和 serviceOrders.assignedUser/creator 预加载
         $customer->load([
             'contacts',
             'devices:id,customer_id',
             'projects:id,name,project_no,stage,status,customer_id,manager_id,created_at',
-            'serviceOrders:id,customer_id,status,created_at',
+            'projects.manager:id,name',
+            'serviceOrders:id,customer_id,status,created_at,assigned_to,created_by',
+            'serviceOrders.assignedUser:id,name',
+            'serviceOrders.creator:id,name',
             'followUps.user:id,name',
             'receivables',
             'assignedUser:id,name',

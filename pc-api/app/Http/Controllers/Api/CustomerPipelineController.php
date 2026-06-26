@@ -48,6 +48,14 @@ class CustomerPipelineController extends Controller
             ->orderBy('id', 'desc')
             ->get();
 
+        // V0.6.0: 批量预取每个客户的最近跟进 (替代 per-card serializeCard N+1)
+        $customerIds = $rows->pluck('id')->all();
+        $lastFollowMap = DB::table('follow_up_records')
+            ->selectRaw('customer_id, MAX(created_at) as last_at')
+            ->whereIn('customer_id', $customerIds)
+            ->groupBy('customer_id')
+            ->pluck('last_at', 'customer_id');
+
         // 6 列分组
         $columns = [];
         foreach (self::STAGES as $s) {
@@ -69,7 +77,7 @@ class CustomerPipelineController extends Controller
             $amount = (float) ($c->expected_amount ?: 0);
             $columns[$stage]['count']++;
             $columns[$stage]['total'] += $amount;
-            $columns[$stage]['cards'][] = $this->serializeCard($c);
+            $columns[$stage]['cards'][] = $this->serializeCard($c, $lastFollowMap->get($c->id));
         }
 
         // 转成保留顺序的数组
@@ -162,14 +170,15 @@ class CustomerPipelineController extends Controller
 
     /**
      * 4 周趋势: [{week: 'W1', new: 3, won: 1, lost: 0}, ...]
+     * V0.6.0: 单次条件聚合替代 12 次循环查询
      */
     public function weeklyTrend(Request $request): JsonResponse
     {
         $now = now();
         $weeks = [];
         for ($i = 3; $i >= 0; $i--) {
-            $start = $now->copy()->subWeeks($i)->startOfWeek();   // 周一
-            $end   = $now->copy()->subWeeks($i)->endOfWeek();     // 周日
+            $start = $now->copy()->subWeeks($i)->startOfWeek();
+            $end   = $now->copy()->subWeeks($i)->endOfWeek();
             $weeks[] = [
                 'start' => $start->toDateString(),
                 'end'   => $end->toDateString(),
@@ -177,20 +186,40 @@ class CustomerPipelineController extends Controller
             ];
         }
 
+        // 单次查询: 按周聚合 new / won / lost
+        $weekStarts = array_column($weeks, 'start');
+        $weekEnds   = array_column($weeks, 'end');
+        $minDate = $weekStarts[0] . ' 00:00:00';
+        $maxDate = $weekEnds[3] . ' 23:59:59';
+
+        // new customers per week
+        $newRows = Customer::whereBetween('created_at', [$minDate, $maxDate])
+            ->selectRaw("DATE_TRUNC('week', created_at)::date as wk, COUNT(*) as cnt")
+            ->groupBy('wk')
+            ->pluck('cnt', 'wk');
+
+        // won customers per week
+        $wonRows = Customer::where('pipeline_stage', 'won')
+            ->whereBetween('updated_at', [$minDate, $maxDate])
+            ->selectRaw("DATE_TRUNC('week', updated_at)::date as wk, COUNT(*) as cnt")
+            ->groupBy('wk')
+            ->pluck('cnt', 'wk');
+
+        // lost customers per week
+        $lostRows = Customer::where('pipeline_stage', 'lost')
+            ->whereBetween('updated_at', [$minDate, $maxDate])
+            ->selectRaw("DATE_TRUNC('week', updated_at)::date as wk, COUNT(*) as cnt")
+            ->groupBy('wk')
+            ->pluck('cnt', 'wk');
+
         $result = [];
         foreach ($weeks as $w) {
-            $newCount = Customer::whereBetween('created_at', [$w['start'] . ' 00:00:00', $w['end'] . ' 23:59:59'])->count();
-            $wonCount = Customer::where('pipeline_stage', 'won')
-                ->whereBetween('updated_at', [$w['start'] . ' 00:00:00', $w['end'] . ' 23:59:59'])
-                ->count();
-            $lostCount = Customer::where('pipeline_stage', 'lost')
-                ->whereBetween('updated_at', [$w['start'] . ' 00:00:00', $w['end'] . ' 23:59:59'])
-                ->count();
+            $weekStart = Carbon::parse($w['start'])->startOfWeek()->toDateString();
             $result[] = [
                 'week'      => $w['label'],
-                'new_count' => $newCount,
-                'won_count' => $wonCount,
-                'lost_count'=> $lostCount,
+                'new_count' => (int) ($newRows->get($weekStart) ?? 0),
+                'won_count' => (int) ($wonRows->get($weekStart) ?? 0),
+                'lost_count'=> (int) ($lostRows->get($weekStart) ?? 0),
             ];
         }
 
@@ -200,10 +229,9 @@ class CustomerPipelineController extends Controller
         ]);
     }
 
-    private function serializeCard(Customer $c): array
+    private function serializeCard(Customer $c, $lastFollowAt = null): array
     {
-        $lastFollow = $c->followUps()->orderBy('created_at', 'desc')->first();
-        $lastFollowAt = $lastFollow?->created_at;
+        // V0.6.0: lastFollowAt 由调用方批量预取传入，避免 per-card 查询
         $lastActivity = $c->last_activity_at ? Carbon::parse($c->last_activity_at) : null;
         $expectedClose = $c->expected_close_date ? Carbon::parse($c->expected_close_date) : null;
 

@@ -516,12 +516,18 @@ class ProjectController extends Controller
             $stageOrder = ['initiation', 'inquiry', 'contract', 'purchase', 'construction', 'settlement', 'warranty'];
             $stageLabels = ['initiation' => '立项', 'inquiry' => '询价', 'contract' => '合同', 'purchase' => '采购', 'construction' => '施工', 'settlement' => '结算', 'warranty' => '质保'];
 
+            // V0.6.0: 单次 GROUP BY 查询替代 7 次循环 count
+            $stageCounts = Project::select('stage', DB::raw('count(*) as cnt'))
+                ->groupBy('stage')
+                ->pluck('cnt', 'stage')
+                ->toArray();
+
             $byStage = [];
             foreach ($stageOrder as $s) {
                 $byStage[$s] = [
                     'value' => $s,
                     'label' => $stageLabels[$s] ?? $s,
-                    'count' => Project::where('stage', $s)->count(),
+                    'count' => (int) ($stageCounts[$s] ?? 0),
                 ];
             }
 
