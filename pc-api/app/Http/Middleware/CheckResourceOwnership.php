@@ -56,7 +56,7 @@ class CheckResourceOwnership
     {
         $user = $request->user();
         if (!$user) {
-            return $next($request);
+            return response()->json(['code' => 401, 'message' => '未登录'], 401);
         }
 
         // 1) admin / manager 旁路

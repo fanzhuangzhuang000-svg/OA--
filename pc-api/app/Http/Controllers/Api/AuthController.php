@@ -78,14 +78,20 @@ class AuthController extends Controller
 
     public function userInfo(Request $request): JsonResponse
     {
-        $user = $request->user()->load(['department', 'position', 'profile', 'roles']);
+        $user = $request->user();
         return response()->json([
             'code' => 0,
             'data' => [
-                'user' => $user,
-                // 暂时注释掉 permissions 和 roles（避免 Spatie 错误）
-                // 'permissions' => $user->getAllPermissions()->pluck('name'),
-                // 'roles' => $user->getRoleNames(),
+                'user' => [
+                    'id'         => $user->id,
+                    'name'       => $user->name,
+                    'username'   => $user->username,
+                    'avatar'     => $user->avatar,
+                    'phone'      => $user->phone,
+                    'email'      => $user->email,
+                    'department' => $user->department?->name,
+                    'position'   => $user->position?->name,
+                ],
             ],
         ]);
     }

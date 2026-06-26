@@ -19,7 +19,6 @@ use Symfony\Component\HttpFoundation\Response;
  *  3) 不通过 → 403 + 写 audit log
  *
  * 特殊豁免:
- *  - 用户名为 'admin' 开头 → 老 admin 兼容
  *  - $perm 形如 'module.*' → 检查该 module 下所有 action 的 OR
  */
 class CheckPermission
@@ -40,10 +39,6 @@ class CheckPermission
             // 关系未就绪
         }
         if (in_array('admin', $userRoles, true)) {
-            return $next($request);
-        }
-        // 老 admin 兼容
-        if (str_starts_with((string) $user->username, 'admin')) {
             return $next($request);
         }
 
