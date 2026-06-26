@@ -1,0 +1,202 @@
+# ============================================================
+# Prometheus 告警规则 — 安防运维OA系统
+# ============================================================
+#
+# 放置路径: /etc/prometheus/rules/oa-alerts.yml
+# Prometheus 会自动加载此文件（需在 prometheus.yml 中配置 rule_files）
+#
+# 告警级别:
+#   - critical: 需要立即处理，影响业务可用性
+#   - warning:  需要关注，可能影响业务
+#   - info:     仅供参考，一般不需要人工干预
+#
+# ============================================================
+
+groups:
+  # ========== 应用可用性 ==========
+  - name: oa-api-availability
+    rules:
+      # 实例不可用
+      - alert: OAApiDown
+        expr: up{job="oa-api"} == 0
+        for: 1m
+        labels:
+          severity: critical
+          service: oa-api
+        annotations:
+          summary: "OA API 实例不可用"
+          description: "实例 {{ $labels.instance }} 已宕机超过 1 分钟"
+          runbook: "docs/MONITORING.md#91-应用无响应"
+
+      # 健康检查返回降级状态
+      - alert: OAApiDegraded
+        expr: oa_app_info{job="oa-api"} == 0
+        for: 2m
+        labels:
+          severity: warning
+          service: oa-api
+        annotations:
+          summary: "OA API 健康检查返回降级状态"
+          description: "实例 {{ $labels.instance }} 健康检查异常"
+
+  # ========== 数据库 ==========
+  - name: oa-api-database
+    rules:
+      # 数据库连接数过高
+      - alert: OADBConnectionsHigh
+        expr: oa_db_connections{job="oa-api"} > 100
+        for: 5m
+        labels:
+          severity: warning
+          service: oa-api
+        annotations:
+          summary: "OA 数据库连接数过高"
+          description: "当前连接数: {{ $value }}（阈值: 100）"
+          runbook: "docs/MONITORING.md#82-数据库连接数过高"
+
+      # 数据库连接数严重过高
+      - alert: OADBConnectionsCritical
+        expr: oa_db_connections{job="oa-api"} > 150
+        for: 2m
+        labels:
+          severity: critical
+          service: oa-api
+        annotations:
+          summary: "OA 数据库连接数严重过高"
+          description: "当前连接数: {{ $value }}（阈值: 150），可能影响业务"
+          runbook: "docs/MONITORING.md#82-数据库连接数过高"
+
+      # 缓存命中率低
+      - alert: OADBCacheHitRateLow
+        expr: oa_db_cache_hit_rate{job="oa-api"} < 90
+        for: 10m
+        labels:
+          severity: warning
+          service: oa-api
+        annotations:
+          summary: "OA 数据库缓存命中率低"
+          description: "当前命中率: {{ $value }}%（阈值: 90%）"
+          runbook: "docs/MONITORING.md#84-缓存命中率低"
+
+  # ========== 系统资源 ==========
+  - name: oa-api-resources
+    rules:
+      # 磁盘使用率高
+      - alert: OADiskUsageHigh
+        expr: oa_disk_usage_percent{job="oa-api"} > 85
+        for: 10m
+        labels:
+          severity: warning
+          service: oa-api
+        annotations:
+          summary: "OA 服务器磁盘使用率高"
+          description: "当前使用率: {{ $value }}%（阈值: 85%）"
+          runbook: "docs/MONITORING.md#81-磁盘空间不足"
+
+      # 磁盘使用率严重过高
+      - alert: OADiskUsageCritical
+        expr: oa_disk_usage_percent{job="oa-api"} > 95
+        for: 5m
+        labels:
+          severity: critical
+          service: oa-api
+        annotations:
+          summary: "OA 服务器磁盘使用率严重过高"
+          description: "当前使用率: {{ $value }}%（阈值: 95%），需立即处理"
+          runbook: "docs/MONITORING.md#81-磁盘空间不足"
+
+      # 系统负载高
+      - alert: OALoadAverageHigh
+        expr: oa_load_average{window="1m", job="oa-api"} > 4
+        for: 10m
+        labels:
+          severity: warning
+          service: oa-api
+        annotations:
+          summary: "OA 服务器负载高"
+          description: "1分钟平均负载: {{ $value }}（阈值: 4）"
+
+      # 系统负载严重过高
+      - alert: OALoadAverageCritical
+        expr: oa_load_average{window="1m", job="oa-api"} > 8
+        for: 5m
+        labels:
+          severity: critical
+          service: oa-api
+        annotations:
+          summary: "OA 服务器负载严重过高"
+          description: "1分钟平均负载: {{ $value }}（阈值: 8）"
+
+  # ========== Node Exporter (服务器硬件) ==========
+  - name: oa-server-hardware
+    rules:
+      # CPU 使用率高
+      - alert: OAServerCPUHigh
+        expr: 100 - (avg by(instance) (irate(node_cpu_seconds_total{mode="idle", job="oa-server"}[5m])) * 100) > 80
+        for: 10m
+        labels:
+          severity: warning
+          service: oa-server
+        annotations:
+          summary: "OA 服务器 CPU 使用率高"
+          description: "实例 {{ $labels.instance }} CPU 使用率: {{ $value | printf \"%.1f\" }}%"
+
+      # 内存使用率高
+      - alert: OAServerMemoryHigh
+        expr: (1 - node_memory_MemAvailable_bytes{job="oa-server"} / node_memory_MemTotal_bytes{job="oa-server"}) * 100 > 85
+        for: 10m
+        labels:
+          severity: warning
+          service: oa-server
+        annotations:
+          summary: "OA 服务器内存使用率高"
+          description: "实例 {{ $labels.instance }} 内存使用率: {{ $value | printf \"%.1f\" }}%"
+
+  # ========== PostgreSQL Exporter ==========
+  - name: oa-database-detailed
+    rules:
+      # 死锁
+      - alert: OADeadlocks
+        expr: rate(pg_stat_activity_count{datname="oa_security", state="active"}[5m]) > 0
+        for: 5m
+        labels:
+          severity: warning
+          service: oa-postgres
+        annotations:
+          summary: "OA 数据库检测到活跃查询异常"
+
+      # 长事务
+      - alert: OALongTransaction
+        expr: pg_stat_activity_max_tx_duration{datname="oa_security"} > 300
+        for: 1m
+        labels:
+          severity: warning
+          service: oa-postgres
+        annotations:
+          summary: "OA 数据库存在长时间运行的事务"
+          description: "最长事务已运行 {{ $value | printf \"%.0f\" }} 秒"
+
+  # ========== Redis ==========
+  - name: oa-redis
+    rules:
+      # Redis 内存使用率高
+      - alert: OARedisMemoryHigh
+        expr: redis_memory_used_bytes{job="oa-redis"} / redis_memory_max_bytes{job="oa-redis"} * 100 > 80
+        for: 5m
+        labels:
+          severity: warning
+          service: oa-redis
+        annotations:
+          summary: "OA Redis 内存使用率高"
+          description: "当前使用率: {{ $value | printf \"%.1f\" }}%"
+
+      # Redis 连接数高
+      - alert: OARedisConnectionsHigh
+        expr: redis_connected_clients{job="oa-redis"} > 100
+        for: 5m
+        labels:
+          severity: warning
+          service: oa-redis
+        annotations:
+          summary: "OA Redis 连接数高"
+          description: "当前连接数: {{ $value }}"

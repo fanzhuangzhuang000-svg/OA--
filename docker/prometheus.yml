@@ -1,0 +1,104 @@
+# ============================================================
+# Prometheus 配置模板 — 安防运维OA系统
+# ============================================================
+#
+# 使用方法:
+#   1. 复制此文件到 Prometheus 配置目录
+#   2. 修改 targets 为实际的 OA API 地址
+#   3. 配置 basic_auth 或 bearer_token（如有需要）
+#   4. 重启 Prometheus: systemctl restart prometheus
+#
+# 前置条件:
+#   - OA API 已部署且 /api/health/metrics 端点可访问
+#   - Prometheus 服务器可访问 OA API 网络
+#
+# ============================================================
+
+global:
+  scrape_interval: 30s      # 全局抓取间隔
+  evaluation_interval: 30s  # 规则评估间隔
+  scrape_timeout: 10s       # 抓取超时
+
+# 告警规则文件
+rule_files:
+  - "rules/oa-alerts.yml"
+
+# 告警管理器
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets:
+            - alertmanager:9093
+
+# 抓取配置
+scrape_configs:
+  # ---- Prometheus 自身 ----
+  - job_name: "prometheus"
+    static_configs:
+      - targets: ["localhost:9090"]
+
+  # ---- 安防运维OA API ----
+  - job_name: "oa-api"
+    scrape_interval: 30s
+    metrics_path: "/api/health/metrics"
+    # 如果 metrics 端点需要认证，取消注释以下配置:
+    # basic_auth:
+    #   username: "monitor"
+    #   password: "your-password"
+    # 或使用 Bearer Token:
+    # bearer_token: "your-sanctum-token"
+    static_configs:
+      - targets:
+          - "oa-api.company.com:443"
+        labels:
+          service: "oa-api"
+          environment: "production"
+          team: "sre"
+
+      # 如果有多个实例（如负载均衡后端）
+      # - targets:
+      #     - "oa-api-1.internal:8000"
+      #     - "oa-api-2.internal:8000"
+      #   labels:
+      #     service: "oa-api"
+      #     environment: "production"
+
+  # ---- Node Exporter (服务器硬件指标) ----
+  - job_name: "oa-server"
+    scrape_interval: 15s
+    static_configs:
+      - targets:
+          - "oa-server.internal:9100"
+        labels:
+          service: "oa-server"
+          environment: "production"
+
+  # ---- PostgreSQL Exporter ----
+  - job_name: "oa-postgres"
+    scrape_interval: 15s
+    static_configs:
+      - targets:
+          - "oa-db.internal:9187"
+        labels:
+          service: "oa-postgres"
+          environment: "production"
+
+  # ---- Redis Exporter ----
+  - job_name: "oa-redis"
+    scrape_interval: 15s
+    static_configs:
+      - targets:
+          - "oa-redis.internal:9121"
+        labels:
+          service: "oa-redis"
+          environment: "production"
+
+  # ---- Nginx Exporter ----
+  - job_name: "oa-nginx"
+    scrape_interval: 15s
+    static_configs:
+      - targets:
+          - "oa-nginx.internal:9113"
+        labels:
+          service: "oa-nginx"
+          environment: "production"

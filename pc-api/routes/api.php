@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\{
     DiskController, KnowledgeController, NotificationController,
     SystemLogController, RoleController, AuditController, BackupController, FieldMaskController,
     SystemSettingsController, ApprovalTemplateController, FuelCardController,
+    HealthCheckController,
     InventoryCategoryController, SalesController, SalesProductController,
     FinanceApprovalController, OperationApprovalController, ProjectApprovalController,
     ApprovalCenterController,
@@ -50,40 +51,10 @@ use Illuminate\Support\Facades\Route;
 
 // ========== 健康检查端点 (T7) — 公开路由,无认证 ==========
 // 放最前面: 1) 监控系统探活用  2) 负载均衡器后端健康检查
-Route::get('/health', function () {
-    $checks = [
-        'status' => 'ok',
-        'time'   => now()->toIso8601String(),
-        'env'    => app()->environment(),
-        'php'    => PHP_VERSION,
-        'laravel'=> app()->version(),
-    ];
-
-    // DB 检查
-    try {
-        $r = DB::select('SELECT 1 AS ok');
-        $checks['db'] = (! empty($r) && $r[0]->ok == 1) ? 'up' : 'down';
-    } catch (\Throwable $e) {
-        $checks['db'] = 'down';
-        $checks['db_error'] = $e->getMessage();
-    }
-
-    // Cache 检查
-    try {
-        Cache::put('health_check', '1', 5);
-        $v = Cache::get('health_check');
-        $checks['cache'] = ($v === '1') ? 'up' : 'down';
-    } catch (\Throwable $e) {
-        $checks['cache'] = 'down';
-    }
-
-    $allUp = ($checks['db'] === 'up') && ($checks['cache'] === 'up');
-    return response()->json([
-        'code'    => $allUp ? 0 : 1001,
-        'message' => $allUp ? 'healthy' : 'degraded',
-        'data'    => $checks,
-    ], $allUp ? 200 : 503);
-});
+// V1.1: 增强为 HealthCheckController (DB/Redis/Cache/Storage/Disk/Queue 全检)
+Route::get('/health', [HealthCheckController::class, 'check']);
+Route::get('/health/ready', [HealthCheckController::class, 'ready']);
+Route::get('/health/live', [HealthCheckController::class, 'live']);
 
 // 公开路由（无需认证）
 Route::prefix('auth')->group(function () {
@@ -528,6 +499,9 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('errors',     [SystemMonitorController::class, 'errors']);
         Route::get('backups',    [SystemMonitorController::class, 'backups']);
     });
+
+    // V1.1 — Prometheus 指标端点 (admin only, 供 Prometheus 抓取)
+    Route::get('health/metrics', [HealthCheckController::class, 'metrics']);
 
     // V0.5.7 块5 — Dashboard 多维度 widget (4 维度)
     Route::prefix('dashboard/widget')->group(function () {

@@ -243,3 +243,12 @@ Schedule::command('oa:clean-expired-roles')
     ->withoutOverlapping()
     ->onOneServer()
     ->name('clean-expired-roles');
+
+// ============================================================
+// === V1.1 定时任务 — 系统监控告警检查（每 5 分钟） ===
+// ============================================================
+Schedule::command('monitor:check')
+    ->everyFiveMinutes()
+    ->withoutOverlapping()
+    ->onOneServer()
+    ->name('monitor-check');
