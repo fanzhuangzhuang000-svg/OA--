@@ -1,11 +1,23 @@
 <template>
   <el-container class="main-layout">
+    <!-- 全局背景效果 -->
+    <ParticleBackground />
+    <MouseGlow />
+
     <!-- 侧边栏 -->
     <el-aside :width="appStore.sidebarCollapsed ? '64px' : '240px'" class="sidebar">
       <div class="logo" @click="router.push('/')">
-        <div class="logo-icon">OA</div>
+        <div class="logo-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2L2 7l10 5 10-5-10-5z" />
+            <path d="M2 17l10 5 10-5" />
+            <path d="M2 12l10 5 10-5" />
+          </svg>
+        </div>
         <transition name="fade">
-          <span v-if="!appStore.sidebarCollapsed" class="logo-text">{{ systemConfigStore.shortName }}</span>
+          <span v-if="!appStore.sidebarCollapsed" class="logo-text">
+            <span class="logo-nova">NOVA</span><span class="logo-ops">OPS</span>
+          </span>
         </transition>
       </div>
       <el-scrollbar>
@@ -14,12 +26,8 @@
           :collapse="appStore.sidebarCollapsed"
           :collapse-transition="false"
           router
-          background-color="#0C447C"
-          text-color="rgba(255,255,255,0.75)"
-          active-text-color="#fff"
         >
           <template v-for="route in menuRoutes" :key="route.path">
-            <!-- 有子菜单 -->
             <el-sub-menu v-if="route.children && route.children.length > 1" :index="route.path">
               <template #title>
                 <el-icon v-if="route.meta?.icon"><component :is="route.meta.icon" /></el-icon>
@@ -34,7 +42,6 @@
                 <template #title>{{ child.meta?.title }}</template>
               </el-menu-item>
             </el-sub-menu>
-            <!-- 单个菜单项（含1个子项或无子项） -->
             <el-menu-item v-else :index="getMenuIndex(route)">
               <el-icon v-if="route.meta?.icon"><component :is="route.meta.icon" /></el-icon>
               <template #title>{{ route.meta?.title }}</template>
@@ -43,9 +50,8 @@
         </el-menu>
       </el-scrollbar>
 
-      <!-- 侧边栏底部：版本号 + 版权 -->
       <div class="sidebar-footer" :class="{ 'is-collapsed': appStore.sidebarCollapsed }">
-        <div class="sidebar-footer-version">v1.0.1</div>
+        <div class="sidebar-footer-version">v2.0.0</div>
         <div class="sidebar-footer-copyright">© 2026 宁波初阳信息技术有限公司</div>
       </div>
     </el-aside>
@@ -67,21 +73,17 @@
           </el-breadcrumb>
         </div>
         <div class="header-right">
-          <!-- 搜索 -->
           <el-tooltip content="全局搜索" placement="bottom">
             <el-icon class="header-action"><Search /></el-icon>
           </el-tooltip>
-          <!-- 消息 -->
           <el-tooltip content="消息中心" placement="bottom">
             <el-badge :value="unreadCount" :max="99" :hidden="unreadCount === 0" class="header-action">
               <el-icon class="header-action__icon" @click="goToMessage"><Bell /></el-icon>
             </el-badge>
           </el-tooltip>
-          <!-- 全屏 -->
           <el-tooltip content="全屏" placement="bottom">
             <el-icon class="header-action" @click="toggleFullscreen"><FullScreen /></el-icon>
           </el-tooltip>
-          <!-- 用户下拉 -->
           <el-dropdown trigger="click" @command="handleCommand">
             <div class="user-info">
               <el-avatar :size="32" class="user-avatar">
@@ -119,10 +121,8 @@
       </el-main>
     </el-container>
 
-    <!-- V0.5.7 块6 — PWA 安装提示 (右下角) -->
     <PwaInstallBanner />
 
-    <!-- 移动端访问提示 -->
     <el-dialog
       v-model="deviceCheck.dialogVisible.value"
       title="请使用 PC 端访问"
@@ -132,10 +132,10 @@
       @close="deviceCheck.closeDialog"
     >
       <div class="mobile-dialog">
-        <el-icon :size="48" color="#BA7517"><Warning /></el-icon>
+        <el-icon :size="48" color="#ff9f0a"><Warning /></el-icon>
         <p>检测到您正在使用移动设备访问本系统。</p>
-        <p>为获得最佳体验,请使用 <strong>PC 浏览器(Chrome/Edge)1920×1080</strong> 以上分辨率访问。</p>
-        <p class="mobile-dialog__tip">移动端适配版本正在规划中,敬请期待。</p>
+        <p>为获得最佳体验，请使用 <strong>PC 浏览器(Chrome/Edge)1920×1080</strong> 以上分辨率访问。</p>
+        <p class="mobile-dialog__tip">移动端适配版本正在规划中，敬请期待。</p>
       </div>
       <template #footer>
         <el-button @click="deviceCheck.closeDialog">我知道了</el-button>
@@ -155,6 +155,8 @@ import { ElMessageBox } from 'element-plus'
 import { get as httpGet } from '@/utils/request'
 import { useDeviceCheck } from '@/composables/useDeviceCheck'
 import PwaInstallBanner from '@/components/PwaInstallBanner.vue'
+import ParticleBackground from '@/components/ParticleBackground.vue'
+import MouseGlow from '@/components/MouseGlow.vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -162,44 +164,36 @@ const appStore = useAppStore()
 const userStore = useUserStore()
 const systemConfigStore = useSystemConfigStore()
 const cachedViews = ref<string[]>([])
-
-// 移动端检测
 const deviceCheck = useDeviceCheck()
 
-// 动态页面标题
 function updateDocumentTitle() {
-  const baseTitle = systemConfigStore.sysConfig.systemName || '安防运维OA办公系统'
+  const baseTitle = systemConfigStore.sysConfig.systemName || 'NOVA OPS — 智能运维管理平台'
   document.title = baseTitle
 }
 onMounted(updateDocumentTitle)
 watch(() => systemConfigStore.sysConfig.systemName, updateDocumentTitle)
 
-// ========== 顶栏消息红点 ==========
 const unreadCount = ref(0)
 let unreadTimer: any
 
 async function loadUnreadCount() {
   try {
     const res: any = await httpGet('/notifications/unread-count')
-    // 解包后 res = {count: 3}
     if (res && typeof res === 'object' && 'count' in res) {
       unreadCount.value = Number(res.count) || 0
     }
-  } catch (e) { /* 未登录时静默 */ }
+  } catch (e) {}
 }
 
 function goToMessage() {
-  // 跳到消息中心（路由已配 alias '/message'）
   router.push('/message')
 }
 
 onMounted(() => {
   loadUnreadCount()
-  // 每 60s 拉一次
   unreadTimer = setInterval(loadUnreadCount, 60000)
 })
 
-// 侧边栏菜单路由（过滤掉隐藏的）
 const menuRoutes = computed(() => {
   const mainRoute = router.options.routes.find(r => r.path === '/')
   return (mainRoute?.children || [])
@@ -210,12 +204,8 @@ const menuRoutes = computed(() => {
     }))
 })
 
-// 当前激活菜单
-const activeMenu = computed(() => {
-  return route.path
-})
+const activeMenu = computed(() => route.path)
 
-// 面包屑
 const breadcrumbs = computed(() => {
   const crumbs: { path: string; title: string }[] = [{ path: '', title: '首页' }]
   const matched = route.matched.filter(item => item.meta?.title)
@@ -225,7 +215,6 @@ const breadcrumbs = computed(() => {
   return crumbs
 })
 
-// 菜单索引（处理只有1个子路由的情况）
 function getMenuIndex(route: any): string {
   if (route.children?.length === 1) {
     return `/${route.path}/${route.children[0].path}`
@@ -233,7 +222,6 @@ function getMenuIndex(route: any): string {
   return `/${route.path}`
 }
 
-// 全屏切换
 function toggleFullscreen() {
   if (!document.fullscreenElement) {
     document.documentElement.requestFullscreen()
@@ -242,7 +230,6 @@ function toggleFullscreen() {
   }
 }
 
-// 用户下拉命令
 function handleCommand(command: string) {
   switch (command) {
     case 'profile':
@@ -265,17 +252,25 @@ function handleCommand(command: string) {
 </script>
 
 <style lang="scss" scoped>
+@use '@/styles/variables' as *;
+
 .main-layout {
   height: 100vh;
   overflow: hidden;
+  position: relative;
 }
 
+// ========== 侧边栏 ==========
 .sidebar {
-  background: #0C447C;
+  background: $bg-sidebar;
+  backdrop-filter: $glass-blur;
+  -webkit-backdrop-filter: $glass-blur;
+  border-right: 1px solid $glass-border;
   transition: width 0.3s ease;
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  z-index: 10;
 
   .logo {
     height: 56px;
@@ -283,44 +278,61 @@ function handleCommand(command: string) {
     align-items: center;
     padding: 0 16px;
     cursor: pointer;
-    border-bottom: 1px solid rgba(255,255,255,0.1);
+    border-bottom: 1px solid $glass-border;
     flex-shrink: 0;
 
     .logo-icon {
       width: 36px;
       height: 36px;
-      background: linear-gradient(135deg, #1D9E75, #7fdbca);
-      border-radius: 8px;
+      background: linear-gradient(135deg, $primary, $accent);
+      border-radius: 10px;
       display: flex;
       align-items: center;
       justify-content: center;
-      color: white;
-      font-size: 16px;
-      font-weight: 700;
       flex-shrink: 0;
+      box-shadow: 0 2px 8px rgba(10, 132, 255, 0.3);
     }
 
     .logo-text {
-      color: white;
       font-size: 16px;
-      font-weight: 600;
+      font-weight: 700;
       margin-left: 12px;
       white-space: nowrap;
+      letter-spacing: 1px;
+
+      .logo-nova {
+        color: #fff;
+      }
+      .logo-ops {
+        color: rgba(255, 255, 255, 0.4);
+      }
     }
   }
 
   :deep(.el-menu) {
     border-right: none;
     padding: 8px 0;
+    background: transparent;
 
-    .el-menu-item {
+    .el-menu-item,
+    .el-sub-menu__title {
+      color: $text-secondary;
       margin: 2px 8px;
-      border-radius: 6px;
+      border-radius: $radius-md;
       height: 44px;
       line-height: 44px;
+      transition: $transition;
 
+      &:hover {
+        background: $glass-bg !important;
+        color: $text-primary;
+      }
+    }
+
+    .el-menu-item {
       &.is-active {
-        background: linear-gradient(135deg, rgba(29,158,117,0.3), rgba(29,158,117,0.15)) !important;
+        background: $primary-lighter !important;
+        color: $primary !important;
         position: relative;
 
         &::before {
@@ -331,25 +343,16 @@ function handleCommand(command: string) {
           transform: translateY(-50%);
           width: 3px;
           height: 20px;
-          background: #1D9E75;
+          background: $primary;
           border-radius: 0 2px 2px 0;
         }
-      }
-
-      &:hover {
-        background: rgba(255,255,255,0.08) !important;
       }
     }
 
     .el-sub-menu {
       .el-sub-menu__title {
-        margin: 2px 8px;
-        border-radius: 6px;
-        height: 44px;
-        line-height: 44px;
-
         &:hover {
-          background: rgba(255,255,255,0.08) !important;
+          background: $glass-bg !important;
         }
       }
     }
@@ -358,9 +361,9 @@ function handleCommand(command: string) {
   .sidebar-footer {
     flex-shrink: 0;
     padding: 10px 12px;
-    border-top: 1px solid rgba(255,255,255,0.08);
-    background: rgba(0,0,0,0.08);
-    color: rgba(255,255,255,0.55);
+    border-top: 1px solid $glass-border;
+    background: rgba(0, 0, 0, 0.2);
+    color: $text-secondary;
     line-height: 1.4;
     transition: padding 0.3s ease;
   }
@@ -368,13 +371,13 @@ function handleCommand(command: string) {
   .sidebar-footer-version {
     font-size: 12px;
     font-weight: 600;
-    color: #fff;
+    color: $primary;
     letter-spacing: 0.4px;
   }
 
   .sidebar-footer-copyright {
     font-size: 11px;
-    color: rgba(255,255,255,0.5);
+    color: $text-placeholder;
     margin-top: 2px;
     white-space: nowrap;
     overflow: hidden;
@@ -391,6 +394,7 @@ function handleCommand(command: string) {
   }
 }
 
+// ========== 顶栏 ==========
 .right-container {
   display: flex;
   flex-direction: column;
@@ -399,14 +403,15 @@ function handleCommand(command: string) {
 
 .header {
   height: 56px;
-  background: #fff;
+  background: $bg-header;
+  backdrop-filter: $glass-blur;
+  -webkit-backdrop-filter: $glass-blur;
+  border-bottom: 1px solid $glass-border;
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0 20px;
-  border-bottom: 1px solid #ebeef5;
   flex-shrink: 0;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
   z-index: 10;
 
   .header-left {
@@ -417,11 +422,14 @@ function handleCommand(command: string) {
     .collapse-btn {
       font-size: 20px;
       cursor: pointer;
-      color: #606266;
-      transition: color 0.3s;
+      color: $text-secondary;
+      transition: $transition;
+      padding: 6px;
+      border-radius: $radius-sm;
 
       &:hover {
-        color: #0C447C;
+        color: $text-primary;
+        background: $glass-bg;
       }
     }
   }
@@ -429,27 +437,27 @@ function handleCommand(command: string) {
   .header-right {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 4px;
 
     .header-action {
       font-size: 18px;
       cursor: pointer;
-      color: #606266;
+      color: $text-secondary;
       padding: 8px;
-      border-radius: 6px;
-      transition: all 0.3s;
+      border-radius: $radius-md;
+      transition: $transition;
       display: inline-flex;
       align-items: center;
 
       &:hover {
-        background: #f5f7fa;
-        color: #0C447C;
+        background: $glass-bg;
+        color: $text-primary;
       }
 
       &__icon {
         cursor: pointer;
         font-size: 18px;
-        &:hover { color: #0C447C; }
+        &:hover { color: $primary; }
       }
     }
 
@@ -460,34 +468,37 @@ function handleCommand(command: string) {
       cursor: pointer;
       padding: 4px 12px 4px 4px;
       border-radius: 20px;
-      transition: background 0.3s;
+      transition: $transition;
       margin-left: 8px;
 
       &:hover {
-        background: #f5f7fa;
+        background: $glass-bg;
       }
 
       .user-avatar {
-        background: linear-gradient(135deg, #0C447C, #1D9E75);
+        background: linear-gradient(135deg, $primary, $accent);
         color: white;
         font-size: 14px;
       }
 
       .user-name {
         font-size: 14px;
-        color: #333;
+        color: $text-regular;
       }
     }
   }
 }
 
+// ========== 主内容区 ==========
 .main-content {
   flex: 1;
   overflow-y: auto;
-  background: #f5f7fa;
+  background: $bg-primary;
   padding: 0;
+  position: relative;
 }
 
+// ========== 过渡动画 ==========
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity 0.3s;
@@ -510,19 +521,44 @@ function handleCommand(command: string) {
   transform: translateX(10px);
 }
 
+// ========== 移动端提示 ==========
 .mobile-dialog {
   text-align: center;
   padding: 8px 0;
   .el-icon { margin-bottom: 16px; }
-  p { margin: 8px 0; color: #606266; line-height: 1.6; }
-  strong { color: #0C447C; }
+  p { margin: 8px 0; color: $text-regular; line-height: 1.6; }
+  strong { color: $primary; }
   &__tip {
     margin-top: 16px;
     padding: 8px 12px;
-    background: #fdf6ec;
-    border-radius: 4px;
-    color: #BA7517;
+    background: $warning-light;
+    border-radius: $radius-sm;
+    color: $warning;
     font-size: 13px;
+  }
+}
+
+// ========== Element Plus 覆盖 ==========
+:deep(.el-breadcrumb) {
+  .el-breadcrumb__inner {
+    color: $text-secondary;
+    &.is-link:hover { color: $primary; }
+  }
+  .el-breadcrumb__separator { color: $text-placeholder; }
+}
+
+:deep(.el-dropdown-menu) {
+  background: $bg-elevated;
+  border: 1px solid $glass-border;
+  border-radius: $radius-lg;
+  box-shadow: $shadow-lg;
+
+  .el-dropdown-menu__item {
+    color: $text-regular;
+    &:hover {
+      background: $glass-bg;
+      color: $text-primary;
+    }
   }
 }
 </style>

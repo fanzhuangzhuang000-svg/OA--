@@ -1,5 +1,11 @@
+// ============================================
+// NOVA OPS — 全局样式系统
+// 深色主题 · 玻璃拟态 · 未来科技感
+// ============================================
+
 @use './variables' as *;
 
+// --- 基础重置 ---
 * {
   margin: 0;
   padding: 0;
@@ -9,10 +15,12 @@
 html, body, #app {
   width: 100%;
   height: 100%;
-  font-family: 'Microsoft YaHei', 'PingFang SC', 'Helvetica Neue', Arial, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'PingFang SC', 'Microsoft YaHei', sans-serif;
   font-size: 14px;
   color: $text-primary;
-  background: $bg-color;
+  background: $bg-primary;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 a {
@@ -20,45 +28,495 @@ a {
   color: $primary;
 }
 
-// NProgress 自定义样式
+::selection {
+  background: rgba(10, 132, 255, 0.3);
+  color: #fff;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 3px;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.15);
+  }
+}
+
+// --- NProgress ---
 #nprogress .bar {
-  background: linear-gradient(90deg, $primary, $success) !important;
-  height: 3px !important;
+  background: linear-gradient(90deg, $primary, $accent) !important;
+  height: 2px !important;
 }
 
-// Element Plus 全局覆盖
+// --- 玻璃拟态工具类 ---
+.glass {
+  background: $glass-bg;
+  backdrop-filter: $glass-blur;
+  -webkit-backdrop-filter: $glass-blur;
+  border: 1px solid $glass-border;
+  border-radius: $radius-lg;
+  transition: $transition;
+}
+
+.glass-hover:hover {
+  background: $glass-bg-hover;
+  border-color: $glass-border-hover;
+  transform: translateY(-1px);
+  box-shadow: $shadow-glow;
+}
+
+.glass-card {
+  background: $glass-bg;
+  backdrop-filter: $glass-blur;
+  -webkit-backdrop-filter: $glass-blur;
+  border: 1px solid $glass-border;
+  border-radius: $radius-lg;
+  transition: $transition;
+
+  &:hover {
+    background: $glass-bg-hover;
+    border-color: $glass-border-hover;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 32px rgba(10, 132, 255, 0.08);
+  }
+}
+
+// --- 渐变文字 ---
+.gradient-text {
+  background: linear-gradient(135deg, $text-primary, $primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+// --- 鼠标跟随光晕 ---
+.mouse-glow {
+  position: fixed;
+  width: 400px;
+  height: 400px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(10, 132, 255, 0.04) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+  transition: transform 0.3s ease-out;
+}
+
+// ============================================
+// Element Plus 深色主题覆盖
+// ============================================
+
+// --- Card ---
 .el-card {
-  border-radius: $border-radius;
-  border: none;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
-}
+  background: $glass-bg !important;
+  backdrop-filter: $glass-blur;
+  -webkit-backdrop-filter: $glass-blur;
+  border: 1px solid $glass-border !important;
+  border-radius: $radius-lg !important;
+  box-shadow: none !important;
+  color: $text-primary;
+  transition: $transition;
 
-.el-table {
-  --el-table-border-color: #{$border-light};
-  --el-table-header-bg-color: #{$bg-color};
-  border-radius: $border-radius;
-  overflow: hidden;
+  &:hover {
+    background: $glass-bg-hover !important;
+    border-color: $glass-border-hover !important;
+  }
 
-  th.el-table__cell {
-    font-weight: 500;
+  .el-card__header {
+    border-bottom: 1px solid $border-color;
     color: $text-primary;
   }
 }
 
-.el-button--primary {
-  --el-button-bg-color: #{$primary};
-  --el-button-border-color: #{$primary};
-  --el-button-hover-bg-color: #{$primary-light};
-  --el-button-hover-border-color: #{$primary-light};
+// --- Table ---
+.el-table {
+  --el-table-bg-color: transparent;
+  --el-table-tr-bg-color: transparent;
+  --el-table-header-bg-color: rgba(255, 255, 255, 0.02);
+  --el-table-row-hover-bg-color: rgba(255, 255, 255, 0.04);
+  --el-table-border-color: #{$border-color};
+  --el-table-text-color: #{$text-regular};
+  --el-table-header-text-color: #{$text-secondary};
+  background-color: transparent;
+  border-radius: $radius-lg;
+  overflow: hidden;
+
+  th.el-table__cell {
+    background-color: rgba(255, 255, 255, 0.02) !important;
+    font-weight: 500;
+    color: $text-secondary;
+    border-bottom: 1px solid $border-color;
+  }
+
+  td.el-table__cell {
+    border-bottom: 1px solid $border-light;
+  }
+
+  .el-table__empty-text {
+    color: $text-placeholder;
+  }
+
+  // 斑马纹
+  &.el-table--striped .el-table__body tr.el-table__row--striped td.el-table__cell {
+    background-color: rgba(255, 255, 255, 0.015);
+  }
 }
 
+// --- Button ---
+.el-button {
+  --el-button-bg-color: #{$glass-bg};
+  --el-button-border-color: #{$glass-border};
+  --el-button-text-color: #{$text-regular};
+  --el-button-hover-bg-color: #{$glass-bg-hover};
+  --el-button-hover-border-color: #{$glass-border-hover};
+  --el-button-hover-text-color: #{$text-primary};
+  border-radius: $radius-md;
+  transition: $transition;
+
+  &--primary {
+    --el-button-bg-color: #{$primary};
+    --el-button-border-color: #{$primary};
+    --el-button-text-color: #ffffff;
+    --el-button-hover-bg-color: #{$primary-light};
+    --el-button-hover-border-color: #{$primary-light};
+    --el-button-hover-text-color: #ffffff;
+    box-shadow: 0 2px 8px rgba(10, 132, 255, 0.25);
+
+    &:hover {
+      box-shadow: 0 4px 16px rgba(10, 132, 255, 0.35);
+      transform: translateY(-1px);
+    }
+  }
+
+  &--success {
+    --el-button-bg-color: #{$success};
+    --el-button-border-color: #{$success};
+    --el-button-text-color: #ffffff;
+    --el-button-hover-bg-color: lighten($success, 5%);
+    --el-button-hover-border-color: lighten($success, 5%);
+    --el-button-hover-text-color: #ffffff;
+  }
+
+  &--danger {
+    --el-button-bg-color: #{$danger};
+    --el-button-border-color: #{$danger};
+    --el-button-text-color: #ffffff;
+    --el-button-hover-bg-color: lighten($danger, 5%);
+    --el-button-hover-border-color: lighten($danger, 5%);
+    --el-button-hover-text-color: #ffffff;
+  }
+
+  &--warning {
+    --el-button-bg-color: #{$warning};
+    --el-button-border-color: #{$warning};
+    --el-button-text-color: #ffffff;
+    --el-button-hover-bg-color: lighten($warning, 5%);
+    --el-button-hover-border-color: lighten($warning, 5%);
+    --el-button-hover-text-color: #ffffff;
+  }
+}
+
+// --- Input ---
+.el-input {
+  --el-input-bg-color: #{$glass-bg};
+  --el-input-border-color: #{$glass-border};
+  --el-input-text-color: #{$text-primary};
+  --el-input-placeholder-color: #{$text-placeholder};
+  --el-input-focus-border-color: #{$primary};
+  --el-input-hover-border-color: #{$glass-border-hover};
+
+  .el-input__wrapper {
+    background: $glass-bg !important;
+    border: 1px solid $glass-border;
+    border-radius: $radius-md;
+    box-shadow: none !important;
+    transition: $transition;
+
+    &:hover {
+      border-color: $glass-border-hover;
+    }
+
+    &.is-focus {
+      border-color: $primary;
+      box-shadow: 0 0 0 2px rgba(10, 132, 255, 0.15) !important;
+    }
+  }
+
+  .el-input__inner {
+    color: $text-primary;
+
+    &::placeholder {
+      color: $text-placeholder;
+    }
+  }
+}
+
+.el-textarea {
+  --el-input-bg-color: #{$glass-bg};
+  --el-input-border-color: #{$glass-border};
+  --el-input-text-color: #{$text-primary};
+  --el-input-placeholder-color: #{$text-placeholder};
+  --el-input-focus-border-color: #{$primary};
+
+  .el-textarea__inner {
+    background: $glass-bg !important;
+    border: 1px solid $glass-border;
+    border-radius: $radius-md;
+    box-shadow: none !important;
+    color: $text-primary;
+    transition: $transition;
+
+    &:hover {
+      border-color: $glass-border-hover;
+    }
+
+    &:focus {
+      border-color: $primary;
+      box-shadow: 0 0 0 2px rgba(10, 132, 255, 0.15);
+    }
+  }
+}
+
+// --- Select ---
+.el-select {
+  --el-select-border-color-hover: #{$glass-border-hover};
+  --el-select-input-focus-border-color: #{$primary};
+}
+
+.el-select .el-input__wrapper {
+  background: $glass-bg !important;
+  border: 1px solid $glass-border;
+  border-radius: $radius-md;
+}
+
+// --- Dialog ---
+.el-dialog {
+  background: $bg-elevated !important;
+  border: 1px solid $glass-border;
+  border-radius: $radius-xl !important;
+  box-shadow: $shadow-lg;
+
+  .el-dialog__header {
+    border-bottom: 1px solid $border-color;
+    padding: 20px 24px;
+  }
+
+  .el-dialog__title {
+    color: $text-primary;
+    font-weight: 600;
+  }
+
+  .el-dialog__body {
+    color: $text-regular;
+    padding: 24px;
+  }
+
+  .el-dialog__footer {
+    border-top: 1px solid $border-color;
+    padding: 16px 24px;
+  }
+}
+
+// --- Tag ---
 .el-tag {
-  border-radius: 4px;
+  border-radius: $radius-sm;
+  border: none;
+  font-weight: 500;
+
+  &--primary {
+    background: $primary-lighter;
+    color: $primary;
+  }
+
+  &--success {
+    background: $success-light;
+    color: $success;
+  }
+
+  &--warning {
+    background: $warning-light;
+    color: $warning;
+  }
+
+  &--danger {
+    background: $danger-light;
+    color: $danger;
+  }
+
+  &--info {
+    background: $info-light;
+    color: $info;
+  }
 }
 
+// --- Form ---
+.el-form-item__label {
+  color: $text-secondary;
+  font-weight: 500;
+}
+
+// --- Menu ---
+.el-menu {
+  background: transparent !important;
+  border: none !important;
+
+  .el-menu-item,
+  .el-sub-menu__title {
+    color: $text-secondary;
+    border-radius: $radius-md;
+    margin: 2px 8px;
+    transition: $transition;
+
+    &:hover {
+      background: $glass-bg;
+      color: $text-primary;
+    }
+
+    &.is-active {
+      background: $primary-lighter;
+      color: $primary;
+    }
+  }
+
+  .el-sub-menu .el-menu {
+    background: transparent !important;
+  }
+}
+
+// --- Pagination ---
+.el-pagination {
+  --el-pagination-bg-color: transparent;
+  --el-pagination-text-color: #{$text-secondary};
+  --el-pagination-button-bg-color: #{$glass-bg};
+  --el-pagination-hover-color: #{$primary};
+
+  .el-pager li {
+    background: $glass-bg;
+    color: $text-secondary;
+    border-radius: $radius-sm;
+    margin: 0 2px;
+    transition: $transition;
+
+    &:hover {
+      color: $primary;
+      background: $glass-bg-hover;
+    }
+
+    &.is-active {
+      background: $primary;
+      color: #fff;
+    }
+  }
+
+  button {
+    background: $glass-bg;
+    color: $text-secondary;
+    border-radius: $radius-sm;
+
+    &:hover {
+      color: $primary;
+      background: $glass-bg-hover;
+    }
+  }
+}
+
+// --- Message Box ---
+.el-message-box {
+  background: $bg-elevated;
+  border: 1px solid $glass-border;
+  border-radius: $radius-xl;
+
+  .el-message-box__title {
+    color: $text-primary;
+  }
+
+  .el-message-box__message {
+    color: $text-regular;
+  }
+}
+
+// --- Notification ---
+.el-notification {
+  background: $bg-elevated;
+  border: 1px solid $glass-border;
+  border-radius: $radius-lg;
+  box-shadow: $shadow-lg;
+
+  .el-notification__title {
+    color: $text-primary;
+  }
+
+  .el-notification__content {
+    color: $text-regular;
+  }
+}
+
+// --- Popover ---
+.el-popover.el-popper {
+  background: $bg-elevated;
+  border: 1px solid $glass-border;
+  border-radius: $radius-lg;
+  box-shadow: $shadow-lg;
+  color: $text-regular;
+}
+
+// --- DatePicker ---
+.el-date-editor {
+  --el-input-bg-color: #{$glass-bg};
+  --el-input-border-color: #{$glass-border};
+  --el-input-text-color: #{$text-primary};
+  --el-input-placeholder-color: #{$text-placeholder};
+  --el-input-hover-border-color: #{$glass-border-hover};
+  --el-input-focus-border-color: #{$primary};
+}
+
+// --- Tabs ---
+.el-tabs {
+  --el-tabs-header-text-color: #{$text-secondary};
+  --el-tabs-header-active-text-color: #{$primary};
+  --el-tabs-header-border-color: #{$border-color};
+
+  .el-tabs__header {
+    background: transparent;
+  }
+
+  .el-tabs__item {
+    transition: $transition;
+
+    &:hover {
+      color: $text-primary;
+    }
+  }
+}
+
+// --- Switch ---
+.el-switch {
+  --el-switch-off-color: #{$glass-bg-hover};
+  --el-switch-on-color: #{$primary};
+}
+
+// --- Checkbox ---
+.el-checkbox {
+  --el-checkbox-text-color: #{$text-regular};
+  --el-checkbox-input-border-color: #{$glass-border};
+  --el-checkbox-bg-color: #{$glass-bg};
+}
+
+// ============================================
 // 页面通用样式
+// ============================================
+
 .page-container {
   padding: 20px;
+  min-height: 100%;
 }
 
 .page-header {
@@ -71,20 +529,25 @@ a {
     font-size: 18px;
     font-weight: 600;
     color: $text-primary;
+    display: flex;
+    align-items: center;
+    gap: 8px;
 
     .page-desc {
       font-size: 13px;
       font-weight: 400;
       color: $text-secondary;
-      margin-left: 12px;
     }
   }
 }
 
 .filter-bar {
-  background: $bg-white;
+  background: $glass-bg;
+  backdrop-filter: $glass-blur;
+  -webkit-backdrop-filter: $glass-blur;
+  border: 1px solid $glass-border;
   padding: 20px;
-  border-radius: $border-radius;
+  border-radius: $radius-lg;
   margin-bottom: 16px;
   display: flex;
   flex-wrap: wrap;
@@ -93,45 +556,54 @@ a {
 }
 
 .content-card {
-  background: $bg-white;
+  background: $glass-bg;
+  backdrop-filter: $glass-blur;
+  -webkit-backdrop-filter: $glass-blur;
+  border: 1px solid $glass-border;
   padding: 20px;
-  border-radius: $border-radius;
+  border-radius: $radius-lg;
 }
 
-// 状态徽标
-.status-dot {
-  display: inline-block;
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  margin-right: 6px;
-  vertical-align: middle;
-
-  &.active { background: $success; }
-  &.pending { background: $warning; }
-  &.danger { background: $danger; }
-  &.info { background: $info; }
-}
-
-// 统计卡片
+// --- 统计卡片 ---
 .stat-card {
-  background: $bg-white;
-  border-radius: $border-radius;
+  background: $glass-bg;
+  backdrop-filter: $glass-blur;
+  -webkit-backdrop-filter: $glass-blur;
+  border: 1px solid $glass-border;
+  border-radius: $radius-lg;
   padding: 20px;
-  text-align: center;
-  cursor: pointer;
   transition: $transition;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, $primary, $accent);
+    opacity: 0;
+    transition: $transition;
+  }
 
   &:hover {
+    background: $glass-bg-hover;
+    border-color: $glass-border-hover;
     transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+    box-shadow: $shadow-glow;
+
+    &::before {
+      opacity: 1;
+    }
   }
 
   .stat-value {
     font-size: 28px;
     font-weight: 700;
-    color: $primary;
-    line-height: 1.2;
+    color: $text-primary;
+    line-height: 1;
   }
 
   .stat-label {
@@ -140,30 +612,38 @@ a {
     margin-top: 8px;
   }
 
-  .stat-trend {
-    font-size: 12px;
-    margin-top: 4px;
-
-    &.up { color: $success; }
-    &.down { color: $danger; }
+  .stat-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: $radius-md;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    margin-bottom: 12px;
   }
 }
 
-// 自定义滚动条
-::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+// --- 动画 ---
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-::-webkit-scrollbar-thumb {
-  background: #c0c4cc;
-  border-radius: 3px;
-
-  &:hover {
-    background: #909399;
-  }
+@keyframes slideInLeft {
+  from { opacity: 0; transform: translateX(-20px); }
+  to { opacity: 1; transform: translateX(0); }
 }
 
-::-webkit-scrollbar-track {
-  background: transparent;
+@keyframes pulse-glow {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 0.8; }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-out;
+}
+
+.animate-slide-in {
+  animation: slideInLeft 0.5s ease-out;
 }

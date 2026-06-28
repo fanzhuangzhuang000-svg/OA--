@@ -81,10 +81,18 @@ onBeforeUnmount(() => {
 </script>
 
 <style lang="scss">
+@use '@/styles/variables' as *;
+
 .app-route-wrap {
   width: 100%;
   height: 100%;
+  background: $bg-primary;
 }
+
+html, body, #app {
+  background: $bg-primary;
+}
+
 .app-fade-enter-active,
 .app-fade-leave-active {
   transition: opacity 0.2s ease;
