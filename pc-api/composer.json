@@ -3,6 +3,7 @@
     "description": "安防运维OA系统后端API",
     "type": "project",
     "require": {
+        "predis/predis": "^2.0",
         "php": ">=8.2",
         "laravel/framework": "^11.0",
         "laravel/sanctum": "^4.0",

@@ -1,16 +1,5 @@
 /**
- * V0.5.0 L1+L2 前端授权
- *
- * 提供:
- *  - permissionStore  (Pinia, 存当前用户权限列表)
- *  - v-permission     (自定义指令, 隐藏无权限的菜单/按钮)
- *  - hasPermission()  (工具函数)
- *
- * 流程:
- *  1) 登录后从 /api/auth/me 拿用户信息 (含 roles 列表)
- *  2) 从 /api/permissions/my 拿所有权限 name
- *  3) 缓存到 permissionStore
- *  4) 组件用 v-permission="'project.view'" 或 :disabled="!hasPermission('x')"
+ * V0.5.3 L1+L2 frontend authorization (FIXED)
  */
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
@@ -29,12 +18,25 @@ export const usePermissionStore = defineStore('permission', () => {
       if (user && Array.isArray(user.roles)) {
         roles.value = user.roles
       }
-      const res = await http.get('/permissions/my')
+
+      const res: any = await http.get('/permissions/my')
       const list = Array.isArray(res) ? res : (res?.data || [])
       permissions.value = list.map((p: any) => typeof p === 'string' ? p : p.name).filter(Boolean)
+
+      // V0.5.3 FIX: extract roles from response if not already set
+      if (roles.value.length === 0) {
+        if (res?.roles && Array.isArray(res.roles)) {
+          roles.value = res.roles
+        }
+        const userInfo = getUserInfo()
+        if (userInfo?.roles && Array.isArray(userInfo.roles)) {
+          roles.value = userInfo.roles
+        }
+      }
+
       loaded.value = true
     } catch (e) {
-      // 静默失败 — 视为无权限
+      console.warn('Permission load failed:', e)
       permissions.value = []
       loaded.value = true
     }
@@ -59,28 +61,11 @@ export const usePermissionStore = defineStore('permission', () => {
   return { permissions, roles, loaded, load, hasPermission, hasAnyPermission, reset }
 })
 
-/**
- * 全局函数 (供模板用, 避免每次 import store)
- * 优先级: admin > 显式权限 > false
- */
 export function hasPermission(perm: string): boolean {
   const store = usePermissionStore()
   return store.hasPermission(perm)
 }
 
-/**
- * v-permission 指令
- *
- * 用法:
- *   <el-button v-permission="'project.create'">新建</el-button>
- *   <div v-permission="['project.view', 'project.edit']">有任一权限即显示</div>
- *
- * 修饰符:
- *   .any  默认: 数组 = 全部需满足
- *   .or   数组 = 任一满足
- *
- *   <el-button v-permission.or="['x', 'y']">有任一权限即显示</el-button>
- */
 export const permissionDirective = {
   mounted(el: HTMLElement, binding: { value: string | string[]; modifiers?: Record<string, boolean> }) {
     applyPermission(el, binding)
@@ -95,8 +80,32 @@ function applyPermission(el: HTMLElement, binding: { value: string | string[]; m
   const perms = Array.isArray(value) ? value : [value]
   const store = usePermissionStore()
 
-  // admin 永远显示
   if (store.roles.includes('admin')) return
+
+  if (!store.loaded) {
+    const checkLater = () => {
+      if (store.roles.includes('admin')) return
+      const isOrMode = modifiers?.or
+      const has = isOrMode
+        ? perms.some(p => store.permissions.includes(p))
+        : perms.every(p => store.permissions.includes(p))
+      if (!has) {
+        el.style.display = 'none'
+        el.setAttribute('aria-hidden', 'true')
+      }
+    }
+    const unwatch = store.$subscribe(() => {
+      if (store.loaded) {
+        checkLater()
+        unwatch()
+      }
+    })
+    setTimeout(() => {
+      checkLater()
+      unwatch()
+    }, 2000)
+    return
+  }
 
   const isOrMode = modifiers?.or
   const has = isOrMode

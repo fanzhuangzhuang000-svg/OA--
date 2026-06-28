@@ -1,0 +1,1 @@
+import{b as e}from"./index-CHEjgaAa.js";function a(){return e("/dashboard/stats")}function o(r){return e("/dashboard/todo",r)}function s(){return e("/dashboard/project-progress")}function n(){return e("/dashboard/service-stats")}function d(r){return e("/dashboard/revenue-trend",r)}function u(){return e("/dashboard/overview")}export{s as a,o as b,n as c,d,u as e,a as g};
