@@ -76,9 +76,9 @@ Route::prefix('portal/repair')->group(function () {
 // 顶层部门/岗位快捷路由（兼容前端 /departments 路径）
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('departments', [EmployeeController::class, 'departments']);
-    Route::post('departments', [EmployeeController::class, 'storeDepartment']);
-    Route::put('departments/{department}', [EmployeeController::class, 'updateDepartment']);
-    Route::delete('departments/{department}', [EmployeeController::class, 'destroyDepartment']);
+    Route::post('departments', [EmployeeController::class, 'storeDepartment'])->middleware('permission:employee.org');
+    Route::put('departments/{department}', [EmployeeController::class, 'updateDepartment'])->middleware('permission:employee.org');
+    Route::delete('departments/{department}', [EmployeeController::class, 'destroyDepartment'])->middleware('permission:employee.org');
     Route::get('positions', [EmployeeController::class, 'positions']);
 });
 
@@ -112,22 +112,22 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::prefix('attendance')->group(function () {
         Route::get('overview', [AttendanceController::class, 'overview']);
         Route::get('calendar', [AttendanceController::class, 'calendar']);
-        Route::post('clock-in', [AttendanceController::class, 'clockIn']);
-        Route::post('clock-out', [AttendanceController::class, 'clockOut']);
-        Route::post('field-clock', [AttendanceController::class, 'fieldClock']);
+        Route::post('clock-in', [AttendanceController::class, 'clockIn'])->middleware('permission:attendance.record');
+        Route::post('clock-out', [AttendanceController::class, 'clockOut'])->middleware('permission:attendance.record');
+        Route::post('field-clock', [AttendanceController::class, 'fieldClock'])->middleware('permission:attendance.record');
         Route::get('today', [AttendanceController::class, 'today']);
-        Route::post('supplement', [AttendanceController::class, 'supplement']);
+        Route::post('supplement', [AttendanceController::class, 'supplement'])->middleware('permission:attendance.record');
         Route::get('records', [AttendanceController::class, 'records']);
         Route::get('report', [AttendanceController::class, 'report']);
         Route::get('leave', [AttendanceController::class, 'leaveRequests']);
-        Route::post('leave', [AttendanceController::class, 'storeLeaveRequest']);
-        Route::post('leave/{leave}/approve', [AttendanceController::class, 'approveLeave']);
-        Route::delete('leave/{leave}', [AttendanceController::class, 'destroyLeaveRequest']);
+        Route::post('leave', [AttendanceController::class, 'storeLeaveRequest'])->middleware('permission:attendance.leave');
+        Route::post('leave/{leave}/approve', [AttendanceController::class, 'approveLeave'])->middleware('permission:attendance.leave');
+        Route::delete('leave/{leave}', [AttendanceController::class, 'destroyLeaveRequest'])->middleware('permission:attendance.leave');
 
         Route::get('overtime', [AttendanceController::class, 'overtimeRequests']);
-        Route::post('overtime', [AttendanceController::class, 'storeOvertimeRequest']);
-        Route::post('overtime/{overtime}/approve', [AttendanceController::class, 'approveOvertime']);
-        Route::delete('overtime/{overtime}', [AttendanceController::class, 'destroyOvertimeRequest']);
+        Route::post('overtime', [AttendanceController::class, 'storeOvertimeRequest'])->middleware('permission:attendance.overtime');
+        Route::post('overtime/{overtime}/approve', [AttendanceController::class, 'approveOvertime'])->middleware('permission:attendance.overtime');
+        Route::delete('overtime/{overtime}', [AttendanceController::class, 'destroyOvertimeRequest'])->middleware('permission:attendance.overtime');
 
         // 兼容前端直接 /attendance 调用
         Route::get('/', [AttendanceController::class, 'overview']);
@@ -138,24 +138,24 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::prefix('schedules')->group(function () {
         // 班次
         Route::get('shifts', [ScheduleController::class, 'listShifts']);
-        Route::post('shifts', [ScheduleController::class, 'storeShift']);
-        Route::put('shifts/{shift}', [ScheduleController::class, 'updateShift']);
-        Route::delete('shifts/{shift}', [ScheduleController::class, 'destroyShift']);
+        Route::post('shifts', [ScheduleController::class, 'storeShift'])->middleware('permission:employee.org');
+        Route::put('shifts/{shift}', [ScheduleController::class, 'updateShift'])->middleware('permission:employee.org');
+        Route::delete('shifts/{shift}', [ScheduleController::class, 'destroyShift'])->middleware('permission:employee.org');
 
         // 班组
         Route::get('groups', [ScheduleController::class, 'listGroups']);
-        Route::post('groups', [ScheduleController::class, 'storeGroup']);
-        Route::put('groups/{group}', [ScheduleController::class, 'updateGroup']);
-        Route::delete('groups/{group}', [ScheduleController::class, 'destroyGroup']);
-        Route::post('groups/{group}/members', [ScheduleController::class, 'syncGroupMembers']);
-        Route::post('groups/{group}/add-member', [ScheduleController::class, 'addGroupMember']);
-        Route::delete('groups/{group}/members/{user}', [ScheduleController::class, 'removeGroupMember']);
+        Route::post('groups', [ScheduleController::class, 'storeGroup'])->middleware('permission:employee.org');
+        Route::put('groups/{group}', [ScheduleController::class, 'updateGroup'])->middleware('permission:employee.org');
+        Route::delete('groups/{group}', [ScheduleController::class, 'destroyGroup'])->middleware('permission:employee.org');
+        Route::post('groups/{group}/members', [ScheduleController::class, 'syncGroupMembers'])->middleware('permission:employee.org');
+        Route::post('groups/{group}/add-member', [ScheduleController::class, 'addGroupMember'])->middleware('permission:employee.org');
+        Route::delete('groups/{group}/members/{user}', [ScheduleController::class, 'removeGroupMember'])->middleware('permission:employee.org');
 
         // 排班
         Route::get('/', [ScheduleController::class, 'index']);
-        Route::post('/', [ScheduleController::class, 'batchSave']);
-        Route::post('batch-by-group', [ScheduleController::class, 'batchByGroup']);
-        Route::delete('{schedule}', [ScheduleController::class, 'destroy']);
+        Route::post('/', [ScheduleController::class, 'batchSave'])->middleware('permission:employee.org');
+        Route::post('batch-by-group', [ScheduleController::class, 'batchByGroup'])->middleware('permission:employee.org');
+        Route::delete('{schedule}', [ScheduleController::class, 'destroy'])->middleware('permission:employee.org');
         Route::get('my-schedule', [ScheduleController::class, 'mySchedule']);
         Route::get('smart-suggest', [ScheduleController::class, 'smartSuggest']);
         Route::get('next-reminder', [ScheduleController::class, 'nextReminder']);
@@ -165,78 +165,78 @@ Route::middleware('auth:sanctum')->group(function () {
     // 员工管理
     Route::prefix('employees')->group(function () {
         Route::get('/', [EmployeeController::class, 'index']);
-        Route::post('/', [EmployeeController::class, 'store']);
+        Route::post('/', [EmployeeController::class, 'store'])->middleware('permission:employee.create');
 
         // 部门（必须在 {user} 之前注册，否则会被吞）
         Route::get('departments', [EmployeeController::class, 'departments']);
-        Route::post('departments', [EmployeeController::class, 'storeDepartment']);
-        Route::put('departments/{department}', [EmployeeController::class, 'updateDepartment']);
-        Route::delete('departments/{department}', [EmployeeController::class, 'destroyDepartment']);
+        Route::post('departments', [EmployeeController::class, 'storeDepartment'])->middleware('permission:employee.org');
+        Route::put('departments/{department}', [EmployeeController::class, 'updateDepartment'])->middleware('permission:employee.org');
+        Route::delete('departments/{department}', [EmployeeController::class, 'destroyDepartment'])->middleware('permission:employee.org');
 
         // 岗位
         Route::get('positions', [EmployeeController::class, 'positions']);
-        Route::post('positions', [EmployeeController::class, 'storePosition']);
-        Route::put('positions/{position}', [EmployeeController::class, 'updatePosition']);
-        Route::delete('positions/{position}', [EmployeeController::class, 'destroyPosition']);
+        Route::post('positions', [EmployeeController::class, 'storePosition'])->middleware('permission:employee.org');
+        Route::put('positions/{position}', [EmployeeController::class, 'updatePosition'])->middleware('permission:employee.org');
+        Route::delete('positions/{position}', [EmployeeController::class, 'destroyPosition'])->middleware('permission:employee.org');
 
         // 技能
         Route::get('skills', [EmployeeController::class, 'skills']);
-        Route::post('skills', [EmployeeController::class, 'storeSkill']);
-        Route::put('skills/{skillTag}', [EmployeeController::class, 'updateSkill']);
-        Route::delete('skills/{skillTag}', [EmployeeController::class, 'destroySkill']);
-        Route::post('skills/{skillTag}/attach', [EmployeeController::class, 'attachSkill']);
-        Route::post('skills/{skillTag}/detach', [EmployeeController::class, 'detachSkill']);
+        Route::post('skills', [EmployeeController::class, 'storeSkill'])->middleware('permission:employee.skill');
+        Route::put('skills/{skillTag}', [EmployeeController::class, 'updateSkill'])->middleware('permission:employee.skill');
+        Route::delete('skills/{skillTag}', [EmployeeController::class, 'destroySkill'])->middleware('permission:employee.skill');
+        Route::post('skills/{skillTag}/attach', [EmployeeController::class, 'attachSkill'])->middleware('permission:employee.skill');
+        Route::post('skills/{skillTag}/detach', [EmployeeController::class, 'detachSkill'])->middleware('permission:employee.skill');
         Route::get('{user}/skills', [EmployeeController::class, 'userSkills']);
 
         // 导入
-        Route::post('import', [EmployeeController::class, 'import']);
+        Route::post('import', [EmployeeController::class, 'import'])->middleware('permission:employee.create');
 
         Route::get('certificates', [EmployeeController::class, 'certificates']);
 
         // 员工 CRUD（放最后 — 通配符会吞掉子路径）
         Route::get('{user}', [EmployeeController::class, 'show']);
-        Route::put('{user}', [EmployeeController::class, 'update']);
-        Route::delete('{user}', [EmployeeController::class, 'destroy']);
+        Route::put('{user}', [EmployeeController::class, 'update'])->middleware('permission:employee.create');
+        Route::delete('{user}', [EmployeeController::class, 'destroy'])->middleware('permission:employee.create');
     });
 
     // 员工入职档案
     Route::prefix('employee-onboardings')->group(function () {
         Route::get('/', [EmployeeOnboardingController::class, 'index']);
-        Route::post('/', [EmployeeOnboardingController::class, 'store']);
+        Route::post('/', [EmployeeOnboardingController::class, 'store'])->middleware('permission:employee.create');
         Route::get('{onboarding}', [EmployeeOnboardingController::class, 'show']);
-        Route::put('{onboarding}', [EmployeeOnboardingController::class, 'update']);
-        Route::delete('{onboarding}', [EmployeeOnboardingController::class, 'destroy']);
+        Route::put('{onboarding}', [EmployeeOnboardingController::class, 'update'])->middleware('permission:employee.create');
+        Route::delete('{onboarding}', [EmployeeOnboardingController::class, 'destroy'])->middleware('permission:employee.create');
     });
 
     // 员工离职记录
     Route::prefix('employee-resignations')->group(function () {
         Route::get('/', [EmployeeResignationController::class, 'index']);
-        Route::post('/', [EmployeeResignationController::class, 'store']);
+        Route::post('/', [EmployeeResignationController::class, 'store'])->middleware('permission:employee.create');
         Route::get('settlement-preview', [EmployeeResignationController::class, 'settlementPreview']);
         Route::get('{resignation}', [EmployeeResignationController::class, 'show']);
-        Route::put('{resignation}', [EmployeeResignationController::class, 'update']);
-        Route::post('{resignation}/submit', [EmployeeResignationController::class, 'submit']);
-        Route::post('{resignation}/approve', [EmployeeResignationController::class, 'approve']);
-        Route::post('{resignation}/cancel', [EmployeeResignationController::class, 'cancel']);
-        Route::post('{resignation}/complete', [EmployeeResignationController::class, 'complete']);
+        Route::put('{resignation}', [EmployeeResignationController::class, 'update'])->middleware('permission:employee.create');
+        Route::post('{resignation}/submit', [EmployeeResignationController::class, 'submit'])->middleware('permission:employee.create');
+        Route::post('{resignation}/approve', [EmployeeResignationController::class, 'approve'])->middleware('permission:employee.create');
+        Route::post('{resignation}/cancel', [EmployeeResignationController::class, 'cancel'])->middleware('permission:employee.create');
+        Route::post('{resignation}/complete', [EmployeeResignationController::class, 'complete'])->middleware('permission:employee.create');
     });
 
     // 员工管理 — /api/users 别名（前端某些模块用 users 路径，复用 EmployeeController）
     Route::prefix('users')->group(function () {
         Route::get('/', [EmployeeController::class, 'index']);
-        Route::post('/', [EmployeeController::class, 'store']);
+        Route::post('/', [EmployeeController::class, 'store'])->middleware('permission:employee.create');
         // V0.5.1 角色同步子路径 (必须在 {user} 通配之前)
-        Route::put('{user}/roles', [RoleController::class, 'usersSyncRoles']);
-        Route::post('bulk-assign-role', [RoleController::class, 'usersBulkAssignRole']);
+        Route::put('{user}/roles', [RoleController::class, 'usersSyncRoles'])->middleware('permission:system.role');
+        Route::post('bulk-assign-role', [RoleController::class, 'usersBulkAssignRole'])->middleware('permission:system.role');
         // V0.5.3 临时角色 (字面量子路径必须在 {user} 通配之前) — 需要 system.role 权限
         Route::get('{user}/roles', [RoleController::class, 'usersListRoles'])->middleware('permission:system.role');
         Route::post('{user}/roles/temporary', [RoleController::class, 'usersGrantTemporary'])->middleware('permission:system.role');
         Route::get('{user}/roles/active', [RoleController::class, 'usersActiveRoles'])->middleware('permission:system.role');
         Route::delete('{user}/roles/{role}', [RoleController::class, 'usersRevokeRole'])->middleware('permission:system.role');
         Route::get('{user}', [EmployeeController::class, 'show']);
-        Route::put('{user}', [EmployeeController::class, 'update']);
-        Route::delete('{user}', [EmployeeController::class, 'destroy']);
-        Route::post('{user}/reset-password', [EmployeeController::class, 'resetPassword']);
+        Route::put('{user}', [EmployeeController::class, 'update'])->middleware('permission:employee.create');
+        Route::delete('{user}', [EmployeeController::class, 'destroy'])->middleware('permission:employee.create');
+        Route::post('{user}/reset-password', [EmployeeController::class, 'resetPassword'])->middleware('permission:system.role');
     });
 
     // V0.5.1 用户-角色管理 (admin 限定) — 路由合并到 230 行的 users group 内
@@ -248,7 +248,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('stats', [CustomerController::class, 'stats']);
         Route::get('industries', [CustomerController::class, 'industries']);  // v0.5.8
         Route::get('health', [CustomerController::class, 'health']);         // v0.5.8 (兼容旧 /customer-health/list)
-        Route::post('import', [CustomerController::class, 'import']);
+        Route::post('import', [CustomerController::class, 'import'])->middleware('permission:customer.create');
         // 销售漏斗看板 (字面量必须在 {customer} 通配之前)
         Route::get('pipeline', [CustomerPipelineController::class, 'index']);
         Route::get('pipeline/weekly-trend', [CustomerPipelineController::class, 'weeklyTrend']);
@@ -257,23 +257,23 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('map', [CustomerController::class, 'mapData']);
         Route::get('{customer}/profile', [CustomerController::class, 'profile']);
         Route::get('{customer}/follow-ups', [CustomerController::class, 'followUps']);
-        Route::post('{customer}/follow-ups', [CustomerController::class, 'storeFollowUp']);
+        Route::post('{customer}/follow-ups', [CustomerController::class, 'storeFollowUp'])->middleware('permission:customer.edit');
         Route::get('{customer}/devices', [CustomerController::class, 'devices']);
         // v0.5.8.9 联系人管理
         Route::get('{customer}/contacts', [CustomerController::class, 'listContacts']);
-        Route::post('{customer}/contacts', [CustomerController::class, 'storeContact']);
-        Route::put('{customer}/contacts/{contact}', [CustomerController::class, 'updateContact'])->whereNumber('contact');
-        Route::delete('{customer}/contacts/{contact}', [CustomerController::class, 'destroyContact'])->whereNumber('contact');
+        Route::post('{customer}/contacts', [CustomerController::class, 'storeContact'])->middleware('permission:customer.edit');
+        Route::put('{customer}/contacts/{contact}', [CustomerController::class, 'updateContact'])->whereNumber('contact')->middleware('permission:customer.edit');
+        Route::delete('{customer}/contacts/{contact}', [CustomerController::class, 'destroyContact'])->whereNumber('contact')->middleware('permission:customer.edit');
         // v0.5.8.9 开票信息
         Route::get('{customer}/invoice-infos', [CustomerController::class, 'listInvoiceInfos']);
-        Route::post('{customer}/invoice-infos', [CustomerController::class, 'storeInvoiceInfo']);
-        Route::put('{customer}/invoice-infos/{info}', [CustomerController::class, 'updateInvoiceInfo'])->whereNumber('info');
-        Route::delete('{customer}/invoice-infos/{info}', [CustomerController::class, 'destroyInvoiceInfo'])->whereNumber('info');
+        Route::post('{customer}/invoice-infos', [CustomerController::class, 'storeInvoiceInfo'])->middleware('permission:customer.edit');
+        Route::put('{customer}/invoice-infos/{info}', [CustomerController::class, 'updateInvoiceInfo'])->whereNumber('info')->middleware('permission:customer.edit');
+        Route::delete('{customer}/invoice-infos/{info}', [CustomerController::class, 'destroyInvoiceInfo'])->whereNumber('info')->middleware('permission:customer.edit');
         // 放最后 — {customer} 通配符会吞掉子路径
         Route::get('{customer}', [CustomerController::class, 'show']);
-        Route::put('{customer}', [CustomerController::class, 'update']);
-        Route::put('{customer}/stage', [CustomerPipelineController::class, 'updateStage']);
-        Route::delete('{customer}', [CustomerController::class, 'destroy']);
+        Route::put('{customer}', [CustomerController::class, 'update'])->middleware('permission:customer.edit');
+        Route::put('{customer}/stage', [CustomerPipelineController::class, 'updateStage'])->middleware('permission:customer.edit');
+        Route::delete('{customer}', [CustomerController::class, 'destroy'])->middleware('permission:customer.edit');
     });
 
     // v0.5.8: 供应商管理 (补 SupplierController 路由)
@@ -281,10 +281,10 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/', [SupplierController::class, 'index']);
         Route::post('/', [SupplierController::class, 'store'])->middleware('permission:supplier.create');
         Route::get('{id}', [SupplierController::class, 'show'])->whereNumber('id');
-        Route::put('{id}', [SupplierController::class, 'update'])->whereNumber('id');
-        Route::delete('{id}', [SupplierController::class, 'destroy'])->whereNumber('id');
-        Route::post('{id}/change-status', [SupplierController::class, 'changeStatus'])->whereNumber('id');
-        Route::post('{id}/sync-contacts', [SupplierController::class, 'syncContacts'])->whereNumber('id');
+        Route::put('{id}', [SupplierController::class, 'update'])->whereNumber('id')->middleware('permission:supplier.edit');
+        Route::delete('{id}', [SupplierController::class, 'destroy'])->whereNumber('id')->middleware('permission:supplier.edit');
+        Route::post('{id}/change-status', [SupplierController::class, 'changeStatus'])->whereNumber('id')->middleware('permission:supplier.edit');
+        Route::post('{id}/sync-contacts', [SupplierController::class, 'syncContacts'])->whereNumber('id')->middleware('permission:supplier.edit');
         Route::get('{id}/evaluations', [SupplierController::class, 'evaluations'])->whereNumber('id');
     });
 
@@ -293,12 +293,12 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('suppliers', [LedgerController::class, 'suppliers']);
         Route::get('suppliers/{id}', [LedgerController::class, 'supplierLedger'])->whereNumber('id');
         Route::get('suppliers/{id}/payables', [LedgerController::class, 'supplierPayables'])->whereNumber('id');
-        Route::post('supplier-payments', [LedgerController::class, 'createSupplierPayment']);
+        Route::post('supplier-payments', [LedgerController::class, 'createSupplierPayment'])->middleware('permission:finance.pay');
         Route::get('supplier-payments/{id}', [LedgerController::class, 'showSupplierPayment'])->whereNumber('id');
         Route::get('customers', [LedgerController::class, 'customers']);
         Route::get('customers/{id}', [LedgerController::class, 'customerLedger'])->whereNumber('id');
         Route::get('customers/{id}/receivables', [LedgerController::class, 'customerReceivables'])->whereNumber('id');
-        Route::post('customer-receipts', [LedgerController::class, 'createCustomerReceipt']);
+        Route::post('customer-receipts', [LedgerController::class, 'createCustomerReceipt'])->middleware('permission:finance.receive');
         Route::get('customer-receipts/{id}', [LedgerController::class, 'showCustomerReceipt'])->whereNumber('id');
         Route::get('summary', [LedgerController::class, 'summary']);
         Route::get('aging', [LedgerController::class, 'aging']);
@@ -314,18 +314,18 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('payment-calendar', [ProjectController::class, 'paymentCalendar']);
         Route::get('board', [ProjectController::class, 'board']);
         Route::get('suppliers', [ProjectController::class, 'suppliers']);
-        Route::post('suppliers', [ProjectController::class, 'storeSupplier']);
-        Route::put('{project}/stage', [ProjectController::class, 'updateStage']);
+        Route::post('suppliers', [ProjectController::class, 'storeSupplier'])->middleware('permission:project.create');
+        Route::put('{project}/stage', [ProjectController::class, 'updateStage'])->middleware('permission:project.create');
         Route::get('{project}/construction-logs', [ProjectController::class, 'constructionLogs']);
-        Route::post('{project}/construction-logs', [ProjectController::class, 'storeConstructionLog']);
+        Route::post('{project}/construction-logs', [ProjectController::class, 'storeConstructionLog'])->middleware('permission:project.create');
         Route::get('{project}/suppliers', [ProjectController::class, 'projectSuppliers']);
         Route::get('{project}/contracts', [ProjectController::class, 'projectContracts']);
         Route::get('{project}/tracking', [ProjectController::class, 'tracking']);
         // V0.5.7 块1 — 项目售后记录 (工单+返修)
         Route::get('{project}/maintenance', [ProjectController::class, 'maintenance']);
         Route::get('{project}', [ProjectController::class, 'show']);
-        Route::put('{project}', [ProjectController::class, 'update']);
-        Route::delete('{project}', [ProjectController::class, 'destroy']);
+        Route::put('{project}', [ProjectController::class, 'update'])->middleware('permission:project.create');
+        Route::delete('{project}', [ProjectController::class, 'destroy'])->middleware('permission:project.create');
     });
 
     // 深化施工 V1.1 - 工序验收 + 影像档案
@@ -335,41 +335,41 @@ Route::middleware('auth:sanctum')->group(function () {
         // 工序模板
         Route::get('industries',           [ProcessController::class, 'industries']);
         Route::get('templates',            [ProcessController::class, 'templates']);
-        Route::post('templates',           [ProcessController::class, 'storeTemplate']);
-        Route::post('templates/{template}/apply', [ProcessController::class, 'applyTemplate']);
+        Route::post('templates',           [ProcessController::class, 'storeTemplate'])->middleware('permission:project.create');
+        Route::post('templates/{template}/apply', [ProcessController::class, 'applyTemplate'])->middleware('permission:project.create');
         Route::get('templates/{template}', [ProcessController::class, 'showTemplate']);
-        Route::put('templates/{template}', [ProcessController::class, 'updateTemplate']);
-        Route::delete('templates/{template}', [ProcessController::class, 'destroyTemplate']);
+        Route::put('templates/{template}', [ProcessController::class, 'updateTemplate'])->middleware('permission:project.create');
+        Route::delete('templates/{template}', [ProcessController::class, 'destroyTemplate'])->middleware('permission:project.create');
 
         // 工序实例
         Route::get('instances',            [ProcessController::class, 'instances']);
-        Route::post('instances',           [ProcessController::class, 'storeInstance']);
+        Route::post('instances',           [ProcessController::class, 'storeInstance'])->middleware('permission:project.create');
         Route::get('instances/{process}',  [ProcessController::class, 'showInstance']);
-        Route::put('instances/{process}',  [ProcessController::class, 'updateInstance']);
-        Route::delete('instances/{process}', [ProcessController::class, 'destroyInstance']);
-        Route::post('instances/{process}/progress', [ProcessController::class, 'updateProgress']);
-        Route::post('instances/{process}/accept',  [ProcessController::class, 'acceptInstance']);
-        Route::post('instances/{process}/reject',  [ProcessController::class, 'rejectInstance']);
+        Route::put('instances/{process}',  [ProcessController::class, 'updateInstance'])->middleware('permission:project.create');
+        Route::delete('instances/{process}', [ProcessController::class, 'destroyInstance'])->middleware('permission:project.create');
+        Route::post('instances/{process}/progress', [ProcessController::class, 'updateProgress'])->middleware('permission:project.create');
+        Route::post('instances/{process}/accept',  [ProcessController::class, 'acceptInstance'])->middleware('permission:project.create');
+        Route::post('instances/{process}/reject',  [ProcessController::class, 'rejectInstance'])->middleware('permission:project.create');
 
         // 验收记录
         Route::get('inspections',                 [ProcessController::class, 'inspections']);
-        Route::post('inspections',                [ProcessController::class, 'storeInspection']);
+        Route::post('inspections',                [ProcessController::class, 'storeInspection'])->middleware('permission:project.create');
         Route::get('inspections/{inspection}',    [ProcessController::class, 'showInspection']);
-        Route::put('inspections/{inspection}',    [ProcessController::class, 'updateInspection']);
-        Route::delete('inspections/{inspection}', [ProcessController::class, 'destroyInspection']);
+        Route::put('inspections/{inspection}',    [ProcessController::class, 'updateInspection'])->middleware('permission:project.create');
+        Route::delete('inspections/{inspection}', [ProcessController::class, 'destroyInspection'])->middleware('permission:project.create');
 
         // 影像
         Route::get('images',                [ProcessController::class, 'images']);
-        Route::post('images/upload',        [ProcessController::class, 'uploadImages']);
+        Route::post('images/upload',        [ProcessController::class, 'uploadImages'])->middleware('permission:project.create');
         Route::get('images/{image}',        [ProcessController::class, 'showImage']);
-        Route::put('images/{image}',        [ProcessController::class, 'updateImageMeta']);
-        Route::delete('images/{image}',     [ProcessController::class, 'destroyImage']);
+        Route::put('images/{image}',        [ProcessController::class, 'updateImageMeta'])->middleware('permission:project.create');
+        Route::delete('images/{image}',     [ProcessController::class, 'destroyImage'])->middleware('permission:project.create');
 
         // 签字
         Route::get('signatures',                  [ProcessController::class, 'signatures']);
-        Route::post('signatures',                 [ProcessController::class, 'storeSignature']);
-        Route::post('signatures/{signature}/verify', [ProcessController::class, 'verifySignature']);
-        Route::delete('signatures/{signature}',   [ProcessController::class, 'destroySignature']);
+        Route::post('signatures',                 [ProcessController::class, 'storeSignature'])->middleware('permission:project.create');
+        Route::post('signatures/{signature}/verify', [ProcessController::class, 'verifySignature'])->middleware('permission:project.create');
+        Route::delete('signatures/{signature}',   [ProcessController::class, 'destroySignature'])->middleware('permission:project.create');
     });
 
     // 售后服务
@@ -379,13 +379,13 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('stats', [ServiceController::class, 'stats']);
         Route::get('maintenance-contracts', [ServiceController::class, 'maintenanceContracts']);
         Route::get('orders', [ServiceController::class, 'index']);
-        Route::post('orders', [ServiceController::class, 'store']);
+        Route::post('orders', [ServiceController::class, 'store'])->middleware('permission:service.create');
         Route::get('orders/stats', [ServiceController::class, 'stats']);
         Route::get('orders/{serviceOrder}', [ServiceController::class, 'show']);
-        Route::post('orders/{serviceOrder}/assign', [ServiceController::class, 'assign']);
-        Route::post('orders/{serviceOrder}/start', [ServiceController::class, 'startRepair']);
-        Route::post('orders/{serviceOrder}/complete', [ServiceController::class, 'completeRepair']);
-        Route::post('orders/{serviceOrder}/confirm', [ServiceController::class, 'confirmByCustomer']);
+        Route::post('orders/{serviceOrder}/assign', [ServiceController::class, 'assign'])->middleware('permission:service.approve');
+        Route::post('orders/{serviceOrder}/start', [ServiceController::class, 'startRepair'])->middleware('permission:service.approve');
+        Route::post('orders/{serviceOrder}/complete', [ServiceController::class, 'completeRepair'])->middleware('permission:service.approve');
+        Route::post('orders/{serviceOrder}/confirm', [ServiceController::class, 'confirmByCustomer'])->middleware('permission:service.approve');
     });
 
     // ============== V0.5.5 维修中心 (利旧 + 重新设计) ==============
@@ -394,69 +394,69 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::prefix('work-orders')->group(function () {
         Route::get('stats', [WorkOrderController::class, 'stats']);
         Route::get('/', [WorkOrderController::class, 'index']);
-        Route::post('/', [WorkOrderController::class, 'store']);
+        Route::post('/', [WorkOrderController::class, 'store'])->middleware('permission:service.create');
         Route::get('{id}', [WorkOrderController::class, 'show'])->whereNumber('id');
-        Route::put('{id}', [WorkOrderController::class, 'update'])->whereNumber('id');
-        Route::delete('{id}', [WorkOrderController::class, 'destroy'])->whereNumber('id');
-        Route::post('{id}/assign', [WorkOrderController::class, 'assign'])->whereNumber('id');
-        Route::post('{id}/start', [WorkOrderController::class, 'start'])->whereNumber('id');
-        Route::post('{id}/resolve', [WorkOrderController::class, 'resolve'])->whereNumber('id');
-        Route::post('{id}/cancel', [WorkOrderController::class, 'cancel'])->whereNumber('id');
+        Route::put('{id}', [WorkOrderController::class, 'update'])->whereNumber('id')->middleware('permission:service.create');
+        Route::delete('{id}', [WorkOrderController::class, 'destroy'])->whereNumber('id')->middleware('permission:service.create');
+        Route::post('{id}/assign', [WorkOrderController::class, 'assign'])->whereNumber('id')->middleware('permission:service.approve');
+        Route::post('{id}/start', [WorkOrderController::class, 'start'])->whereNumber('id')->middleware('permission:service.approve');
+        Route::post('{id}/resolve', [WorkOrderController::class, 'resolve'])->whereNumber('id')->middleware('permission:service.approve');
+        Route::post('{id}/cancel', [WorkOrderController::class, 'cancel'])->whereNumber('id')->middleware('permission:service.approve');
         // 关键: 转返修
-        Route::post('{id}/convert-to-repair', [WorkOrderController::class, 'convertToRepair'])->whereNumber('id');
+        Route::post('{id}/convert-to-repair', [WorkOrderController::class, 'convertToRepair'])->whereNumber('id')->middleware('permission:service.approve');
     });
 
     // 返修管理 (主单 9 端点)
     Route::prefix('repair-orders')->group(function () {
         Route::get('stats', [RepairOrderController::class, 'stats']);
         Route::get('/', [RepairOrderController::class, 'index']);
-        Route::post('/', [RepairOrderController::class, 'store']);
+        Route::post('/', [RepairOrderController::class, 'store'])->middleware('permission:service.create');
         Route::get('{id}', [RepairOrderController::class, 'show'])->whereNumber('id');
-        Route::put('{id}', [RepairOrderController::class, 'update'])->whereNumber('id');
-        Route::delete('{id}', [RepairOrderController::class, 'destroy'])->whereNumber('id');
-        Route::post('{id}/cancel', [RepairOrderController::class, 'cancel'])->whereNumber('id');
-        Route::post('{id}/ship-out', [RepairOrderController::class, 'shipOut'])->whereNumber('id');
-        Route::post('{id}/ship-back', [RepairOrderController::class, 'shipBack'])->whereNumber('id');
-        Route::post('{id}/in-repair', [RepairOrderController::class, 'markInRepair'])->whereNumber('id');
-        Route::post('{id}/repaired', [RepairOrderController::class, 'markRepaired'])->whereNumber('id');
-        Route::post('{id}/close', [RepairOrderController::class, 'close'])->whereNumber('id');
+        Route::put('{id}', [RepairOrderController::class, 'update'])->whereNumber('id')->middleware('permission:service.create');
+        Route::delete('{id}', [RepairOrderController::class, 'destroy'])->whereNumber('id')->middleware('permission:service.create');
+        Route::post('{id}/cancel', [RepairOrderController::class, 'cancel'])->whereNumber('id')->middleware('permission:service.approve');
+        Route::post('{id}/ship-out', [RepairOrderController::class, 'shipOut'])->whereNumber('id')->middleware('permission:service.approve');
+        Route::post('{id}/ship-back', [RepairOrderController::class, 'shipBack'])->whereNumber('id')->middleware('permission:service.approve');
+        Route::post('{id}/in-repair', [RepairOrderController::class, 'markInRepair'])->whereNumber('id')->middleware('permission:service.approve');
+        Route::post('{id}/repaired', [RepairOrderController::class, 'markRepaired'])->whereNumber('id')->middleware('permission:service.approve');
+        Route::post('{id}/close', [RepairOrderController::class, 'close'])->whereNumber('id')->middleware('permission:service.approve');
     });
 
     // 物流子资源 (按返修单 id 嵌套)
     Route::prefix('repair-orders/{repairOrderId}/shipments')->whereNumber('repairOrderId')->group(function () {
         Route::get('/', [RepairShipmentController::class, 'index']);
-        Route::post('/', [RepairShipmentController::class, 'store']);
-        Route::put('{id}', [RepairShipmentController::class, 'update'])->whereNumber('id');
-        Route::delete('{id}', [RepairShipmentController::class, 'destroy'])->whereNumber('id');
+        Route::post('/', [RepairShipmentController::class, 'store'])->middleware('permission:service.create');
+        Route::put('{id}', [RepairShipmentController::class, 'update'])->whereNumber('id')->middleware('permission:service.create');
+        Route::delete('{id}', [RepairShipmentController::class, 'destroy'])->whereNumber('id')->middleware('permission:service.create');
     });
 
     // 维修方式 (按返修单 id 嵌套)
     Route::prefix('repair-orders/{repairOrderId}/methods')->whereNumber('repairOrderId')->group(function () {
         Route::get('/', [RepairMethodController::class, 'index']);
-        Route::post('/', [RepairMethodController::class, 'store']);
-        Route::put('{id}', [RepairMethodController::class, 'update'])->whereNumber('id');
-        Route::delete('{id}', [RepairMethodController::class, 'destroy'])->whereNumber('id');
+        Route::post('/', [RepairMethodController::class, 'store'])->middleware('permission:service.create');
+        Route::put('{id}', [RepairMethodController::class, 'update'])->whereNumber('id')->middleware('permission:service.create');
+        Route::delete('{id}', [RepairMethodController::class, 'destroy'])->whereNumber('id')->middleware('permission:service.create');
     });
 
     // 维修进度日志
     Route::prefix('repair-orders/{repairOrderId}/progress-logs')->whereNumber('repairOrderId')->group(function () {
         Route::get('/', [RepairProgressLogController::class, 'index']);
-        Route::post('/', [RepairProgressLogController::class, 'store']);
-        Route::delete('{id}', [RepairProgressLogController::class, 'destroy'])->whereNumber('id');
+        Route::post('/', [RepairProgressLogController::class, 'store'])->middleware('permission:service.create');
+        Route::delete('{id}', [RepairProgressLogController::class, 'destroy'])->whereNumber('id')->middleware('permission:service.create');
     });
 
     // 维修附件 (V0.5.5.2 A6 — 物流凭证图/过程照片)
     Route::prefix('repair-orders/{repairOrderId}/attachments')->whereNumber('repairOrderId')->group(function () {
         Route::get('/', [RepairOrderController::class, 'listAttachments']);
-        Route::post('/', [RepairOrderController::class, 'uploadAttachment']);
-        Route::delete('{id}', [RepairOrderController::class, 'deleteAttachment'])->whereNumber('id');
+        Route::post('/', [RepairOrderController::class, 'uploadAttachment'])->middleware('permission:service.create');
+        Route::delete('{id}', [RepairOrderController::class, 'deleteAttachment'])->whereNumber('id')->middleware('permission:service.create');
     });
 
     // V0.5.7 块2 — 维修过程照片 (7 步进度, 工单+返修共用)
     Route::prefix('step-photos')->group(function () {
         Route::get('/', [RepairStepPhotoController::class, 'index']);
-        Route::post('/', [RepairStepPhotoController::class, 'store']);
-        Route::delete('{id}', [RepairStepPhotoController::class, 'destroy'])->whereNumber('id');
+        Route::post('/', [RepairStepPhotoController::class, 'store'])->middleware('permission:service.create');
+        Route::delete('{id}', [RepairStepPhotoController::class, 'destroy'])->whereNumber('id')->middleware('permission:service.create');
     });
 
     // V0.5.7 块4 — 维修成本归集 (4 维度 + dashboard widget)
@@ -471,10 +471,10 @@ Route::middleware('auth:sanctum')->group(function () {
     // V0.5.7 块A — 系统初始化向导 (5 步)
     Route::prefix('setup')->group(function () {
         Route::get('summary',     [SetupWizardController::class, 'summary']);
-        Route::post('step1',      [SetupWizardController::class, 'step1']);
-        Route::post('step3',      [SetupWizardController::class, 'step3']);
-        Route::post('step4',      [SetupWizardController::class, 'step4']);
-        Route::post('complete',   [SetupWizardController::class, 'complete']);
+        Route::post('step1',      [SetupWizardController::class, 'step1'])->middleware('permission:system.config');
+        Route::post('step3',      [SetupWizardController::class, 'step3'])->middleware('permission:system.config');
+        Route::post('step4',      [SetupWizardController::class, 'step4'])->middleware('permission:system.config');
+        Route::post('complete',   [SetupWizardController::class, 'complete'])->middleware('permission:system.config');
         Route::get('sample-csv',  [SetupWizardController::class, 'sampleCsv']);
     });
 
@@ -483,11 +483,11 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('kinds',         [SystemDictController::class, 'kinds']);
         Route::get('grouped',       [SystemDictController::class, 'grouped']);
         Route::get('/',             [SystemDictController::class, 'index']);
-        Route::post('/',            [SystemDictController::class, 'store']);
-        Route::post('reorder',      [SystemDictController::class, 'reorder']);
-        Route::post('seed-defaults',[SystemDictController::class, 'seedDefaults']);
-        Route::patch('{id}',        [SystemDictController::class, 'update'])->whereNumber('id');
-        Route::delete('{id}',       [SystemDictController::class, 'destroy'])->whereNumber('id');
+        Route::post('/',            [SystemDictController::class, 'store'])->middleware('permission:system.config');
+        Route::post('reorder',      [SystemDictController::class, 'reorder'])->middleware('permission:system.config');
+        Route::post('seed-defaults',[SystemDictController::class, 'seedDefaults'])->middleware('permission:system.config');
+        Route::patch('{id}',        [SystemDictController::class, 'update'])->whereNumber('id')->middleware('permission:system.config');
+        Route::delete('{id}',       [SystemDictController::class, 'destroy'])->whereNumber('id')->middleware('permission:system.config');
     });
 
     // V0.5.7 块C — 系统监控 (admin only)
@@ -515,58 +515,58 @@ Route::middleware('auth:sanctum')->group(function () {
     // 报销管理
     Route::prefix('expenses')->group(function () {
         Route::get('/', [ExpenseController::class, 'index']);
-        Route::post('/', [ExpenseController::class, 'store']);
+        Route::post('/', [ExpenseController::class, 'store'])->middleware('permission:finance.approve');
         Route::get('stats', [ExpenseController::class, 'stats']);
         Route::get('projects', [ExpenseController::class, 'projects']);
         Route::get('my', [ExpenseController::class, 'myClaims']);
         Route::get('{claim}', [ExpenseController::class, 'show']);
-        Route::put('{claim}', [ExpenseController::class, 'update']);
-        Route::delete('{claim}', [ExpenseController::class, 'destroy']);
-        Route::post('{claim}/approve', [ExpenseController::class, 'approve']);
-        Route::post('{claim}/cancel', [ExpenseController::class, 'cancel']);
-        Route::post('{claim}/pay', [ExpenseController::class, 'pay']);
+        Route::put('{claim}', [ExpenseController::class, 'update'])->middleware('permission:finance.approve');
+        Route::delete('{claim}', [ExpenseController::class, 'destroy'])->middleware('permission:finance.approve');
+        Route::post('{claim}/approve', [ExpenseController::class, 'approve'])->middleware('permission:finance.approve');
+        Route::post('{claim}/cancel', [ExpenseController::class, 'cancel'])->middleware('permission:finance.approve');
+        Route::post('{claim}/pay', [ExpenseController::class, 'pay'])->middleware('permission:finance.pay');
     });
 
     // 车辆管理
     Route::prefix('vehicles')->group(function () {
         Route::get('/', [VehicleController::class, 'index']);
-        Route::post('/', [VehicleController::class, 'store']);
+        Route::post('/', [VehicleController::class, 'store'])->middleware('permission:vehicle.create');
         Route::get('stats', [VehicleController::class, 'stats']);
         Route::get('usage', [VehicleController::class, 'usageRequests']);
-        Route::post('usage', [VehicleController::class, 'storeUsageRequest']);
-        Route::post('usage/{usageRequest}/dispatch', [VehicleController::class, 'dispatchVehicle']);
-        Route::put('usage/{usageRequest}', [VehicleController::class, 'updateUsageRequest']);
+        Route::post('usage', [VehicleController::class, 'storeUsageRequest'])->middleware('permission:vehicle.create');
+        Route::post('usage/{usageRequest}/dispatch', [VehicleController::class, 'dispatchVehicle'])->middleware('permission:vehicle.create');
+        Route::put('usage/{usageRequest}', [VehicleController::class, 'updateUsageRequest'])->middleware('permission:vehicle.create');
         // 用车申请 — 别名 (前端 /vehicles/applies 和 /vehicles/apply)
         Route::get('applies', [VehicleController::class, 'usageRequests']);
         Route::get('apply', [VehicleController::class, 'usageRequests']);
-        Route::post('apply', [VehicleController::class, 'storeUsageRequest']);
+        Route::post('apply', [VehicleController::class, 'storeUsageRequest'])->middleware('permission:vehicle.create');
         // 保险
         Route::get('insurances', [VehicleController::class, 'insurances']);
-        Route::post('insurances', [VehicleController::class, 'storeInsurance']);
-        Route::put('insurances/{insurance}', [VehicleController::class, 'updateInsurance']);
-        Route::delete('insurances/{insurance}', [VehicleController::class, 'destroyInsurance']);
+        Route::post('insurances', [VehicleController::class, 'storeInsurance'])->middleware('permission:vehicle.create');
+        Route::put('insurances/{insurance}', [VehicleController::class, 'updateInsurance'])->middleware('permission:vehicle.create');
+        Route::delete('insurances/{insurance}', [VehicleController::class, 'destroyInsurance'])->middleware('permission:vehicle.create');
         // 保养
         Route::get('maintenances', [VehicleController::class, 'maintenances']);
-        Route::post('maintenances', [VehicleController::class, 'storeMaintenance']);
-        Route::put('maintenances/{maintenance}', [VehicleController::class, 'updateMaintenance']);
-        Route::delete('maintenances/{maintenance}', [VehicleController::class, 'destroyMaintenance']);
+        Route::post('maintenances', [VehicleController::class, 'storeMaintenance'])->middleware('permission:vehicle.create');
+        Route::put('maintenances/{maintenance}', [VehicleController::class, 'updateMaintenance'])->middleware('permission:vehicle.create');
+        Route::delete('maintenances/{maintenance}', [VehicleController::class, 'destroyMaintenance'])->middleware('permission:vehicle.create');
         // 单车详情/更新/删除 — 必须放最后
         Route::get('{vehicle}', [VehicleController::class, 'show']);
-        Route::put('{vehicle}', [VehicleController::class, 'update']);
-        Route::delete('{vehicle}', [VehicleController::class, 'destroy']);
+        Route::put('{vehicle}', [VehicleController::class, 'update'])->middleware('permission:vehicle.create');
+        Route::delete('{vehicle}', [VehicleController::class, 'destroy'])->middleware('permission:vehicle.create');
     });
 
     // 油卡管理
     Route::prefix('fuel-cards')->group(function () {
         Route::get('stats', [FuelCardController::class, 'stats']);
         Route::get('/', [FuelCardController::class, 'index']);
-        Route::post('/', [FuelCardController::class, 'store']);
+        Route::post('/', [FuelCardController::class, 'store'])->middleware('permission:vehicle.create');
         Route::get('recharges', [FuelCardController::class, 'recharges']);
-        Route::post('recharges', [FuelCardController::class, 'storeRecharge']);
-        Route::delete('recharges/{recharge}', [FuelCardController::class, 'destroyRecharge']);
+        Route::post('recharges', [FuelCardController::class, 'storeRecharge'])->middleware('permission:vehicle.create');
+        Route::delete('recharges/{recharge}', [FuelCardController::class, 'destroyRecharge'])->middleware('permission:vehicle.create');
         // 单卡详情/更新/删除 — 必须放最后
-        Route::put('{card}', [FuelCardController::class, 'update']);
-        Route::delete('{card}', [FuelCardController::class, 'destroy']);
+        Route::put('{card}', [FuelCardController::class, 'update'])->middleware('permission:vehicle.create');
+        Route::delete('{card}', [FuelCardController::class, 'destroy'])->middleware('permission:vehicle.create');
     });
 
     // 库存管理
@@ -577,36 +577,36 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('warehouses', [InventoryController::class, 'warehouses']);
         Route::get('low-stock', [InventoryController::class, 'lowStock']);
         Route::get('stats', [InventoryController::class, 'stats']);
-        Route::post('stock-in',  [InventoryController::class, 'stockIn']);
-        Route::post('stock-out', [InventoryController::class, 'stockOut']);
+        Route::post('stock-in',  [InventoryController::class, 'stockIn'])->middleware('permission:inventory.transfer');
+        Route::post('stock-out', [InventoryController::class, 'stockOut'])->middleware('permission:inventory.transfer');
 
         // 批量处理 (静态子路径必须在 {inventoryItem} 通配之前)
-        Route::post('batch-delete', [InventoryController::class, 'batchDelete']);
-        Route::post('batch-update', [InventoryController::class, 'batchUpdate']);
-        Route::post('batch-export', [InventoryController::class, 'batchExport']);
+        Route::post('batch-delete', [InventoryController::class, 'batchDelete'])->middleware('permission:inventory.transfer');
+        Route::post('batch-update', [InventoryController::class, 'batchUpdate'])->middleware('permission:inventory.transfer');
+        Route::post('batch-export', [InventoryController::class, 'batchExport'])->middleware('permission:inventory.transfer');
 
         // v0.3.7.9 库存×分类打通 — 静态子路径必须放在 {inventoryItem} 通配之前
         Route::get('tree-with-counts',        [InventoryController::class, 'treeWithCounts']);
         Route::get('items-by-category',       [InventoryController::class, 'itemsByCategory']);
-        Route::post('items/batch-import',     [InventoryController::class, 'batchImport']);
+        Route::post('items/batch-import',     [InventoryController::class, 'batchImport'])->middleware('permission:inventory.transfer');
         Route::get('items/export-template',   [InventoryController::class, 'exportTemplate']);
         Route::get('warnings',                [InventoryController::class, 'warnings']);
 
         // 单物料 {inventoryItem} 通配必须放最后
         Route::get('{inventoryItem}', [InventoryController::class, 'show']);
-        Route::put('{inventoryItem}', [InventoryController::class, 'update']);
-        Route::delete('{inventoryItem}', [InventoryController::class, 'destroy']);
+        Route::put('{inventoryItem}', [InventoryController::class, 'update'])->middleware('permission:inventory.transfer');
+        Route::delete('{inventoryItem}', [InventoryController::class, 'destroy'])->middleware('permission:inventory.transfer');
     });
 
     // 库存分类管理
     Route::prefix('inventory-categories')->group(function () {
         Route::get('/', [InventoryCategoryController::class, 'index']);
         Route::get('tree', [InventoryCategoryController::class, 'tree']);
-        Route::post('/', [InventoryCategoryController::class, 'store']);
+        Route::post('/', [InventoryCategoryController::class, 'store'])->middleware('permission:inventory.transfer');
         // 子路径 /move 必须在 {category} 通配之前
-        Route::post('{category}/move', [InventoryCategoryController::class, 'moveCategory']);
-        Route::put('{category}', [InventoryCategoryController::class, 'update']);
-        Route::delete('{category}', [InventoryCategoryController::class, 'destroy']);
+        Route::post('{category}/move', [InventoryCategoryController::class, 'moveCategory'])->middleware('permission:inventory.transfer');
+        Route::put('{category}', [InventoryCategoryController::class, 'update'])->middleware('permission:inventory.transfer');
+        Route::delete('{category}', [InventoryCategoryController::class, 'destroy'])->middleware('permission:inventory.transfer');
     });
 
     // 财务管理 (V0.5.1 L4 字段脱敏: 金额对非财务角色 ***)
@@ -617,35 +617,35 @@ Route::middleware('auth:sanctum')->group(function () {
 
         // 应收（子路径必须在 {receivable} 通配之前）
         Route::get('receivables', [FinanceController::class, 'receivables']);
-        Route::post('receivables', [FinanceController::class, 'storeReceivable']);
+        Route::post('receivables', [FinanceController::class, 'storeReceivable'])->middleware('permission:finance.receive');
         Route::get('receivables/{receivable}/payments', [FinanceController::class, 'receivablePayments']);
-        Route::post('receivables/{receivable}/payments', [FinanceController::class, 'storeReceivablePayment']);
-        Route::post('receivables/{receivable}/close', [FinanceController::class, 'closeReceivable']);
-        Route::put('receivables/{receivable}', [FinanceController::class, 'updateReceivable']);
-        Route::delete('receivables/{receivable}', [FinanceController::class, 'destroyReceivable']);
+        Route::post('receivables/{receivable}/payments', [FinanceController::class, 'storeReceivablePayment'])->middleware('permission:finance.receive');
+        Route::post('receivables/{receivable}/close', [FinanceController::class, 'closeReceivable'])->middleware('permission:finance.receive');
+        Route::put('receivables/{receivable}', [FinanceController::class, 'updateReceivable'])->middleware('permission:finance.receive');
+        Route::delete('receivables/{receivable}', [FinanceController::class, 'destroyReceivable'])->middleware('permission:finance.receive');
 
         // 应付（子路径必须在 {payable} 通配之前）
         Route::get('payables', [FinanceController::class, 'payables']);
-        Route::post('payables', [FinanceController::class, 'storePayable']);
+        Route::post('payables', [FinanceController::class, 'storePayable'])->middleware('permission:finance.pay');
         Route::get('payables/{payable}/payments', [FinanceController::class, 'payablePayments']);
-        Route::post('payables/{payable}/payments', [FinanceController::class, 'storePayablePayment']);
-        Route::put('payables/{payable}', [FinanceController::class, 'updatePayable']);
-        Route::delete('payables/{payable}', [FinanceController::class, 'destroyPayable']);
+        Route::post('payables/{payable}/payments', [FinanceController::class, 'storePayablePayment'])->middleware('permission:finance.pay');
+        Route::put('payables/{payable}', [FinanceController::class, 'updatePayable'])->middleware('permission:finance.pay');
+        Route::delete('payables/{payable}', [FinanceController::class, 'destroyPayable'])->middleware('permission:finance.pay');
 
         // 资金账户（子路径必须在 {account} 通配之前）
         Route::get('accounts', [FinanceController::class, 'accounts']);
-        Route::post('accounts', [FinanceController::class, 'storeAccount']);
-        Route::post('accounts/transfer', [FinanceController::class, 'transferAccount']);
+        Route::post('accounts', [FinanceController::class, 'storeAccount'])->middleware('permission:finance.pay');
+        Route::post('accounts/transfer', [FinanceController::class, 'transferAccount'])->middleware('permission:finance.pay');
         Route::get('accounts/{account}/transactions', [FinanceController::class, 'accountTransactions']);
-        Route::put('accounts/{account}', [FinanceController::class, 'updateAccount']);
-        Route::delete('accounts/{account}', [FinanceController::class, 'destroyAccount']);
+        Route::put('accounts/{account}', [FinanceController::class, 'updateAccount'])->middleware('permission:finance.pay');
+        Route::delete('accounts/{account}', [FinanceController::class, 'destroyAccount'])->middleware('permission:finance.pay');
 
         // 发票管理
         Route::get('invoices', [FinanceController::class, 'invoices']);
-        Route::post('invoices', [FinanceController::class, 'storeInvoice']);
+        Route::post('invoices', [FinanceController::class, 'storeInvoice'])->middleware('permission:finance.receive');
         Route::get('invoices/{invoice}', [FinanceController::class, 'showInvoice']);
-        Route::put('invoices/{invoice}', [FinanceController::class, 'updateInvoice']);
-        Route::delete('invoices/{invoice}', [FinanceController::class, 'destroyInvoice']);
+        Route::put('invoices/{invoice}', [FinanceController::class, 'updateInvoice'])->middleware('permission:finance.receive');
+        Route::delete('invoices/{invoice}', [FinanceController::class, 'destroyInvoice'])->middleware('permission:finance.receive');
 
         // 应收应付报表
         Route::get('summary/aging', [FinanceController::class, 'agingSummary']);
@@ -653,7 +653,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
         // 收款单 (前端 /finance/receipts)
         Route::get('receipts', [FinanceController::class, 'receipts']);
-        Route::post('receipts', [FinanceController::class, 'storeReceipt']);
+        Route::post('receipts', [FinanceController::class, 'storeReceipt'])->middleware('permission:finance.receive');
         Route::get('receipts/{receipt}', [FinanceController::class, 'showReceipt']);
         // 转账记录 (前端 /finance/transfers)
         Route::get('transfers', [FinanceController::class, 'transfers']);
@@ -662,35 +662,35 @@ Route::middleware('auth:sanctum')->group(function () {
     // 公司网盘
     Route::prefix('disk')->group(function () {
         Route::get('folders', [DiskController::class, 'folders']);
-        Route::post('folders', [DiskController::class, 'createFolder']);
-        Route::delete('folders/{folder}', [DiskController::class, 'destroyFolder']);
+        Route::post('folders', [DiskController::class, 'createFolder'])->middleware('permission:disk.create');
+        Route::delete('folders/{folder}', [DiskController::class, 'destroyFolder'])->middleware('permission:disk.create');
         Route::get('files', [DiskController::class, 'files']);
-        Route::post('upload', [DiskController::class, 'upload']);
-        Route::delete('files/{file}', [DiskController::class, 'destroyFile']);
+        Route::post('upload', [DiskController::class, 'upload'])->middleware('permission:disk.create');
+        Route::delete('files/{file}', [DiskController::class, 'destroyFile'])->middleware('permission:disk.create');
     });
 
     // 知识库
     Route::prefix('knowledge')->group(function () {
         // 分类（子路径/通配放最后）
-        Route::post('categories', [KnowledgeController::class, 'storeCategory']);
+        Route::post('categories', [KnowledgeController::class, 'storeCategory'])->middleware('permission:knowledge.create');
         Route::get('categories', [KnowledgeController::class, 'categories']);
-        Route::put('categories/{category}', [KnowledgeController::class, 'updateCategory']);
-        Route::delete('categories/{category}', [KnowledgeController::class, 'destroyCategory']);
+        Route::put('categories/{category}', [KnowledgeController::class, 'updateCategory'])->middleware('permission:knowledge.create');
+        Route::delete('categories/{category}', [KnowledgeController::class, 'destroyCategory'])->middleware('permission:knowledge.create');
 
         // 文章
         Route::get('articles', [KnowledgeController::class, 'articles']);
-        Route::post('articles', [KnowledgeController::class, 'store']);
+        Route::post('articles', [KnowledgeController::class, 'store'])->middleware('permission:knowledge.create');
         Route::get('articles/{article}', [KnowledgeController::class, 'show']);
-        Route::put('articles/{article}', [KnowledgeController::class, 'update']);
-        Route::delete('articles/{article}', [KnowledgeController::class, 'destroy']);
+        Route::put('articles/{article}', [KnowledgeController::class, 'update'])->middleware('permission:knowledge.create');
+        Route::delete('articles/{article}', [KnowledgeController::class, 'destroy'])->middleware('permission:knowledge.create');
     });
 
     // 数据备份
     Route::prefix('backups')->group(function () {
         Route::get('/', [BackupController::class, 'index']);
-        Route::post('/', [BackupController::class, 'store']);
+        Route::post('/', [BackupController::class, 'store'])->middleware('permission:system.backup');
         Route::get('{filename}/download', [BackupController::class, 'download']);
-        Route::delete('{filename}', [BackupController::class, 'destroy']);
+        Route::delete('{filename}', [BackupController::class, 'destroy'])->middleware('permission:system.backup');
     });
 
     // 消息中心
@@ -711,7 +711,7 @@ Route::middleware('auth:sanctum')->group(function () {
             Route::get('/',                          [SalesController::class, 'leadsIndex']);
             Route::get('source-options',             [SalesController::class, 'leadsSourceOptions']);
             // 子路径（{lead} 通配之前）
-            Route::post('/',                         [SalesController::class, 'leadsStore']);
+            Route::post('/',                         [SalesController::class, 'leadsStore'])->middleware('permission:sales.create');
             // 通配放最后
             Route::patch('{lead}/status',            [SalesController::class, 'leadsUpdateStatus'])->middleware('owns:lead');
             Route::post('{lead}/convert-to-opp',     [SalesController::class, 'leadsConvertToOpp'])->middleware('owns:lead');
@@ -727,7 +727,7 @@ Route::middleware('auth:sanctum')->group(function () {
             Route::get('funnel',                     [SalesController::class, 'oppsFunnel']);
             Route::get('lost-reasons',               [SalesController::class, 'oppsLostReasons']);
             // 子路径（{opp} 通配之前）
-            Route::post('/',                         [SalesController::class, 'oppsStore']);
+            Route::post('/',                         [SalesController::class, 'oppsStore'])->middleware('permission:sales.create');
             Route::patch('{opp}/stage',              [SalesController::class, 'oppsUpdateStage'])->middleware('owns:opp');
             Route::post('{opp}/mark-won',            [SalesController::class, 'oppsMarkWon'])->middleware('owns:opp');
             Route::post('{opp}/mark-lost',           [SalesController::class, 'oppsMarkLost'])->middleware('owns:opp');
@@ -752,7 +752,7 @@ Route::middleware('auth:sanctum')->group(function () {
             Route::get('/',                          [SalesController::class, 'quotesIndex']);
             Route::get('status-options',             [SalesController::class, 'quotesStatusOptions']);
             // 子路径（{quote} 通配之前）
-            Route::post('/',                         [SalesController::class, 'quotesStore']);
+            Route::post('/',                         [SalesController::class, 'quotesStore'])->middleware('permission:sales.create');
             Route::put('{quote}/status',             [SalesController::class, 'quotesUpdateStatus'])->middleware('owns:quote');
             Route::post('{quote}/items',             [SalesController::class, 'quotesStoreItems'])->middleware('owns:quote');
             Route::post('{quote}/new-version',       [SalesController::class, 'quotesNewVersion'])->middleware('owns:quote');
@@ -779,7 +779,7 @@ Route::middleware('auth:sanctum')->group(function () {
         // 推荐人
         Route::prefix('referrers')->group(function () {
             Route::get('/',                          [SalesController::class, 'referrersIndex']);
-            Route::post('/',                         [SalesController::class, 'referrersStore']);
+            Route::post('/',                         [SalesController::class, 'referrersStore'])->middleware('permission:sales.create');
             // 通配放最后
             Route::get('{referrer}',                 [SalesController::class, 'referrersShow'])->middleware('owns:referrer');
             Route::put('{referrer}',                 [SalesController::class, 'referrersUpdate'])->middleware('owns:referrer');
@@ -799,7 +799,7 @@ Route::middleware('auth:sanctum')->group(function () {
         // 跟进记录 + 附件
         Route::prefix('follow-ups')->group(function () {
             Route::get('/',                          [SalesController::class, 'followUpsIndex']);
-            Route::post('/',                         [SalesController::class, 'followUpsStore']);
+            Route::post('/',                         [SalesController::class, 'followUpsStore'])->middleware('permission:sales.create');
             // 附件下载 — attachments/{att} 必须在 {followUp} 之后注册，但子路径先注册
             Route::get('attachments/{att}/download', [SalesController::class, 'followUpsDownloadAttachment'])->middleware('owns:att');
             Route::delete('attachments/{att}',       [SalesController::class, 'followUpsDeleteAttachment'])->middleware('owns:att');
@@ -816,8 +816,8 @@ Route::middleware('auth:sanctum')->group(function () {
             Route::get('/',                                [SalesController::class, 'referralSettlementsIndex']);
             Route::get('stats',                           [SalesController::class, 'referralSettlementsStats']);
             // 子路径必须在 {settlement} 通配之前
-            Route::post('{settlement}/approve',           [SalesController::class, 'referralSettlementsApprove']);
-            Route::post('{settlement}/pay',               [SalesController::class, 'referralSettlementsPay']);
+            Route::post('{settlement}/approve',           [SalesController::class, 'referralSettlementsApprove'])->middleware('permission:finance.approve');
+            Route::post('{settlement}/pay',               [SalesController::class, 'referralSettlementsPay'])->middleware('permission:finance.pay');
             // 通配放最后
             Route::get('{settlement}',                    [SalesController::class, 'referralSettlementsShow']);
         });
@@ -828,32 +828,32 @@ Route::middleware('auth:sanctum')->group(function () {
             Route::get('categories',                 [SalesProductController::class, 'categories']);
             // 列表/新建
             Route::get('/',                          [SalesProductController::class, 'index']);
-            Route::post('/',                         [SalesProductController::class, 'store']);
+            Route::post('/',                         [SalesProductController::class, 'store'])->middleware('permission:sales.create');
             // 通配放最后
             Route::get('{product}',                  [SalesProductController::class, 'show']);
-            Route::put('{product}',                  [SalesProductController::class, 'update']);
-            Route::delete('{product}',               [SalesProductController::class, 'destroy']);
+            Route::put('{product}',                  [SalesProductController::class, 'update'])->middleware('permission:sales.create');
+            Route::delete('{product}',               [SalesProductController::class, 'destroy'])->middleware('permission:sales.create');
         });
     });
 
     // ========== 招标中心 (V0.6.0 内部) ==========
     Route::prefix('tenders')->group(function () {
         Route::get('/',                      [TenderController::class, 'index']);
-        Route::post('/',                     [TenderController::class, 'store']);
+        Route::post('/',                     [TenderController::class, 'store'])->middleware('permission:tender.create');
         // 子路径必须在 {id} 通配之前
-        Route::post('{id}/publish',          [TenderController::class, 'publish'])->whereNumber('id');
-        Route::post('{id}/close',            [TenderController::class, 'close'])->whereNumber('id');
-        Route::post('{id}/cancel',           [TenderController::class, 'cancel'])->whereNumber('id');
-        Route::post('{id}/evaluate',         [TenderController::class, 'evaluate'])->whereNumber('id');
-        Route::post('{id}/award',            [TenderController::class, 'award'])->whereNumber('id');
+        Route::post('{id}/publish',          [TenderController::class, 'publish'])->whereNumber('id')->middleware('permission:tender.create');
+        Route::post('{id}/close',            [TenderController::class, 'close'])->whereNumber('id')->middleware('permission:tender.create');
+        Route::post('{id}/cancel',           [TenderController::class, 'cancel'])->whereNumber('id')->middleware('permission:tender.create');
+        Route::post('{id}/evaluate',         [TenderController::class, 'evaluate'])->whereNumber('id')->middleware('permission:tender.create');
+        Route::post('{id}/award',            [TenderController::class, 'award'])->whereNumber('id')->middleware('permission:tender.create');
         Route::get('{id}/bids',              [TenderController::class, 'bids'])->whereNumber('id');
-        Route::post('{id}/bids',             [TenderController::class, 'storeBid'])->whereNumber('id');
+        Route::post('{id}/bids',             [TenderController::class, 'storeBid'])->whereNumber('id')->middleware('permission:tender.create');
         Route::get('{id}/attachments',       [TenderController::class, 'listAttachments'])->whereNumber('id');
-        Route::post('{id}/attachments',      [TenderController::class, 'uploadAttachment'])->whereNumber('id');
-        Route::delete('{id}/attachments/{att}', [TenderController::class, 'deleteAttachment'])->whereNumber(['id', 'att']);
+        Route::post('{id}/attachments',      [TenderController::class, 'uploadAttachment'])->whereNumber('id')->middleware('permission:tender.create');
+        Route::delete('{id}/attachments/{att}', [TenderController::class, 'deleteAttachment'])->whereNumber(['id', 'att'])->middleware('permission:tender.create');
         // 通配放最后
         Route::get('{id}',                   [TenderController::class, 'show'])->whereNumber('id');
-        Route::put('{id}',                   [TenderController::class, 'update'])->whereNumber('id');
+        Route::put('{id}',                   [TenderController::class, 'update'])->whereNumber('id')->middleware('permission:tender.create');
     });
 
     // ========== 供应商门户 (V0.6.0 外部免登录 — 必须在 auth:sanctum group 外) ==========
@@ -869,54 +869,54 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::prefix('requirements')->group(function () {
             Route::get('/',                                  [PurchaseRequirementController::class, 'index']);
             Route::get('stats',                             [PurchaseRequirementController::class, 'stats']);
-            Route::post('/',                                [PurchaseRequirementController::class, 'store']);
+            Route::post('/',                                [PurchaseRequirementController::class, 'store'])->middleware('permission:purchase.create');
             // 通配放最后
-            Route::put('{requirement}',                     [PurchaseRequirementController::class, 'update']);
-            Route::delete('{requirement}',                  [PurchaseRequirementController::class, 'destroy']);
+            Route::put('{requirement}',                     [PurchaseRequirementController::class, 'update'])->middleware('permission:purchase.create');
+            Route::delete('{requirement}',                  [PurchaseRequirementController::class, 'destroy'])->middleware('permission:purchase.create');
         });
 
         // 采购计划 (7 端点)
         Route::prefix('plans')->group(function () {
             Route::get('/',                                  [PurchasePlanController::class, 'index']);
             Route::get('stats',                             [PurchasePlanController::class, 'stats']);
-            Route::post('/',                                [PurchasePlanController::class, 'store']);
+            Route::post('/',                                [PurchasePlanController::class, 'store'])->middleware('permission:purchase.create');
             // 子路径必须在 {plan} 通配之前
-            Route::post('{plan}/submit',                    [PurchasePlanController::class, 'submit']);
-            Route::post('{plan}/approve',                   [PurchasePlanController::class, 'approve']);
+            Route::post('{plan}/submit',                    [PurchasePlanController::class, 'submit'])->middleware('permission:purchase.approve');
+            Route::post('{plan}/approve',                   [PurchasePlanController::class, 'approve'])->middleware('permission:purchase.approve');
             // 通配放最后
-            Route::put('{plan}',                            [PurchasePlanController::class, 'update']);
-            Route::delete('{plan}',                         [PurchasePlanController::class, 'destroy']);
+            Route::put('{plan}',                            [PurchasePlanController::class, 'update'])->middleware('permission:purchase.create');
+            Route::delete('{plan}',                         [PurchasePlanController::class, 'destroy'])->middleware('permission:purchase.create');
         });
 
         // 采购合同 (7 端点)
         Route::prefix('contracts')->group(function () {
             Route::get('/',                                  [PurchaseContractController::class, 'index']);
             Route::get('stats',                             [PurchaseContractController::class, 'stats']);
-            Route::post('/',                                [PurchaseContractController::class, 'store']);
+            Route::post('/',                                [PurchaseContractController::class, 'store'])->middleware('permission:purchase.create');
             // 子路径必须在 {contract} 通配之前
-            Route::post('{contract}/ship',                  [PurchaseContractController::class, 'ship']);
+            Route::post('{contract}/ship',                  [PurchaseContractController::class, 'ship'])->middleware('permission:purchase.approve');
             // 通配放最后
             Route::get('{contract}',                        [PurchaseContractController::class, 'show']);
-            Route::put('{contract}',                        [PurchaseContractController::class, 'update']);
-            Route::delete('{contract}',                     [PurchaseContractController::class, 'destroy']);
+            Route::put('{contract}',                        [PurchaseContractController::class, 'update'])->middleware('permission:purchase.create');
+            Route::delete('{contract}',                     [PurchaseContractController::class, 'destroy'])->middleware('permission:purchase.create');
         });
 
         // 采购付款申请 (5 端点)
         Route::prefix('payment-requests')->group(function () {
             Route::get('/',                                  [PurchasePaymentRequestController::class, 'index']);
             Route::get('stats',                             [PurchasePaymentRequestController::class, 'stats']);
-            Route::post('/',                                [PurchasePaymentRequestController::class, 'store']);
+            Route::post('/',                                [PurchasePaymentRequestController::class, 'store'])->middleware('permission:purchase.create');
             // 子路径必须在 {req} 通配之前
-            Route::post('{req}/approve',                    [PurchasePaymentRequestController::class, 'approve']);
+            Route::post('{req}/approve',                    [PurchasePaymentRequestController::class, 'approve'])->middleware('permission:purchase.approve');
             // 通配放最后
-            Route::delete('{req}',                          [PurchasePaymentRequestController::class, 'destroy']);
+            Route::delete('{req}',                          [PurchasePaymentRequestController::class, 'destroy'])->middleware('permission:purchase.create');
         });
 
         // 采购付款 (3 端点)
         Route::prefix('payments')->group(function () {
             Route::get('/',                                  [PurchasePaymentController::class, 'index']);
             Route::get('stats',                             [PurchasePaymentController::class, 'stats']);
-            Route::post('/',                                [PurchasePaymentController::class, 'store']);
+            Route::post('/',                                [PurchasePaymentController::class, 'store'])->middleware('permission:purchase.create');
         });
 
         // 采购发货 (3 端点)
@@ -925,10 +925,10 @@ Route::middleware('auth:sanctum')->group(function () {
             Route::get('/',                                  [PurchaseShipmentController::class, 'index']);
             Route::get('stats',                             [PurchaseShipmentController::class, 'stats']);
             // 物流更新/轨迹/列表 — 子路径必须先注册
-            Route::post('{shipment}/logistics-update',      [PurchaseLogisticsController::class, 'store']);
+            Route::post('{shipment}/logistics-update',      [PurchaseLogisticsController::class, 'store'])->middleware('permission:purchase.create');
             Route::get('{shipment}/logistics',              [PurchaseLogisticsController::class, 'index']);
             Route::get('{shipment}/track',                  [PurchaseLogisticsController::class, 'track']);
-            Route::put('{shipment}/logistics/{log}',        [PurchaseLogisticsController::class, 'update']);
+            Route::put('{shipment}/logistics/{log}',        [PurchaseLogisticsController::class, 'update'])->middleware('permission:purchase.create');
             // 通配放最后
             Route::get('{shipment}',                        [PurchaseShipmentController::class, 'show']);
         });
@@ -939,25 +939,25 @@ Route::middleware('auth:sanctum')->group(function () {
         // 采购审批 (3 端点)
         Route::prefix('approvals')->group(function () {
             Route::get('/',                                  [PurchaseApprovalController::class, 'index']);
-            Route::post('/',                                [PurchaseApprovalController::class, 'store']);
+            Route::post('/',                                [PurchaseApprovalController::class, 'store'])->middleware('permission:purchase.approve');
             // 子路径必须在 {appr} 通配之前 — 本组没有 {appr} 通配，decide 可放任意位置
-            Route::post('{appr}/decide',                    [PurchaseApprovalController::class, 'decide']);
+            Route::post('{appr}/decide',                    [PurchaseApprovalController::class, 'decide'])->middleware('permission:purchase.approve');
         });
     });
 
     // 角色权限管理 (RBAC)
     Route::prefix('roles')->group(function () {
         Route::get('/', [RoleController::class, 'index']);
-        Route::post('/', [RoleController::class, 'store']);
+        Route::post('/', [RoleController::class, 'store'])->middleware('permission:system.role');
         // V0.5.2 矩阵端点 (字面量必须在 {role} 通配之前)
         Route::get('matrix', [RoleController::class, 'matrix']);
         // V0.5.3 临时角色 — 7 天内即将过期 (字面量必须在 {role} 通配之前) — 需要 system.role 权限
         Route::get('expiring', [RoleController::class, 'expiringSoon'])->middleware('permission:system.role');
         // 限制 {role} 只匹配数字 id, 防止 'matrix' 'permissions' 'expiring' 等被当 name 强转 bigint 22P02
         Route::get('{role}', [RoleController::class, 'show'])->whereNumber('role');
-        Route::put('{role}', [RoleController::class, 'update'])->whereNumber('role');
-        Route::delete('{role}', [RoleController::class, 'destroy'])->whereNumber('role');
-        Route::post('{role}/permissions', [RoleController::class, 'assignPermissions'])->whereNumber('role');
+        Route::put('{role}', [RoleController::class, 'update'])->whereNumber('role')->middleware('permission:system.role');
+        Route::delete('{role}', [RoleController::class, 'destroy'])->whereNumber('role')->middleware('permission:system.role');
+        Route::post('{role}/permissions', [RoleController::class, 'assignPermissions'])->whereNumber('role')->middleware('permission:system.role');
     });
 
     // V0.5.1 用户-角色管理 (admin 限定) — 路由合并到 230 行的 users group 内
@@ -999,13 +999,13 @@ Route::middleware('auth:sanctum')->group(function () {
     // V0.4.10 对外报价 (ExternalQuote 控制器接入)
     Route::prefix('external-quotes')->group(function () {
         Route::get('requests',          [ExternalQuoteController::class, 'indexRequests']);
-        Route::post('requests',         [ExternalQuoteController::class, 'storeRequest']);
+        Route::post('requests',         [ExternalQuoteController::class, 'storeRequest'])->middleware('permission:sales.create');
         // 附件 (子路径必须在 {id} 通配之前)
-        Route::post('requests/{id}/files',   [ExternalQuoteController::class, 'uploadRequiredFile'])->whereNumber('id');
-        Route::delete('requests/{id}/files', [ExternalQuoteController::class, 'deleteRequiredFile'])->whereNumber('id');
+        Route::post('requests/{id}/files',   [ExternalQuoteController::class, 'uploadRequiredFile'])->whereNumber('id')->middleware('permission:sales.create');
+        Route::delete('requests/{id}/files', [ExternalQuoteController::class, 'deleteRequiredFile'])->whereNumber('id')->middleware('permission:sales.create');
         Route::get('requests/{id}',     [ExternalQuoteController::class, 'showRequest']);
         // v0.5.8.10 通用附件上传 (新建请求时使用, 不依赖 request id)
-        Route::post('upload-attachment', [ExternalQuoteController::class, 'uploadAttachment']);
+        Route::post('upload-attachment', [ExternalQuoteController::class, 'uploadAttachment'])->middleware('permission:sales.create');
     });
 
     // 排班/班次/班组 (V0.4.10 兼容路径 - 实际是 /schedules/shifts /schedules/groups)
@@ -1029,22 +1029,22 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // ========== 系统设置（标题/版权/公告/备案号/联系邮箱） ==========
     Route::get('settings', [SystemSettingsController::class, 'index']);
-    Route::put('settings', [SystemSettingsController::class, 'update']);
+    Route::put('settings', [SystemSettingsController::class, 'update'])->middleware('permission:system.config');
 
     // ========== 系统设置 — 自定义端口（与 settings 平级，便于前端独立调用） ==========
     Route::get('settings/port', [SystemSettingsController::class, 'getPortConfig']);
-    Route::put('settings/port', [SystemSettingsController::class, 'updatePortConfig']);
+    Route::put('settings/port', [SystemSettingsController::class, 'updatePortConfig'])->middleware('permission:system.config');
 
     // ========== 系统设置 — 闲置超时（给前端 useIdleTimer 启动时拉） ==========
     Route::get('settings/idle-config', [SystemSettingsController::class, 'getIdleConfig']);
 
     // ========== 审批流程模板（CRUD — 替代前端 hardcoded） ==========
     Route::get('approval-templates', [ApprovalTemplateController::class, 'index']);
-    Route::post('approval-templates', [ApprovalTemplateController::class, 'store']);
+    Route::post('approval-templates', [ApprovalTemplateController::class, 'store'])->middleware('permission:approval.template');
     Route::get('approval-templates/{approvalTemplate}', [ApprovalTemplateController::class, 'show']);
-    Route::put('approval-templates/{approvalTemplate}', [ApprovalTemplateController::class, 'update']);
-    Route::delete('approval-templates/{approvalTemplate}', [ApprovalTemplateController::class, 'destroy']);
-    Route::post('approval-templates/{approvalTemplate}/toggle', [ApprovalTemplateController::class, 'toggle']);
+    Route::put('approval-templates/{approvalTemplate}', [ApprovalTemplateController::class, 'update'])->middleware('permission:approval.template');
+    Route::delete('approval-templates/{approvalTemplate}', [ApprovalTemplateController::class, 'destroy'])->middleware('permission:approval.template');
+    Route::post('approval-templates/{approvalTemplate}/toggle', [ApprovalTemplateController::class, 'toggle'])->middleware('permission:approval.template');
 
     // ========== 审批中心（财务 / 运营 / 项目 3 大类 + 统一聚合） ==========
     // 统一聚合（center 必须在 finance/operation/project 之前注册，避免被通配吞掉）
@@ -1056,11 +1056,11 @@ Route::middleware('auth:sanctum')->group(function () {
     // 财务审批
     Route::prefix('approvals/finance')->group(function () {
         Route::get('/',                 [FinanceApprovalController::class, 'index']);
-        Route::post('/',                [FinanceApprovalController::class, 'store']);
+        Route::post('/',                [FinanceApprovalController::class, 'store'])->middleware('permission:finance.approve');
         // 子动作路由必须在 {approval} 通配之前
-        Route::post('{approval}/approve', [FinanceApprovalController::class, 'approve']);
-        Route::post('{approval}/reject',  [FinanceApprovalController::class, 'reject']);
-        Route::post('{approval}/forward', [FinanceApprovalController::class, 'forward']);
+        Route::post('{approval}/approve', [FinanceApprovalController::class, 'approve'])->middleware('permission:finance.approve');
+        Route::post('{approval}/reject',  [FinanceApprovalController::class, 'reject'])->middleware('permission:finance.approve');
+        Route::post('{approval}/forward', [FinanceApprovalController::class, 'forward'])->middleware('permission:finance.approve');
         // 通配放最后
         Route::get('{approval}',         [FinanceApprovalController::class, 'show']);
     });
@@ -1068,20 +1068,20 @@ Route::middleware('auth:sanctum')->group(function () {
     // 运营审批
     Route::prefix('approvals/operation')->group(function () {
         Route::get('/',                 [OperationApprovalController::class, 'index']);
-        Route::post('/',                [OperationApprovalController::class, 'store']);
-        Route::post('{approval}/approve', [OperationApprovalController::class, 'approve']);
-        Route::post('{approval}/reject',  [OperationApprovalController::class, 'reject']);
-        Route::post('{approval}/forward', [OperationApprovalController::class, 'forward']);
+        Route::post('/',                [OperationApprovalController::class, 'store'])->middleware('permission:approval.mine');
+        Route::post('{approval}/approve', [OperationApprovalController::class, 'approve'])->middleware('permission:approval.mine');
+        Route::post('{approval}/reject',  [OperationApprovalController::class, 'reject'])->middleware('permission:approval.mine');
+        Route::post('{approval}/forward', [OperationApprovalController::class, 'forward'])->middleware('permission:approval.mine');
         Route::get('{approval}',         [OperationApprovalController::class, 'show']);
     });
 
     // 项目审批
     Route::prefix('approvals/project')->group(function () {
         Route::get('/',                 [ProjectApprovalController::class, 'index']);
-        Route::post('/',                [ProjectApprovalController::class, 'store']);
-        Route::post('{approval}/approve', [ProjectApprovalController::class, 'approve']);
-        Route::post('{approval}/reject',  [ProjectApprovalController::class, 'reject']);
-        Route::post('{approval}/forward', [ProjectApprovalController::class, 'forward']);
+        Route::post('/',                [ProjectApprovalController::class, 'store'])->middleware('permission:project.create');
+        Route::post('{approval}/approve', [ProjectApprovalController::class, 'approve'])->middleware('permission:project.create');
+        Route::post('{approval}/reject',  [ProjectApprovalController::class, 'reject'])->middleware('permission:project.create');
+        Route::post('{approval}/forward', [ProjectApprovalController::class, 'forward'])->middleware('permission:project.create');
         Route::get('{approval}',         [ProjectApprovalController::class, 'show']);
     });
 
@@ -1093,7 +1093,7 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 
     // ========== admin 一键清理业务数据（高危） ==========
-    Route::post('admin/wipe-data', [SystemSettingsController::class, 'wipeData']);
+    Route::post('admin/wipe-data', [SystemSettingsController::class, 'wipeData'])->middleware('permission:system.role');
 
     // =============================================
     // V0.4.1 项目预算 (Construction Budget)
@@ -1101,12 +1101,12 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::prefix('construction/budgets')->group(function () {
         Route::get('/', [App\Http\Controllers\Api\Construction\BudgetController::class, 'index']);
         Route::get('/summary/{projectId}', [App\Http\Controllers\Api\Construction\BudgetController::class, 'summary']);
-        Route::post('/', [App\Http\Controllers\Api\Construction\BudgetController::class, 'store']);
+        Route::post('/', [App\Http\Controllers\Api\Construction\BudgetController::class, 'store'])->middleware('permission:construction.create');
         Route::get('/{id}', [App\Http\Controllers\Api\Construction\BudgetController::class, 'show'])->where('id', '[0-9]+');
-        Route::put('/{id}', [App\Http\Controllers\Api\Construction\BudgetController::class, 'update'])->where('id', '[0-9]+');
-        Route::post('/{id}/approve', [App\Http\Controllers\Api\Construction\BudgetController::class, 'approve'])->where('id', '[0-9]+');
-        Route::post('/{id}/revise', [App\Http\Controllers\Api\Construction\BudgetController::class, 'revise'])->where('id', '[0-9]+');
-        Route::delete('/{id}', [App\Http\Controllers\Api\Construction\BudgetController::class, 'destroy'])->where('id', '[0-9]+');
+        Route::put('/{id}', [App\Http\Controllers\Api\Construction\BudgetController::class, 'update'])->where('id', '[0-9]+')->middleware('permission:construction.create');
+        Route::post('/{id}/approve', [App\Http\Controllers\Api\Construction\BudgetController::class, 'approve'])->where('id', '[0-9]+')->middleware('permission:construction.create');
+        Route::post('/{id}/revise', [App\Http\Controllers\Api\Construction\BudgetController::class, 'revise'])->where('id', '[0-9]+')->middleware('permission:construction.create');
+        Route::delete('/{id}', [App\Http\Controllers\Api\Construction\BudgetController::class, 'destroy'])->where('id', '[0-9]+')->middleware('permission:construction.create');
     });
 
     // =============================================
@@ -1114,13 +1114,13 @@ Route::middleware('auth:sanctum')->group(function () {
     // =============================================
     Route::prefix('construction/teams')->group(function () {
         Route::get('/', [App\Http\Controllers\Api\Construction\TeamController::class, 'index']);
-        Route::post('/', [App\Http\Controllers\Api\Construction\TeamController::class, 'store']);
+        Route::post('/', [App\Http\Controllers\Api\Construction\TeamController::class, 'store'])->middleware('permission:construction.create');
         Route::get('/{id}', [App\Http\Controllers\Api\Construction\TeamController::class, 'show'])->where('id', '[0-9]+');
-        Route::put('/{id}', [App\Http\Controllers\Api\Construction\TeamController::class, 'update'])->where('id', '[0-9]+');
-        Route::delete('/{id}', [App\Http\Controllers\Api\Construction\TeamController::class, 'destroy'])->where('id', '[0-9]+');
+        Route::put('/{id}', [App\Http\Controllers\Api\Construction\TeamController::class, 'update'])->where('id', '[0-9]+')->middleware('permission:construction.create');
+        Route::delete('/{id}', [App\Http\Controllers\Api\Construction\TeamController::class, 'destroy'])->where('id', '[0-9]+')->middleware('permission:construction.create');
         // 子路径必须放在 {id} 通配之前
-        Route::post('/{id}/members', [App\Http\Controllers\Api\Construction\TeamController::class, 'addMembers'])->where('id', '[0-9]+');
-        Route::delete('/{id}/members/{memberId}', [App\Http\Controllers\Api\Construction\TeamController::class, 'removeMember'])->where('id', '[0-9]+')->where('memberId', '[0-9]+');
+        Route::post('/{id}/members', [App\Http\Controllers\Api\Construction\TeamController::class, 'addMembers'])->where('id', '[0-9]+')->middleware('permission:construction.create');
+        Route::delete('/{id}/members/{memberId}', [App\Http\Controllers\Api\Construction\TeamController::class, 'removeMember'])->where('id', '[0-9]+')->where('memberId', '[0-9]+')->middleware('permission:construction.create');
     });
 
     // =============================================
@@ -1128,14 +1128,14 @@ Route::middleware('auth:sanctum')->group(function () {
     // =============================================
     Route::prefix('construction/commencement-orders')->group(function () {
         Route::get('/', [App\Http\Controllers\Api\Construction\CommencementOrderController::class, 'index']);
-        Route::post('/', [App\Http\Controllers\Api\Construction\CommencementOrderController::class, 'store']);
+        Route::post('/', [App\Http\Controllers\Api\Construction\CommencementOrderController::class, 'store'])->middleware('permission:construction.create');
         // 子动作（approve/start/complete）必须放在 {id} 通配之前
-        Route::post('/{id}/approve', [App\Http\Controllers\Api\Construction\CommencementOrderController::class, 'approve'])->where('id', '[0-9]+');
-        Route::post('/{id}/start', [App\Http\Controllers\Api\Construction\CommencementOrderController::class, 'startWork'])->where('id', '[0-9]+');
-        Route::post('/{id}/complete', [App\Http\Controllers\Api\Construction\CommencementOrderController::class, 'complete'])->where('id', '[0-9]+');
+        Route::post('/{id}/approve', [App\Http\Controllers\Api\Construction\CommencementOrderController::class, 'approve'])->where('id', '[0-9]+')->middleware('permission:construction.create');
+        Route::post('/{id}/start', [App\Http\Controllers\Api\Construction\CommencementOrderController::class, 'startWork'])->where('id', '[0-9]+')->middleware('permission:construction.create');
+        Route::post('/{id}/complete', [App\Http\Controllers\Api\Construction\CommencementOrderController::class, 'complete'])->where('id', '[0-9]+')->middleware('permission:construction.create');
         // 通配放最后
         Route::get('/{id}', [App\Http\Controllers\Api\Construction\CommencementOrderController::class, 'show'])->where('id', '[0-9]+');
-        Route::put('/{id}', [App\Http\Controllers\Api\Construction\CommencementOrderController::class, 'update'])->where('id', '[0-9]+');
+        Route::put('/{id}', [App\Http\Controllers\Api\Construction\CommencementOrderController::class, 'update'])->where('id', '[0-9]+')->middleware('permission:construction.create');
     });
 
     // =============================================
@@ -1143,15 +1143,15 @@ Route::middleware('auth:sanctum')->group(function () {
     // =============================================
     Route::prefix('construction/logs')->group(function () {
         Route::get('/', [App\Http\Controllers\Api\Construction\ConstructionLogController::class, 'index']);
-        Route::post('/', [App\Http\Controllers\Api\Construction\ConstructionLogController::class, 'store']);
+        Route::post('/', [App\Http\Controllers\Api\Construction\ConstructionLogController::class, 'store'])->middleware('permission:construction.create');
         // 字面量路由 overdue 必须在 {id} 通配之前
         Route::get('/overdue', [App\Http\Controllers\Api\Construction\ConstructionLogController::class, 'overdue']);
         // 子动作路由（submit/progress）必须放在 {id} 通配之前
-        Route::post('/{id}/submit', [App\Http\Controllers\Api\Construction\ConstructionLogController::class, 'submit'])->where('id', '[0-9]+');
-        Route::post('/{id}/progress', [App\Http\Controllers\Api\Construction\ConstructionLogController::class, 'updateProgress'])->where('id', '[0-9]+');
+        Route::post('/{id}/submit', [App\Http\Controllers\Api\Construction\ConstructionLogController::class, 'submit'])->where('id', '[0-9]+')->middleware('permission:construction.create');
+        Route::post('/{id}/progress', [App\Http\Controllers\Api\Construction\ConstructionLogController::class, 'updateProgress'])->where('id', '[0-9]+')->middleware('permission:construction.create');
         // 通配放最后
         Route::get('/{id}', [App\Http\Controllers\Api\Construction\ConstructionLogController::class, 'show'])->where('id', '[0-9]+');
-        Route::put('/{id}', [App\Http\Controllers\Api\Construction\ConstructionLogController::class, 'update'])->where('id', '[0-9]+');
+        Route::put('/{id}', [App\Http\Controllers\Api\Construction\ConstructionLogController::class, 'update'])->where('id', '[0-9]+')->middleware('permission:construction.create');
     });
 
     // =============================================
@@ -1159,9 +1159,9 @@ Route::middleware('auth:sanctum')->group(function () {
     // =============================================
     Route::prefix('construction/rectifications')->group(function () {
         Route::get('/', [App\Http\Controllers\Api\Construction\RectificationController::class, 'index']);
-        Route::post('/', [App\Http\Controllers\Api\Construction\RectificationController::class, 'store']);
+        Route::post('/', [App\Http\Controllers\Api\Construction\RectificationController::class, 'store'])->middleware('permission:construction.create');
         // 子动作路由（complete）必须放在 {id} 通配之前
-        Route::post('/{id}/complete', [App\Http\Controllers\Api\Construction\RectificationController::class, 'complete'])->where('id', '[0-9]+');
+        Route::post('/{id}/complete', [App\Http\Controllers\Api\Construction\RectificationController::class, 'complete'])->where('id', '[0-9]+')->middleware('permission:construction.create');
         // 通配放最后
         Route::get('/{id}', [App\Http\Controllers\Api\Construction\RectificationController::class, 'show'])->where('id', '[0-9]+');
     });
@@ -1171,10 +1171,10 @@ Route::middleware('auth:sanctum')->group(function () {
     // =============================================
     Route::prefix('construction/work-processes')->group(function () {
         Route::get('/', [App\Http\Controllers\Api\Construction\WorkProcessController::class, 'index']);
-        Route::post('/', [App\Http\Controllers\Api\Construction\WorkProcessController::class, 'store']);
+        Route::post('/', [App\Http\Controllers\Api\Construction\WorkProcessController::class, 'store'])->middleware('permission:construction.create');
         // {id} 通配放最后
-        Route::put('/{id}', [App\Http\Controllers\Api\Construction\WorkProcessController::class, 'update'])->where('id', '[0-9]+');
-        Route::delete('/{id}', [App\Http\Controllers\Api\Construction\WorkProcessController::class, 'destroy'])->where('id', '[0-9]+');
+        Route::put('/{id}', [App\Http\Controllers\Api\Construction\WorkProcessController::class, 'update'])->where('id', '[0-9]+')->middleware('permission:construction.create');
+        Route::delete('/{id}', [App\Http\Controllers\Api\Construction\WorkProcessController::class, 'destroy'])->where('id', '[0-9]+')->middleware('permission:construction.create');
     });
 
     // =============================================
@@ -1182,16 +1182,16 @@ Route::middleware('auth:sanctum')->group(function () {
     // =============================================
     Route::prefix('construction/external-works')->group(function () {
         Route::get('/', [App\Http\Controllers\Api\Construction\ExternalConstructionController::class, 'index']);
-        Route::post('/', [App\Http\Controllers\Api\Construction\ExternalConstructionController::class, 'store']);
+        Route::post('/', [App\Http\Controllers\Api\Construction\ExternalConstructionController::class, 'store'])->middleware('permission:construction.create');
         // 字面子路径 bids (GET) 必须放在 {id} 通配之前
         Route::get('/{id}/bids', [App\Http\Controllers\Api\Construction\ExternalConstructionController::class, 'listBids'])->where('id', '[0-9]+');
         // 子动作路由（close/bids POST/award）必须放在 {id} 通配之前
-        Route::post('/{id}/close', [App\Http\Controllers\Api\Construction\ExternalConstructionController::class, 'close'])->where('id', '[0-9]+');
-        Route::post('/{id}/bids', [App\Http\Controllers\Api\Construction\ExternalConstructionController::class, 'submitBid'])->where('id', '[0-9]+');
-        Route::post('/{id}/award', [App\Http\Controllers\Api\Construction\ExternalConstructionController::class, 'award'])->where('id', '[0-9]+');
+        Route::post('/{id}/close', [App\Http\Controllers\Api\Construction\ExternalConstructionController::class, 'close'])->where('id', '[0-9]+')->middleware('permission:construction.create');
+        Route::post('/{id}/bids', [App\Http\Controllers\Api\Construction\ExternalConstructionController::class, 'submitBid'])->where('id', '[0-9]+')->middleware('permission:construction.create');
+        Route::post('/{id}/award', [App\Http\Controllers\Api\Construction\ExternalConstructionController::class, 'award'])->where('id', '[0-9]+')->middleware('permission:construction.create');
         // 通配放最后
         Route::get('/{id}', [App\Http\Controllers\Api\Construction\ExternalConstructionController::class, 'show'])->where('id', '[0-9]+');
-        Route::put('/{id}', [App\Http\Controllers\Api\Construction\ExternalConstructionController::class, 'update'])->where('id', '[0-9]+');
+        Route::put('/{id}', [App\Http\Controllers\Api\Construction\ExternalConstructionController::class, 'update'])->where('id', '[0-9]+')->middleware('permission:construction.create');
     });
 
     // =============================================
@@ -1202,14 +1202,14 @@ Route::middleware('auth:sanctum')->group(function () {
         // 字面量路由（expiring）必须在 /{id} 通配之前
         Route::get('expiring', [WarrantyController::class, 'expiring']);
         Route::get('/', [WarrantyController::class, 'index']);
-        Route::post('/', [WarrantyController::class, 'store']);
+        Route::post('/', [WarrantyController::class, 'store'])->middleware('permission:warranty.create');
         // 子动作（renew/terminate）必须在 /{id} 通配之前
-        Route::post('/{id}/renew', [WarrantyController::class, 'renew'])->where('id', '[0-9]+');
-        Route::post('/{id}/terminate', [WarrantyController::class, 'terminate'])->where('id', '[0-9]+');
+        Route::post('/{id}/renew', [WarrantyController::class, 'renew'])->where('id', '[0-9]+')->middleware('permission:warranty.create');
+        Route::post('/{id}/terminate', [WarrantyController::class, 'terminate'])->where('id', '[0-9]+')->middleware('permission:warranty.create');
         // 通配放最后
         Route::get('/{id}', [WarrantyController::class, 'show'])->where('id', '[0-9]+');
-        Route::put('/{id}', [WarrantyController::class, 'update'])->where('id', '[0-9]+');
-        Route::delete('/{id}', [WarrantyController::class, 'destroy'])->where('id', '[0-9]+');
+        Route::put('/{id}', [WarrantyController::class, 'update'])->where('id', '[0-9]+')->middleware('permission:warranty.create');
+        Route::delete('/{id}', [WarrantyController::class, 'destroy'])->where('id', '[0-9]+')->middleware('permission:warranty.create');
     });
 
     // 质保期服务工单
@@ -1217,12 +1217,12 @@ Route::middleware('auth:sanctum')->group(function () {
         // 字面量路由（technician-stats）必须在 /{id} 通配之前
         Route::get('technician-stats', [WarrantyServiceOrderController::class, 'technicianStats']);
         Route::get('/', [WarrantyServiceOrderController::class, 'index']);
-        Route::post('/', [WarrantyServiceOrderController::class, 'store']);
+        Route::post('/', [WarrantyServiceOrderController::class, 'store'])->middleware('permission:warranty.create');
         // 子动作（assign/start/complete/cancel）必须在 /{id} 通配之前
-        Route::post('/{id}/assign', [WarrantyServiceOrderController::class, 'assign'])->where('id', '[0-9]+');
-        Route::post('/{id}/start', [WarrantyServiceOrderController::class, 'start'])->where('id', '[0-9]+');
-        Route::post('/{id}/complete', [WarrantyServiceOrderController::class, 'complete'])->where('id', '[0-9]+');
-        Route::post('/{id}/cancel', [WarrantyServiceOrderController::class, 'cancel'])->where('id', '[0-9]+');
+        Route::post('/{id}/assign', [WarrantyServiceOrderController::class, 'assign'])->where('id', '[0-9]+')->middleware('permission:warranty.create');
+        Route::post('/{id}/start', [WarrantyServiceOrderController::class, 'start'])->where('id', '[0-9]+')->middleware('permission:warranty.create');
+        Route::post('/{id}/complete', [WarrantyServiceOrderController::class, 'complete'])->where('id', '[0-9]+')->middleware('permission:warranty.create');
+        Route::post('/{id}/cancel', [WarrantyServiceOrderController::class, 'cancel'])->where('id', '[0-9]+')->middleware('permission:warranty.create');
         // 通配放最后
         Route::get('/{id}', [WarrantyServiceOrderController::class, 'show'])->where('id', '[0-9]+');
     });
@@ -1230,11 +1230,11 @@ Route::middleware('auth:sanctum')->group(function () {
     // 质保期保证金
     Route::prefix('warranty-deposits')->group(function () {
         Route::get('/', [WarrantyDepositController::class, 'index']);
-        Route::post('/', [WarrantyDepositController::class, 'store']);
+        Route::post('/', [WarrantyDepositController::class, 'store'])->middleware('permission:warranty.create');
         // 子动作（partial-release/full-release/forfeit）必须在 /{id} 通配之前
-        Route::post('/{id}/partial-release', [WarrantyDepositController::class, 'partialRelease'])->where('id', '[0-9]+');
-        Route::post('/{id}/full-release', [WarrantyDepositController::class, 'fullRelease'])->where('id', '[0-9]+');
-        Route::post('/{id}/forfeit', [WarrantyDepositController::class, 'forfeit'])->where('id', '[0-9]+');
+        Route::post('/{id}/partial-release', [WarrantyDepositController::class, 'partialRelease'])->where('id', '[0-9]+')->middleware('permission:warranty.create');
+        Route::post('/{id}/full-release', [WarrantyDepositController::class, 'fullRelease'])->where('id', '[0-9]+')->middleware('permission:warranty.create');
+        Route::post('/{id}/forfeit', [WarrantyDepositController::class, 'forfeit'])->where('id', '[0-9]+')->middleware('permission:warranty.create');
         // 通配放最后
         Route::get('/{id}', [WarrantyDepositController::class, 'show'])->where('id', '[0-9]+');
     });

@@ -332,8 +332,14 @@ class RoleController extends Controller
             ],
             '客户管理' => [
                 ['name' => 'customer.view',  'label' => '客户列表查看'],
+                ['name' => 'customer.create','label' => '客户创建'],
                 ['name' => 'customer.edit',  'label' => '客户信息编辑'],
                 ['name' => 'customer.map',   'label' => '客户分布地图'],
+            ],
+            '供应商管理' => [
+                ['name' => 'supplier.view',  'label' => '供应商查看'],
+                ['name' => 'supplier.create','label' => '供应商创建'],
+                ['name' => 'supplier.edit',  'label' => '供应商编辑'],
             ],
             '财务管理' => [
                 ['name' => 'finance.view',     'label' => '财务概览'],
@@ -343,6 +349,7 @@ class RoleController extends Controller
             ],
             '库存管理' => [
                 ['name' => 'inventory.view',     'label' => '库存总览'],
+                ['name' => 'inventory.create',   'label' => '库存物料创建'],
                 ['name' => 'inventory.transfer', 'label' => '出入库记录'],
                 ['name' => 'inventory.alert',    'label' => '库存预警设置'],
             ],
@@ -350,6 +357,42 @@ class RoleController extends Controller
                 ['name' => 'approval.template', 'label' => '流程模板管理'],
                 ['name' => 'approval.mine',     'label' => '我的审批'],
                 ['name' => 'approval.config',   'label' => '审批配置'],
+            ],
+            '售后服务' => [
+                ['name' => 'service.view',    'label' => '售后服务查看'],
+                ['name' => 'service.create',  'label' => '售后服务创建'],
+                ['name' => 'service.approve', 'label' => '售后服务处理'],
+            ],
+            '销售管理' => [
+                ['name' => 'sales.view',   'label' => '销售模块查看'],
+                ['name' => 'sales.create', 'label' => '销售数据创建'],
+            ],
+            '采购管理' => [
+                ['name' => 'purchase.view',   'label' => '采购模块查看'],
+                ['name' => 'purchase.create', 'label' => '采购数据创建'],
+                ['name' => 'purchase.approve','label' => '采购审批'],
+            ],
+            '招标管理' => [
+                ['name' => 'tender.view',   'label' => '招标模块查看'],
+                ['name' => 'tender.create', 'label' => '招标创建管理'],
+            ],
+            '车辆管理' => [
+                ['name' => 'vehicle.view',   'label' => '车辆管理查看'],
+                ['name' => 'vehicle.create', 'label' => '车辆管理编辑'],
+            ],
+            '质保管理' => [
+                ['name' => 'warranty.view',   'label' => '质保期查看'],
+                ['name' => 'warranty.create', 'label' => '质保期管理'],
+            ],
+            '施工管理' => [
+                ['name' => 'construction.view',   'label' => '施工管理查看'],
+                ['name' => 'construction.create', 'label' => '施工管理编辑'],
+            ],
+            '文件管理' => [
+                ['name' => 'disk.view',       'label' => '网盘查看'],
+                ['name' => 'disk.create',     'label' => '网盘文件管理'],
+                ['name' => 'knowledge.view',  'label' => '知识库查看'],
+                ['name' => 'knowledge.create','label' => '知识库管理'],
             ],
         ];
         $tree = [];
